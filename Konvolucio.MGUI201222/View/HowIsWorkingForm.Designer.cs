@@ -1,4 +1,4 @@
-﻿namespace Konvolucio.MCEL181123.View
+﻿namespace Konvolucio.MGUI201222.View
 {
     partial class HowIsWorkingForm
     {

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Konvolucio.MCEL181123.Calib.Properties {
+namespace Konvolucio.MGUI201222.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Konvolucio.MCEL181123.Calib.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Konvolucio.MCEL181123.Calib.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Konvolucio.MGUI201222.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

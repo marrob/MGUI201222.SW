@@ -1,8 +1,10 @@
-﻿namespace Konvolucio.MCEL181123.Calib.Common
+﻿namespace Konvolucio.MGUI201222.Common
 {
     using System;
     using System.Linq.Expressions;
     using System.Runtime.InteropServices;
+    using System.Collections.Generic;
+    using System.Windows.Forms;
 
     public static class Tools
     {
@@ -45,6 +47,22 @@
         public static String GetPropertyName<TValue>(Expression<Func<TValue>> propertyId)
         {
             return ((MemberExpression)propertyId.Body).Member.Name;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="container"></param>
+        /// <returns></returns>
+        public static IEnumerable<Control> GetAllControls(Control container)
+        {
+            List<Control> controlList = new List<Control>();
+            foreach (Control c in container.Controls)
+            {
+                controlList.AddRange(GetAllControls(c));
+                controlList.Add(c);
+            }
+            return controlList;
         }
     }
 }

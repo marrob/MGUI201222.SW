@@ -1,4 +1,4 @@
-﻿namespace Konvolucio.MCEL181123.Calib.View
+﻿namespace Konvolucio.MGUI201222.View
 {
     using System;
     using System.Collections.Generic;
@@ -22,12 +22,23 @@
 
         public void UserEnter()
         {
-
+            numericUpDownDisplay.Value = DevIoSrv.Instance.GetDisplayLight();
+            numericUpDownButton.Value = DevIoSrv.Instance.GetPowerButtonLight();
         }
 
         public void UserLeave()
         {
 
+        }
+
+        private void numericUpDownButton_ValueChanged(object sender, EventArgs e)
+        {
+            DevIoSrv.Instance.SetPowerButtonLight((int)numericUpDownButton.Value);
+        }
+
+        private void numericUpDownDisplay_ValueChanged(object sender, EventArgs e)
+        {
+            DevIoSrv.Instance.SetDisplayLight((int)numericUpDownDisplay.Value);
         }
     }
 }

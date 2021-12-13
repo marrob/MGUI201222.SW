@@ -1,6 +1,4 @@
-﻿
-
-namespace Konvolucio.MCEL181123.Calib
+﻿namespace Konvolucio.MGUI201222
 { 
     using System;
     using System.Collections.Generic;
@@ -135,6 +133,83 @@ namespace Konvolucio.MCEL181123.Calib
             return str;
         }
 
+        public string GetVersion()
+        {
+            var resp = WriteRead("*VER?");
+            if (resp == null)
+                return "n/a";
+            else
+               return resp;
+        }
+
+        public string GetUniqeId()
+        {
+            var resp = WriteRead("*UID?");
+            if (resp == null)
+                return "n/a";
+            else
+                return resp;
+        }
+
+        public int GetUpTime()
+        {
+            int retval = 0;
+            var resp = WriteRead("UPTIME?");
+            if (resp == null)
+                return 0;
+            else if (int.TryParse(resp, NumberStyles.Number, CultureInfo.GetCultureInfo("en-US"), out retval))
+                return retval;
+            else
+                return 0;
+        }
+
+        public string GetWhoIs()
+        {
+            var resp = WriteRead("*WHOIS?");
+            if (resp == null)
+                return "n/a";
+            else
+                return resp;
+        }
+
+        public int GetDisplayLight()
+        {
+            var retval = -1;
+            var resp = WriteRead("DIS:LIG?");
+            if (resp == null)
+                return -1;
+            else if (int.TryParse(resp, NumberStyles.Integer, CultureInfo.GetCultureInfo("en-US"), out retval))
+                return retval;
+            else
+                return -1;
+        }
+
+        public void SetDisplayLight(int percent)
+        {
+            WriteRead("DIS:LIG" + "  " + percent.ToString());
+        }
+
+        public int GetPowerButtonLight()
+        {
+            var retval = -1;
+            var resp = WriteRead("PBT:LIG?");
+            if (resp == null)
+                return -1;
+            else if (int.TryParse(resp, NumberStyles.Integer, CultureInfo.GetCultureInfo("en-US"), out retval))
+                return retval;
+            else
+                return -1;
+        }
+
+        public void SetPowerButtonLight(int percent)
+        {
+            WriteRead("PBT:LIG" + "  " + percent.ToString());
+        }
+
+
+
+
+
         public double MeasVolt(byte node)
         {
             double retval = double.NaN;
@@ -221,17 +296,7 @@ namespace Konvolucio.MCEL181123.Calib
             WriteRead("#" + node.ToString("X2") + " " + "TRIG:CURR");
         }
 
-        public int ReadUpTime(byte node)
-        {
-            int retval = 0;
-            var resp = WriteRead("READ:UPTIME?");
-            if (resp == null)
-                return 0;
-            else if (int.TryParse(resp, NumberStyles.Number, CultureInfo.GetCultureInfo("en-US"), out retval))
-                return retval;
-            else
-                return 0;
-        }
+
 
         public void Close()
         {

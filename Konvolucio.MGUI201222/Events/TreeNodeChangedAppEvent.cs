@@ -1,4 +1,4 @@
-﻿namespace Konvolucio.MCEL181123.Calib.Events
+﻿namespace Konvolucio.MGUI201222.Events
 {
     using System.Windows.Forms;
 

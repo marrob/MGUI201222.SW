@@ -1,4 +1,4 @@
-﻿namespace Konvolucio.MCEL181123.Calib
+﻿namespace Konvolucio.MGUI201222
 {
     public class AppConstants
     {

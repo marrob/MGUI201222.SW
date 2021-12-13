@@ -1,5 +1,5 @@
 ﻿
-namespace Konvolucio.MCEL181123.Calib.Commands
+namespace Konvolucio.MGUI201222.Commands
 {
     using System;
     using System.Windows.Forms;

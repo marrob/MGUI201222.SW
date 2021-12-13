@@ -7,8 +7,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{7DB95A0F-D60C-4C44-B872-C6BBCBC8BCF0}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Konvolucio.MCEL181123.Calib</RootNamespace>
-    <AssemblyName>Konvolucio.MCEL181123.Calib</AssemblyName>
+    <RootNamespace>Konvolucio.MGUI201222</RootNamespace>
+    <AssemblyName>Konvolucio.MGUI201222</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -53,14 +53,26 @@
     <Compile Include="Commands\AlwaysOnTopCommand.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\KnvIoControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\KnvIoControl.designer.cs">
+      <DependentUpon>KnvIoControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\KnvIoItemControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\KnvIoItemControl.Designer.cs">
+      <DependentUpon>KnvIoItemControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Events\ConfigsChangedAppEvent .cs" />
     <Compile Include="StatusBar\VoltageStatusBar.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="StatusBar\CurrentRangeStatusBar .cs">
+    <Compile Include="StatusBar\UniqueId.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="StatusBar\CurrentLimitStatusBar.cs">
+    <Compile Include="StatusBar\FwVersion.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="StatusBar\SeneseStatusBar.cs">
@@ -186,6 +198,9 @@
     <Compile Include="View\UpdatesForm.Designer.cs">
       <DependentUpon>UpdatesForm.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Controls\KnvIoControl.resx">
+      <DependentUpon>KnvIoControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="View\VoltageMeasNode.resx">
       <DependentUpon>VoltageMeasNode.cs</DependentUpon>
     </EmbeddedResource>

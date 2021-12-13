@@ -1,4 +1,4 @@
-﻿namespace Konvolucio.MCEL181123.Calib
+﻿namespace Konvolucio.MGUI201222
 {
     partial class MainForm
     {
@@ -33,7 +33,7 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.panel2 = new System.Windows.Forms.Panel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.mainView1 = new Konvolucio.MCEL181123.Calib.View.MainView();
+            this.mainView1 = new Konvolucio.MGUI201222.View.MainView();
             this.knvRichTextBox1 = new Controls.KnvRichTextBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();

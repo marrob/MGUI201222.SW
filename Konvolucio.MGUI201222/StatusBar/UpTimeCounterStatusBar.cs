@@ -1,6 +1,6 @@
 ﻿
 
-namespace Konvolucio.MCEL181123.Calib.StatusBar
+namespace Konvolucio.MGUI201222.StatusBar
 {
     using System;
     using System.Windows.Forms;
@@ -19,7 +19,7 @@ namespace Konvolucio.MCEL181123.Calib.StatusBar
             TimerService.Instance.Tick += (s, e) =>
             {
                 if(DevIoSrv.Instance.IsOpen && Settings.Default.UpTimeCounterPeriodicUpdate)
-                    Text = "UpTime Counter: " + DevIoSrv.Instance.ReadUpTime(0);
+                    Text = "UpTime Counter: " + DevIoSrv.Instance.GetUpTime();
             };
         }
     }

@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Konvolucio.MCEL181123.View
+namespace Konvolucio.MGUI201222.View
 {
     public partial class HowIsWorkingForm : Form
     {

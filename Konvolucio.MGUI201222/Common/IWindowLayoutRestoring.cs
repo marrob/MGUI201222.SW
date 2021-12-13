@@ -1,4 +1,4 @@
-﻿namespace Konvolucio.MCEL181123.Calib.Common
+﻿namespace Konvolucio.MGUI201222.Common
 {
     /// <summary>
     /// Az olyan tualjodoságok amelyeknek paraméterezési sorrendje fontos 

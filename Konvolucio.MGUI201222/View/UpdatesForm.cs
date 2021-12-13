@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Konvolucio.MCEL181123.Calib.View
+namespace Konvolucio.MGUI201222.View
 {
     public partial class UpdatesForm : Form
     {

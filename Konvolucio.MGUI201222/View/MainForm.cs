@@ -1,5 +1,5 @@
 ﻿
-namespace Konvolucio.MCEL181123.Calib
+namespace Konvolucio.MGUI201222
 {
     using System;
     using System.Collections.Generic;

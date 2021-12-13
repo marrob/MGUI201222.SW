@@ -1,5 +1,4 @@
-﻿
-namespace Konvolucio.MCEL181123.Calib
+﻿namespace Konvolucio.MGUI201222
 {
     using System;
     using System.Collections.Generic;
@@ -127,7 +126,7 @@ namespace Konvolucio.MCEL181123.Calib
                 new StatusBar.LogLinesStatusBar(),   
                 new StatusBar.UpTimeCounterStatusBar(),
                 new StatusBar.CurrentRangeStatusBar(),
-                new StatusBar.CurrentLimitStatusBar(),
+                new StatusBar.FwVersion(),
                 new StatusBar.VoltageStatusBar(),
                 new StatusBar.SeneseStatusBar(),
                 new StatusBar.EmptyStatusBar(),
