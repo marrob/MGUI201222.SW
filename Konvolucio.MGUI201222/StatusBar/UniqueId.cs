@@ -4,9 +4,9 @@
     using System.Windows.Forms;
     using Properties;
     using Events;
-    class CurrentRangeStatusBar: ToolStripStatusLabel
+    class UniqueId: ToolStripStatusLabel
     { 
-        public CurrentRangeStatusBar()
+        public UniqueId()
         {
             BorderSides = ToolStripStatusLabelBorderSides.Left;
             BorderStyle = Border3DStyle.Etched;

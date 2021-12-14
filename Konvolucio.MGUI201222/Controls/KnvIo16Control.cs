@@ -13,13 +13,12 @@ using Konvolucio.MGUI201222.Common;
 
 namespace Konvolucio.MGUI201222.Controls
 {
-    public partial class DioControl : UserControl
+    public partial class KnvIo16Control : UserControl
     {
-        #region Public Events
+
         [Browsable(false)]
-        public event EventHandler ChangedValue;
-        #endregion 
-        #region Public Property
+        public event EventHandler<KnvIoEventArg> ChangedValue; 
+
         [Browsable(false)]
         public int Index { get; private set; }
         [Browsable(false)]
@@ -67,15 +66,11 @@ namespace Konvolucio.MGUI201222.Controls
         }
         bool _readOnly;
 
-        #endregion 
-
-        #region Constructor
-        public DioControl()
+        public KnvIo16Control()
         {
-            Value = new bool[32];
+            Value = new bool[16];
             InitializeComponent();
         }
-        #endregion 
 
 
         protected override void OnEnabledChanged(EventArgs e)
@@ -98,7 +93,7 @@ namespace Konvolucio.MGUI201222.Controls
                 if ((ctrl is DioItemControl) && int.Parse(ctrl.Tag.ToString()) == index)
                 {
                     (ctrl as DioItemControl).Checked = state;
-                    Value[index] = state;
+                    Value[index-1] = state;
                 }
             }
         }
@@ -110,18 +105,14 @@ namespace Konvolucio.MGUI201222.Controls
                 int index = int.Parse((string)ctrl.Tag);
                 bool state = value[index];
                 ctrl.Checked = state;
-                Value[index] = state;
+                Value[index -1] = state;
             }
         }
         private void checkBox_CheckedChanged(object sender, EventArgs e)
         {
-            DioItemControl cb = sender as DioItemControl;
-            Checked = cb.Checked;
-            Index = int.Parse(cb.Tag.ToString());
-            Value[Index] = Checked;
-            if (ChangedValue != null)
-                ChangedValue(this, EventArgs.Empty);
-
+            var cb = sender as DioItemControl;
+            ChangedValue?
+                .Invoke(this, new KnvIoEventArg(int.Parse(cb.Tag.ToString()), cb.Checked));
         }
     }
 }

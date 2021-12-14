@@ -67,9 +67,12 @@
 
             /*** Trace ***/
             TimerService.Instance.Tick += (o, e) =>
-            {
+            { 
+                _mainForm.RichTextBoxTrace.SuspendLayout();
+
                 for (int i = 0; DevIoSrv.Instance.TraceQueue.Count != 0; i++)
                 {
+                   
                     string str = DevIoSrv.Instance.TraceQueue.Dequeue();
                     if (str.Contains("Rx:"))
                         _mainForm.RichTextBoxTrace.AppendText(str + "\r\n", System.Drawing.Color.DarkGreen, false);
@@ -80,6 +83,8 @@
                     else
                         _mainForm.RichTextBoxTrace.AppendText(str + "\r\n", System.Drawing.Color.Black);
                 }
+
+                _mainForm.RichTextBoxTrace.ResumeLayout();
             };
 
             /*** Menu Bar ***/
@@ -125,10 +130,8 @@
             {
                 new StatusBar.LogLinesStatusBar(),   
                 new StatusBar.UpTimeCounterStatusBar(),
-                new StatusBar.CurrentRangeStatusBar(),
+                new StatusBar.UniqueId(),
                 new StatusBar.FwVersion(),
-                new StatusBar.VoltageStatusBar(),
-                new StatusBar.SeneseStatusBar(),
                 new StatusBar.EmptyStatusBar(),
                 new StatusBar.VersionStatus(),
                 new StatusBar.LogoStatusBar(),

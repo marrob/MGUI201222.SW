@@ -4,13 +4,11 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
-    using System.Threading.Tasks;
     using System.IO.Ports;
     using System.Globalization;
 
     public class DevIoSrv
     {
-
 
         public event EventHandler ConnectionChanged;
 
@@ -59,14 +57,20 @@
 
         }
 
+        /// <summary>
+        /// Srosport Nyitása
+        /// </summary>
+        /// <param name="port">Port:COMx</param>
         public void Open(string port)
         {
             try
             {
-                _sp = new SerialPort(port);
-                _sp.ReadTimeout = 1000;
-                _sp.BaudRate = 460800;
-                _sp.NewLine = "\n";
+                _sp = new SerialPort(port)
+                {
+                    ReadTimeout = 1000,
+                    BaudRate = 460800,
+                    NewLine = "\n"
+                };
                 _sp.Open();
                 Trace("Serial Port: " + port + " is Open.");
                 Test();
@@ -132,7 +136,10 @@
             }
             return str;
         }
-
+        /// <summary>
+        /// Firmware Verziószáma
+        /// </summary>
+        /// <returns>pl. 1.0.0.0</returns>
         public string GetVersion()
         {
             var resp = WriteRead("*VER?");
@@ -141,7 +148,10 @@
             else
                return resp;
         }
-
+        /// <summary>
+        /// Processzor egyedi azonsítója, hosza nem változik
+        /// </summary>
+        /// <returns>pl:20001E354D501320383252</returns>
         public string GetUniqeId()
         {
             var resp = WriteRead("*UID?");
@@ -150,7 +160,10 @@
             else
                 return resp;
         }
-
+        /// <summary>
+        /// Bekapcsolás óta eltelt idő másodpercben
+        /// </summary>
+        /// <returns>másodperc</returns>
         public int GetUpTime()
         {
             int retval = 0;
@@ -163,6 +176,10 @@
                 return 0;
         }
 
+        /// <summary>
+        /// A panel varáció neve pl: MGUI201222V00-PCREF
+        /// </summary>
+        /// <returns></returns>
         public string GetWhoIs()
         {
             var resp = WriteRead("*WHOIS?");
@@ -172,6 +189,10 @@
                 return resp;
         }
 
+        /// <summary>
+        /// Beállított háttérfényerő százalékban
+        /// </summary>
+        /// <returns>0..100</returns>
         public int GetDisplayLight()
         {
             var retval = -1;
@@ -186,13 +207,14 @@
 
         public void SetDisplayLight(int percent)
         {
-            WriteRead("DIS:LIG" + "  " + percent.ToString());
+            if (WriteRead("DIS:LIG" + "  " + percent.ToString()) != "RDY")
+                Trace("IO-ERROR: Invalid Response.");
         }
 
         public int GetPowerButtonLight()
         {
             var retval = -1;
-            var resp = WriteRead("PBT:LIG?");
+            var resp = WriteRead("DIS:LIG?");
             if (resp == null)
                 return -1;
             else if (int.TryParse(resp, NumberStyles.Integer, CultureInfo.GetCultureInfo("en-US"), out retval))
@@ -203,99 +225,65 @@
 
         public void SetPowerButtonLight(int percent)
         {
-            WriteRead("PBT:LIG" + "  " + percent.ToString());
+            if(WriteRead("PBT:LIG" + "  " + percent.ToString())!= "RDY")
+                Trace("IO-ERROR: Invalid Response.");
         }
 
-
-
-
-
-        public double MeasVolt(byte node)
+        /// <summary>
+        /// Egy digitális kimenet bekapcsolása
+        /// </summary>
+        /// <param name="channel">1..8-ig</param>
+        public void SetOnOutput(int channel)
         {
-            double retval = double.NaN;
-            var resp = WriteRead("#" + node.ToString("X2") + " " + "MEAS:VOLT?");
-            if (resp == null)
-                return double.NaN;
-            else if (double.TryParse(resp, NumberStyles.Float, CultureInfo.GetCultureInfo("en-US"), out retval))
-                return retval;
+            if (WriteRead("DIG:OUT:ON:BIT" + "  " + channel.ToString()) != "RDY")
+                Trace("IO-ERROR: Invalid Response.");
+
+        }
+
+        /// <summary>
+        /// Egy digitális kimenet kikapcsolása
+        /// </summary>
+        /// <param name="channel"></param>
+        public void SetOffOutput(int channel)
+        {
+            if (WriteRead("DIG:OUT:OFF:BIT" + "  " + channel.ToString()) != "RDY")
+                Trace("IO-ERROR: Invalid Response.");
+
+        }
+
+        /// <summary>
+        /// Egy digitális kimenet olvasása
+        /// </summary>
+        /// <param name="channel">1..16-ig</param>
+        /// <returns>True = aktív, Open Drain kimenetek </returns>
+        public bool GetOutput(int channel)
+        {
+            var resp = WriteRead("DIG:OUT:BIT?" + " " + channel.ToString());
+            if (resp == "0")
+                return false;
+            else if (resp == "1")
+                return true;
             else
-                return double.NaN;
+                Trace("IO-ERROR: Invalid Response.");
+            return false;   
         }
 
-        public double MeasCurr(byte node)
+        /// <summary>
+        /// Egy digitális bemenet olvasása
+        /// </summary>
+        /// <param name="channel">1..16-ig</param>
+        /// <returns>True = aktív, alaphelyzetben: True</returns>
+        public bool GetInput(int channel)
         {
-            double retval = double.NaN;
-            var resp = WriteRead("#" + node.ToString("X2") + " " + "MEAS:CURR?");
-            if (resp == null)
-                return double.NaN;
-            else if (double.TryParse(resp, NumberStyles.Float, CultureInfo.GetCultureInfo("en-US"), out retval))
-                return retval;
+            var resp = WriteRead("DIG:INP:BIT?" + " " + channel.ToString());
+            if (resp == "0")
+                return false;
+            else if (resp == "1")
+                return true;
             else
-                return double.NaN;
+                Trace("IO-ERROR: Invalid Response.");
+            return false;
         }
-
-        public string GetCurrRange(byte node)
-        {
-            if (_sp == null || !_sp.IsOpen)
-                return "ERROR port is Closed";
-
-            try
-            {
-                var resp = int.Parse(WriteRead("#" + node.ToString("X2") + " " + "CURR:RNG?"));
-                if (resp == 0)
-                {
-                    return "100mA";
-                }
-                if (resp == 1)
-                {
-                    return "50uA";
-                }
-                else
-                {
-                    return "Unknown";
-                }
-            }
-            catch (Exception ex)
-            {
-                Trace("IO-ERROR:" + ex.Message);
-            }
-            return "na";
-        }
-
-
-        public void SetVolt(byte node, double volt)
-        {
-            _lastVoltage = volt;
-            WriteRead("#" + node.ToString("X2") + " " + "SET:VOLT" + "  " + volt.ToString());
-        }
-
-        public void OutputOn(byte node)
-        {
-            WriteRead("#" + node.ToString("X2") + " " + "SET:OE 1");
-        }
-
-        public void OutputOff(byte node)
-        {
-            WriteRead("#" + node.ToString("X2") + " " + "SET:OE 0");
-        }
-
-        public void SetCurrentLimit(byte node, double current)
-        {
-            _lastCurrent = current;
-            WriteRead("#" + node.ToString("X2") + " " + "SET:CURR" + "  " + current.ToString());
-        }
-
-
-        public void SetTriggerVolt(byte node)
-        {
-            WriteRead("#" + node.ToString("X2") + " " + "TRIG:VOLT");
-        }
-
-        public void SetTriggerCurrent(byte node)
-        {
-            WriteRead("#" + node.ToString("X2") + " " + "TRIG:CURR");
-        }
-
 
 
         public void Close()

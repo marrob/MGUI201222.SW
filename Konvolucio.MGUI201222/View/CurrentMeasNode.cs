@@ -41,8 +41,6 @@
         public void UserEnter()
         {
             UserInFocus = true;
-
-            CurrentLimit =  DevIoSrv.Instance.GetCurrRange(0);
         }
     }
 }

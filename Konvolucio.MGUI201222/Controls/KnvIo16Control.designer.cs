@@ -1,6 +1,6 @@
 ﻿namespace Konvolucio.MGUI201222.Controls
 {
-    partial class DioControl
+    partial class KnvIo16Control
     {
         /// <summary> 
         /// Required designer variable.
@@ -44,23 +44,23 @@
             this.label14 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.mdioFlagControl16 = new DioItemControl();
-            this.mdioFlagControl15 = new DioItemControl();
-            this.mdioFlagControl14 = new DioItemControl();
-            this.mdioFlagControl13 = new DioItemControl();
-            this.mdioFlagControl12 = new DioItemControl();
-            this.mdioFlagControl11 = new DioItemControl();
-            this.mdioFlagControl10 = new DioItemControl();
-            this.mdioFlagControl9 = new DioItemControl();
-            this.mdioFlagControl8 = new DioItemControl();
-            this.mdioFlagControl7 = new DioItemControl();
-            this.mdioFlagControl6 = new DioItemControl();
-            this.mdioFlagControl5 = new DioItemControl();
-            this.mdioFlagControl4 = new DioItemControl();
-            this.mdioFlagControl3 = new DioItemControl();
-            this.mdioFlagControl2 = new DioItemControl();
+            this.mdioFlagControl16 = new Konvolucio.MGUI201222.Controls.DioItemControl();
+            this.mdioFlagControl15 = new Konvolucio.MGUI201222.Controls.DioItemControl();
+            this.mdioFlagControl14 = new Konvolucio.MGUI201222.Controls.DioItemControl();
+            this.mdioFlagControl13 = new Konvolucio.MGUI201222.Controls.DioItemControl();
+            this.mdioFlagControl12 = new Konvolucio.MGUI201222.Controls.DioItemControl();
+            this.mdioFlagControl113 = new Konvolucio.MGUI201222.Controls.DioItemControl();
+            this.mdioFlagControl10 = new Konvolucio.MGUI201222.Controls.DioItemControl();
+            this.mdioFlagControl9 = new Konvolucio.MGUI201222.Controls.DioItemControl();
+            this.mdioFlagControl8 = new Konvolucio.MGUI201222.Controls.DioItemControl();
+            this.mdioFlagControl7 = new Konvolucio.MGUI201222.Controls.DioItemControl();
+            this.mdioFlagControl6 = new Konvolucio.MGUI201222.Controls.DioItemControl();
+            this.mdioFlagControl5 = new Konvolucio.MGUI201222.Controls.DioItemControl();
+            this.mdioFlagControl4 = new Konvolucio.MGUI201222.Controls.DioItemControl();
+            this.mdioFlagControl3 = new Konvolucio.MGUI201222.Controls.DioItemControl();
+            this.mdioFlagControl2 = new Konvolucio.MGUI201222.Controls.DioItemControl();
             this.label16 = new System.Windows.Forms.Label();
-            this.mdioFlagControl1 = new DioItemControl();
+            this.mdioFlagControl1 = new Konvolucio.MGUI201222.Controls.DioItemControl();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -283,7 +283,7 @@
             this.tableLayoutPanel1.Controls.Add(this.mdioFlagControl14, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.mdioFlagControl13, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.mdioFlagControl12, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.mdioFlagControl11, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.mdioFlagControl113, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.mdioFlagControl10, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.mdioFlagControl9, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.mdioFlagControl8, 0, 1);
@@ -325,250 +325,255 @@
             this.mdioFlagControl16.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.mdioFlagControl16.BackColor = System.Drawing.Color.Lime;
             this.mdioFlagControl16.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.mdioFlagControl16.Checked = false;
             this.mdioFlagControl16.Location = new System.Drawing.Point(303, 24);
             this.mdioFlagControl16.MaximumSize = new System.Drawing.Size(15, 15);
-            this.mdioFlagControl16.Checked = false;
             this.mdioFlagControl16.MinimumSize = new System.Drawing.Size(15, 15);
             this.mdioFlagControl16.Name = "mdioFlagControl16";
+            this.mdioFlagControl16.NotAvaliable = false;
+            this.mdioFlagControl16.ReadOnly = false;
             this.mdioFlagControl16.Size = new System.Drawing.Size(15, 15);
             this.mdioFlagControl16.TabIndex = 47;
-            this.mdioFlagControl16.Tag = "11";
+            this.mdioFlagControl16.Tag = "12";
             this.mdioFlagControl16.CheckedChanged += new System.EventHandler(this.checkBox_CheckedChanged);
-      
             // 
             // mdioFlagControl15
             // 
             this.mdioFlagControl15.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.mdioFlagControl15.BackColor = System.Drawing.Color.Lime;
             this.mdioFlagControl15.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.mdioFlagControl15.Checked = false;
             this.mdioFlagControl15.Location = new System.Drawing.Point(141, 24);
             this.mdioFlagControl15.MaximumSize = new System.Drawing.Size(15, 15);
-            this.mdioFlagControl15.Checked = false;
             this.mdioFlagControl15.MinimumSize = new System.Drawing.Size(15, 15);
             this.mdioFlagControl15.Name = "mdioFlagControl15";
+            this.mdioFlagControl15.NotAvaliable = false;
+            this.mdioFlagControl15.ReadOnly = false;
             this.mdioFlagControl15.Size = new System.Drawing.Size(15, 15);
             this.mdioFlagControl15.TabIndex = 46;
-            this.mdioFlagControl15.Tag = "5";
+            this.mdioFlagControl15.Tag = "6";
             this.mdioFlagControl15.CheckedChanged += new System.EventHandler(this.checkBox_CheckedChanged);
-   
             // 
             // mdioFlagControl14
             // 
             this.mdioFlagControl14.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.mdioFlagControl14.BackColor = System.Drawing.Color.Lime;
             this.mdioFlagControl14.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.mdioFlagControl14.Checked = false;
             this.mdioFlagControl14.Location = new System.Drawing.Point(168, 24);
             this.mdioFlagControl14.MaximumSize = new System.Drawing.Size(15, 15);
-            this.mdioFlagControl14.Checked = false;
-
             this.mdioFlagControl14.MinimumSize = new System.Drawing.Size(15, 15);
             this.mdioFlagControl14.Name = "mdioFlagControl14";
+            this.mdioFlagControl14.NotAvaliable = false;
+            this.mdioFlagControl14.ReadOnly = false;
             this.mdioFlagControl14.Size = new System.Drawing.Size(15, 15);
             this.mdioFlagControl14.TabIndex = 45;
-            this.mdioFlagControl14.Tag = "6";
+            this.mdioFlagControl14.Tag = "7";
             this.mdioFlagControl14.CheckedChanged += new System.EventHandler(this.checkBox_CheckedChanged);
-          
             // 
             // mdioFlagControl13
             // 
             this.mdioFlagControl13.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.mdioFlagControl13.BackColor = System.Drawing.Color.Lime;
             this.mdioFlagControl13.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.mdioFlagControl13.Checked = false;
             this.mdioFlagControl13.Location = new System.Drawing.Point(195, 24);
             this.mdioFlagControl13.MaximumSize = new System.Drawing.Size(15, 15);
-            this.mdioFlagControl13.Checked = false;
             this.mdioFlagControl13.MinimumSize = new System.Drawing.Size(15, 15);
             this.mdioFlagControl13.Name = "mdioFlagControl13";
+            this.mdioFlagControl13.NotAvaliable = false;
+            this.mdioFlagControl13.ReadOnly = false;
             this.mdioFlagControl13.Size = new System.Drawing.Size(15, 15);
             this.mdioFlagControl13.TabIndex = 44;
-            this.mdioFlagControl13.Tag = "7";
+            this.mdioFlagControl13.Tag = "8";
             this.mdioFlagControl13.CheckedChanged += new System.EventHandler(this.checkBox_CheckedChanged);
-           
             // 
             // mdioFlagControl12
             // 
             this.mdioFlagControl12.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.mdioFlagControl12.BackColor = System.Drawing.Color.Lime;
             this.mdioFlagControl12.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.mdioFlagControl12.Checked = false;
             this.mdioFlagControl12.Location = new System.Drawing.Point(114, 24);
             this.mdioFlagControl12.MaximumSize = new System.Drawing.Size(15, 15);
-            this.mdioFlagControl12.Checked = false;
-
             this.mdioFlagControl12.MinimumSize = new System.Drawing.Size(15, 15);
             this.mdioFlagControl12.Name = "mdioFlagControl12";
+            this.mdioFlagControl12.NotAvaliable = false;
+            this.mdioFlagControl12.ReadOnly = false;
             this.mdioFlagControl12.Size = new System.Drawing.Size(15, 15);
             this.mdioFlagControl12.TabIndex = 43;
-            this.mdioFlagControl12.Tag = "4";
+            this.mdioFlagControl12.Tag = "5";
             this.mdioFlagControl12.CheckedChanged += new System.EventHandler(this.checkBox_CheckedChanged);
-
             // 
-            // mdioFlagControl11
+            // mdioFlagControl113
             // 
-            this.mdioFlagControl11.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.mdioFlagControl11.BackColor = System.Drawing.Color.Lime;
-            this.mdioFlagControl11.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.mdioFlagControl11.Location = new System.Drawing.Point(33, 24);
-            this.mdioFlagControl11.MaximumSize = new System.Drawing.Size(15, 15);
-            this.mdioFlagControl11.Checked = false;
-            this.mdioFlagControl11.MinimumSize = new System.Drawing.Size(15, 15);
-            this.mdioFlagControl11.Name = "mdioFlagControl11";
-            this.mdioFlagControl11.Size = new System.Drawing.Size(15, 15);
-            this.mdioFlagControl11.TabIndex = 42;
-            this.mdioFlagControl11.Tag = "1";
-            this.mdioFlagControl11.CheckedChanged += new System.EventHandler(this.checkBox_CheckedChanged);
+            this.mdioFlagControl113.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.mdioFlagControl113.BackColor = System.Drawing.Color.Lime;
+            this.mdioFlagControl113.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.mdioFlagControl113.Checked = false;
+            this.mdioFlagControl113.Location = new System.Drawing.Point(33, 24);
+            this.mdioFlagControl113.MaximumSize = new System.Drawing.Size(15, 15);
+            this.mdioFlagControl113.MinimumSize = new System.Drawing.Size(15, 15);
+            this.mdioFlagControl113.Name = "mdioFlagControl113";
+            this.mdioFlagControl113.NotAvaliable = false;
+            this.mdioFlagControl113.ReadOnly = false;
+            this.mdioFlagControl113.Size = new System.Drawing.Size(15, 15);
+            this.mdioFlagControl113.TabIndex = 42;
+            this.mdioFlagControl113.Tag = "1";
+            this.mdioFlagControl113.CheckedChanged += new System.EventHandler(this.checkBox_CheckedChanged);
             // 
             // mdioFlagControl10
             // 
             this.mdioFlagControl10.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.mdioFlagControl10.BackColor = System.Drawing.Color.Lime;
             this.mdioFlagControl10.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.mdioFlagControl10.Checked = false;
             this.mdioFlagControl10.Location = new System.Drawing.Point(60, 24);
             this.mdioFlagControl10.MaximumSize = new System.Drawing.Size(15, 15);
-            this.mdioFlagControl10.Checked = false;
-
             this.mdioFlagControl10.MinimumSize = new System.Drawing.Size(15, 15);
             this.mdioFlagControl10.Name = "mdioFlagControl10";
+            this.mdioFlagControl10.NotAvaliable = false;
+            this.mdioFlagControl10.ReadOnly = false;
             this.mdioFlagControl10.Size = new System.Drawing.Size(15, 15);
             this.mdioFlagControl10.TabIndex = 41;
-            this.mdioFlagControl10.Tag = "2";
+            this.mdioFlagControl10.Tag = "3";
             this.mdioFlagControl10.CheckedChanged += new System.EventHandler(this.checkBox_CheckedChanged);
-    
             // 
             // mdioFlagControl9
             // 
             this.mdioFlagControl9.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.mdioFlagControl9.BackColor = System.Drawing.Color.Lime;
             this.mdioFlagControl9.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.mdioFlagControl9.Checked = false;
             this.mdioFlagControl9.Location = new System.Drawing.Point(87, 24);
             this.mdioFlagControl9.MaximumSize = new System.Drawing.Size(15, 15);
-            this.mdioFlagControl9.Checked = false;
-      
             this.mdioFlagControl9.MinimumSize = new System.Drawing.Size(15, 15);
             this.mdioFlagControl9.Name = "mdioFlagControl9";
+            this.mdioFlagControl9.NotAvaliable = false;
+            this.mdioFlagControl9.ReadOnly = false;
             this.mdioFlagControl9.Size = new System.Drawing.Size(15, 15);
             this.mdioFlagControl9.TabIndex = 40;
-            this.mdioFlagControl9.Tag = "3";
+            this.mdioFlagControl9.Tag = "4";
             this.mdioFlagControl9.CheckedChanged += new System.EventHandler(this.checkBox_CheckedChanged);
-         
             // 
             // mdioFlagControl8
             // 
             this.mdioFlagControl8.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.mdioFlagControl8.BackColor = System.Drawing.Color.Lime;
             this.mdioFlagControl8.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.mdioFlagControl8.Checked = false;
             this.mdioFlagControl8.Location = new System.Drawing.Point(222, 24);
             this.mdioFlagControl8.MaximumSize = new System.Drawing.Size(15, 15);
-            this.mdioFlagControl8.Checked = false;
-
             this.mdioFlagControl8.MinimumSize = new System.Drawing.Size(15, 15);
             this.mdioFlagControl8.Name = "mdioFlagControl8";
+            this.mdioFlagControl8.NotAvaliable = false;
+            this.mdioFlagControl8.ReadOnly = false;
             this.mdioFlagControl8.Size = new System.Drawing.Size(15, 15);
             this.mdioFlagControl8.TabIndex = 39;
-            this.mdioFlagControl8.Tag = "8";
+            this.mdioFlagControl8.Tag = "9";
             this.mdioFlagControl8.CheckedChanged += new System.EventHandler(this.checkBox_CheckedChanged);
-
             // 
             // mdioFlagControl7
             // 
             this.mdioFlagControl7.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.mdioFlagControl7.BackColor = System.Drawing.Color.Lime;
             this.mdioFlagControl7.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.mdioFlagControl7.Checked = false;
             this.mdioFlagControl7.Location = new System.Drawing.Point(357, 24);
             this.mdioFlagControl7.MaximumSize = new System.Drawing.Size(15, 15);
-            this.mdioFlagControl7.Checked = false;
-
             this.mdioFlagControl7.MinimumSize = new System.Drawing.Size(15, 15);
             this.mdioFlagControl7.Name = "mdioFlagControl7";
+            this.mdioFlagControl7.NotAvaliable = false;
+            this.mdioFlagControl7.ReadOnly = false;
             this.mdioFlagControl7.Size = new System.Drawing.Size(15, 15);
             this.mdioFlagControl7.TabIndex = 38;
-            this.mdioFlagControl7.Tag = "13";
+            this.mdioFlagControl7.Tag = "14";
             this.mdioFlagControl7.CheckedChanged += new System.EventHandler(this.checkBox_CheckedChanged);
-
             // 
             // mdioFlagControl6
             // 
             this.mdioFlagControl6.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.mdioFlagControl6.BackColor = System.Drawing.Color.Lime;
             this.mdioFlagControl6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.mdioFlagControl6.Checked = false;
             this.mdioFlagControl6.Location = new System.Drawing.Point(384, 24);
             this.mdioFlagControl6.MaximumSize = new System.Drawing.Size(15, 15);
-            this.mdioFlagControl6.Checked = false;
-
             this.mdioFlagControl6.MinimumSize = new System.Drawing.Size(15, 15);
             this.mdioFlagControl6.Name = "mdioFlagControl6";
+            this.mdioFlagControl6.NotAvaliable = false;
+            this.mdioFlagControl6.ReadOnly = false;
             this.mdioFlagControl6.Size = new System.Drawing.Size(15, 15);
             this.mdioFlagControl6.TabIndex = 37;
-            this.mdioFlagControl6.Tag = "14";
+            this.mdioFlagControl6.Tag = "15";
             this.mdioFlagControl6.CheckedChanged += new System.EventHandler(this.checkBox_CheckedChanged);
-
             // 
             // mdioFlagControl5
             // 
             this.mdioFlagControl5.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.mdioFlagControl5.BackColor = System.Drawing.Color.Lime;
             this.mdioFlagControl5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.mdioFlagControl5.Checked = false;
             this.mdioFlagControl5.Location = new System.Drawing.Point(415, 24);
             this.mdioFlagControl5.MaximumSize = new System.Drawing.Size(15, 15);
-            this.mdioFlagControl5.Checked = false;
-
             this.mdioFlagControl5.MinimumSize = new System.Drawing.Size(15, 15);
             this.mdioFlagControl5.Name = "mdioFlagControl5";
+            this.mdioFlagControl5.NotAvaliable = false;
+            this.mdioFlagControl5.ReadOnly = false;
             this.mdioFlagControl5.Size = new System.Drawing.Size(15, 15);
             this.mdioFlagControl5.TabIndex = 36;
-            this.mdioFlagControl5.Tag = "15";
+            this.mdioFlagControl5.Tag = "16";
             this.mdioFlagControl5.CheckedChanged += new System.EventHandler(this.checkBox_CheckedChanged);
-
             // 
             // mdioFlagControl4
             // 
             this.mdioFlagControl4.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.mdioFlagControl4.BackColor = System.Drawing.Color.Lime;
             this.mdioFlagControl4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.mdioFlagControl4.Checked = false;
             this.mdioFlagControl4.Location = new System.Drawing.Point(330, 24);
             this.mdioFlagControl4.MaximumSize = new System.Drawing.Size(15, 15);
-            this.mdioFlagControl4.Checked = false;
-
             this.mdioFlagControl4.MinimumSize = new System.Drawing.Size(15, 15);
             this.mdioFlagControl4.Name = "mdioFlagControl4";
+            this.mdioFlagControl4.NotAvaliable = false;
+            this.mdioFlagControl4.ReadOnly = false;
             this.mdioFlagControl4.Size = new System.Drawing.Size(15, 15);
             this.mdioFlagControl4.TabIndex = 35;
-            this.mdioFlagControl4.Tag = "12";
+            this.mdioFlagControl4.Tag = "13";
             this.mdioFlagControl4.CheckedChanged += new System.EventHandler(this.checkBox_CheckedChanged);
-
             // 
             // mdioFlagControl3
             // 
             this.mdioFlagControl3.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.mdioFlagControl3.BackColor = System.Drawing.Color.Lime;
             this.mdioFlagControl3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.mdioFlagControl3.Checked = false;
             this.mdioFlagControl3.Location = new System.Drawing.Point(249, 24);
             this.mdioFlagControl3.MaximumSize = new System.Drawing.Size(15, 15);
-            this.mdioFlagControl3.Checked = false;
-
             this.mdioFlagControl3.MinimumSize = new System.Drawing.Size(15, 15);
             this.mdioFlagControl3.Name = "mdioFlagControl3";
+            this.mdioFlagControl3.NotAvaliable = false;
+            this.mdioFlagControl3.ReadOnly = false;
             this.mdioFlagControl3.Size = new System.Drawing.Size(15, 15);
             this.mdioFlagControl3.TabIndex = 34;
-            this.mdioFlagControl3.Tag = "9";
+            this.mdioFlagControl3.Tag = "10";
             this.mdioFlagControl3.CheckedChanged += new System.EventHandler(this.checkBox_CheckedChanged);
-
             // 
             // mdioFlagControl2
             // 
             this.mdioFlagControl2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.mdioFlagControl2.BackColor = System.Drawing.Color.Lime;
             this.mdioFlagControl2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.mdioFlagControl2.Checked = false;
             this.mdioFlagControl2.Location = new System.Drawing.Point(276, 24);
             this.mdioFlagControl2.MaximumSize = new System.Drawing.Size(15, 15);
-            this.mdioFlagControl2.Checked = false;
-
             this.mdioFlagControl2.MinimumSize = new System.Drawing.Size(15, 15);
             this.mdioFlagControl2.Name = "mdioFlagControl2";
+            this.mdioFlagControl2.NotAvaliable = false;
+            this.mdioFlagControl2.ReadOnly = false;
             this.mdioFlagControl2.Size = new System.Drawing.Size(15, 15);
             this.mdioFlagControl2.TabIndex = 33;
-            this.mdioFlagControl2.Tag = "10";
+            this.mdioFlagControl2.Tag = "11";
             this.mdioFlagControl2.CheckedChanged += new System.EventHandler(this.checkBox_CheckedChanged);
-
             // 
             // label16
             // 
@@ -588,25 +593,25 @@
             this.mdioFlagControl1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.mdioFlagControl1.BackColor = System.Drawing.Color.Lime;
             this.mdioFlagControl1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.mdioFlagControl1.Checked = false;
             this.mdioFlagControl1.Location = new System.Drawing.Point(6, 24);
             this.mdioFlagControl1.MaximumSize = new System.Drawing.Size(15, 15);
-            this.mdioFlagControl1.Checked = false;
-
             this.mdioFlagControl1.MinimumSize = new System.Drawing.Size(15, 15);
             this.mdioFlagControl1.Name = "mdioFlagControl1";
+            this.mdioFlagControl1.NotAvaliable = false;
+            this.mdioFlagControl1.ReadOnly = false;
             this.mdioFlagControl1.Size = new System.Drawing.Size(15, 15);
             this.mdioFlagControl1.TabIndex = 32;
-            this.mdioFlagControl1.Tag = "0";
+            this.mdioFlagControl1.Tag = "1";
             this.mdioFlagControl1.CheckedChanged += new System.EventHandler(this.checkBox_CheckedChanged);
-
             // 
-            // DioControl
+            // KnvIo16Control
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tableLayoutPanel1);
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Name = "DioControl";
+            this.Name = "KnvIo16Control";
             this.Size = new System.Drawing.Size(440, 42);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
@@ -639,7 +644,7 @@
         private DioItemControl mdioFlagControl14;
         private DioItemControl mdioFlagControl13;
         private DioItemControl mdioFlagControl12;
-        private DioItemControl mdioFlagControl11;
+        private DioItemControl mdioFlagControl113;
         private DioItemControl mdioFlagControl10;
         private DioItemControl mdioFlagControl9;
         private DioItemControl mdioFlagControl8;

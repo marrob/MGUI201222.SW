@@ -53,12 +53,19 @@
     <Compile Include="Commands\AlwaysOnTopCommand.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\KnvIoControl.cs">
+    <Compile Include="Controls\KnvIo8Control .cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\KnvIoControl.designer.cs">
-      <DependentUpon>KnvIoControl.cs</DependentUpon>
+    <Compile Include="Controls\KnvIo8Control .designer.cs">
+      <DependentUpon>KnvIo8Control .cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\KnvIo16Control.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\KnvIo16Control.designer.cs">
+      <DependentUpon>KnvIo16Control.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\KnvIoEventArg.cs" />
     <Compile Include="Controls\KnvIoItemControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -198,8 +205,11 @@
     <Compile Include="View\UpdatesForm.Designer.cs">
       <DependentUpon>UpdatesForm.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Controls\KnvIoControl.resx">
-      <DependentUpon>KnvIoControl.cs</DependentUpon>
+    <EmbeddedResource Include="Controls\KnvIo8Control .resx">
+      <DependentUpon>KnvIo8Control .cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\KnvIo16Control.resx">
+      <DependentUpon>KnvIo16Control.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\VoltageMeasNode.resx">
       <DependentUpon>VoltageMeasNode.cs</DependentUpon>

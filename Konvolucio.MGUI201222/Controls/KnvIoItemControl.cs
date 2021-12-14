@@ -11,10 +11,8 @@ namespace Konvolucio.MGUI201222.Controls
 {
     public partial class DioItemControl : UserControl
     {
-        #region Public Event 
         public event EventHandler CheckedChanged;
-        #endregion 
-        #region PublicProperty
+
         [Browsable(false)]
         public bool Checked
         {
@@ -26,7 +24,6 @@ namespace Konvolucio.MGUI201222.Controls
                     if (!NotAvaliable)
                     {
                         UpdateState();
-                        OnCheckedChanged(value);
                     }
                 }
             }
@@ -65,14 +62,13 @@ namespace Konvolucio.MGUI201222.Controls
         
         }
         bool _notAvaliable;
-        #endregion 
-        #region Constructor
+ 
+
         public DioItemControl()
         {
             InitializeComponent();
             OnCheckedChanged(Checked);
         }
-        #endregion 
 
         protected virtual void OnCheckedChanged(bool state)
         {
@@ -83,7 +79,6 @@ namespace Konvolucio.MGUI201222.Controls
         {
             if (Enabled && !_readOnly && !NotAvaliable)
             {  
-                _checked = !_checked;
                 UpdateState();
                 OnCheckedChanged(_checked); 
             }

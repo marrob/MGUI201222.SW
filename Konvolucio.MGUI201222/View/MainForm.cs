@@ -87,8 +87,6 @@ namespace Konvolucio.MGUI201222
             //WindowState = Settings.Default.MainFormWindowState;
             //Size = Settings.Default.MainFormSize;
             //splitContainer1.SplitterDistance = Settings.Default.MainTree_SplitterDistance;
-
-
         }
 
         private void KnvRichTextBox1_TextChanged(object sender, EventArgs e)
