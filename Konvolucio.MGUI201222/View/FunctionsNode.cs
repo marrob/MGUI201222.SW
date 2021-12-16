@@ -22,8 +22,12 @@
 
         public void UserEnter()
         {
-           numericUpDownDisplay.Value = DevIoSrv.Instance.GetDisplayLight();
-           numericUpDownButton.Value = DevIoSrv.Instance.GetPowerButtonLight();
+            this.SuspendLayout();
+           
+            numericUpDownDisplay.Value = DevIoSrv.Instance.GetDisplayLight();
+            numericUpDownButton.Value = DevIoSrv.Instance.GetPowerButtonLight();
+            checkBoxPSP.Checked = DevIoSrv.Instance.GetDisplay();
+            checkBoxPSP.Checked = DevIoSrv.Instance.GetPowerSupply();
 
             knvIoOutputs.ChangedValue += KnvIo8Control1_ChangedValue;
             if (!DevIoSrv.Instance.IsOpen)
@@ -38,7 +42,17 @@
                 for (int i = 1; i <= 16; i++)
                     knvIoInputs.SetContent(i, DevIoSrv.Instance.GetInput(i));
             }
-        }   
+
+            textBoxTemp1.Text = DevIoSrv.Instance.GetTemperature(1).ToString();
+            textBoxTemp2.Text = DevIoSrv.Instance.GetTemperature(2).ToString();
+            textBoxTemp3.Text = DevIoSrv.Instance.GetTemperature(3).ToString();
+            textBoxTemp4.Text = DevIoSrv.Instance.GetTemperature(4).ToString();
+
+            this.ResumeLayout();
+
+            timer1.Start();
+
+        }
 
         public void UserLeave()
         {
@@ -67,6 +81,43 @@
         private void numericUpDownDisplay_ValueChanged(object sender, EventArgs e)
         {
             DevIoSrv.Instance.SetDisplayLight((int)numericUpDownDisplay.Value);
+        }
+
+        private void checkBoxPSP_CheckedChanged(object sender, EventArgs e)
+        {
+            DevIoSrv.Instance.SetPowerSupply((sender as CheckBox).Checked);
+        }
+
+        private void checkBoxDisplay_CheckedChanged(object sender, EventArgs e)
+        {
+            DevIoSrv.Instance.SetDisplay((sender as CheckBox).Checked);
+        }
+
+        private void groupBox2_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if (DevIoSrv.Instance.IsOpen)
+            {
+
+                textBoxTemp1.Text = DevIoSrv.Instance.GetTemperature(1).ToString();
+                textBoxTemp2.Text = DevIoSrv.Instance.GetTemperature(2).ToString();
+                textBoxTemp3.Text = DevIoSrv.Instance.GetTemperature(3).ToString();
+                textBoxTemp4.Text = DevIoSrv.Instance.GetTemperature(4).ToString();
+
+                for (int i = 1; i <= 16; i++)
+                    knvIoInputs.SetContent(i, DevIoSrv.Instance.GetInput(i));
+
+            }
+            else 
+            {
+            
+            }
+
+
         }
     }
 }

@@ -214,7 +214,7 @@
         public int GetPowerButtonLight()
         {
             var retval = -1;
-            var resp = WriteRead("DIS:LIG?");
+            var resp = WriteRead("PBT:LIG?");
             if (resp == null)
                 return -1;
             else if (int.TryParse(resp, NumberStyles.Integer, CultureInfo.GetCultureInfo("en-US"), out retval))
@@ -285,6 +285,58 @@
             return false;
         }
 
+        public void SetDisplay(bool onoff)
+        {
+            if (WriteRead("DIS:" + (onoff?"ON":"OFF")) != "RDY")
+                Trace("IO-ERROR: Invalid Response.");
+        }
+
+        public bool GetDisplay()
+        {
+            var resp = WriteRead("DIS?");
+            if (resp == "0")
+                return false;
+            else if (resp == "1")
+                return true;
+            else
+                Trace("IO-ERROR: Invalid Response.");
+            return false;
+        }
+
+        public void SetPowerSupply(bool onoff)
+        {
+            if (WriteRead("PSP:" + (onoff ? "ON" : "OFF")) != "RDY")
+                Trace("IO-ERROR: Invalid Response.");
+        }
+
+        public bool GetPowerSupply()
+        {
+            var resp = WriteRead("PSP?");
+            if (resp == "0")
+                return false;
+            else if (resp == "1")
+                return true;
+            else
+                Trace("IO-ERROR: Invalid Response.");
+            return false;
+        }
+
+        /// <summary>
+        /// Hőmérséklet szenzorok értékeinek lekérdezése
+        /// </summary>
+        /// <param name="channel">1..4-ig</param>
+        /// <returns>0..2.5V</returns>
+        public double GetTemperature(int channel)
+        {
+            double retval = double.NaN;
+            var resp = WriteRead("TEM:DBL?" + " " + channel.ToString());
+            if (resp == null)
+                return double.NaN;
+            else if (double.TryParse(resp, NumberStyles.Float, CultureInfo.GetCultureInfo("en-US"), out retval))
+                return retval;
+            else
+                return double.NaN;
+        }
 
         public void Close()
         {

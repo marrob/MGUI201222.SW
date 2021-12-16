@@ -68,6 +68,7 @@
             /*** Trace ***/
             TimerService.Instance.Tick += (o, e) =>
             { 
+               
                 _mainForm.RichTextBoxTrace.SuspendLayout();
 
                 for (int i = 0; DevIoSrv.Instance.TraceQueue.Count != 0; i++)
@@ -85,6 +86,7 @@
                 }
 
                 _mainForm.RichTextBoxTrace.ResumeLayout();
+                
             };
 
             /*** Menu Bar ***/
