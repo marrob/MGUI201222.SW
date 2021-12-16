@@ -47,7 +47,7 @@
             textBoxTemp2.Text = DevIoSrv.Instance.GetTemperature(2).ToString();
             textBoxTemp3.Text = DevIoSrv.Instance.GetTemperature(3).ToString();
             textBoxTemp4.Text = DevIoSrv.Instance.GetTemperature(4).ToString();
-
+           
             this.ResumeLayout();
 
             timer1.Start();
@@ -102,14 +102,16 @@
         {
             if (DevIoSrv.Instance.IsOpen)
             {
-
+                
+/*
                 textBoxTemp1.Text = DevIoSrv.Instance.GetTemperature(1).ToString();
                 textBoxTemp2.Text = DevIoSrv.Instance.GetTemperature(2).ToString();
                 textBoxTemp3.Text = DevIoSrv.Instance.GetTemperature(3).ToString();
                 textBoxTemp4.Text = DevIoSrv.Instance.GetTemperature(4).ToString();
-
+ *//*
                 for (int i = 1; i <= 16; i++)
                     knvIoInputs.SetContent(i, DevIoSrv.Instance.GetInput(i));
+              */ 
 
             }
             else 

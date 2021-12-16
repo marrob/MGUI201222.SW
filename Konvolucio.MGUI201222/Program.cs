@@ -71,6 +71,7 @@
                
                 _mainForm.RichTextBoxTrace.SuspendLayout();
 
+                
                 for (int i = 0; DevIoSrv.Instance.TraceQueue.Count != 0; i++)
                 {
                    
@@ -84,6 +85,7 @@
                     else
                         _mainForm.RichTextBoxTrace.AppendText(str + "\r\n", System.Drawing.Color.Black);
                 }
+                
 
                 _mainForm.RichTextBoxTrace.ResumeLayout();
                 
