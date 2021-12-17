@@ -57,6 +57,8 @@
 
         }
 
+        object SyncObject = new object();
+
         /// <summary>
         /// Srosport Nyitása
         /// </summary>
@@ -104,35 +106,37 @@
 
         string WriteRead(string str)
         {
-            if (_sp == null || !_sp.IsOpen)
+            lock (SyncObject)
+                
             {
-                Trace("IO ERROR Serial Port is closed. " + str);
-                OnConnectionChanged();
-                return null;
-            }
-            try
-            {
-                Trace("Tx: " + str);
-                _sp.WriteLine(str);
-                // IoLog.Instance.WirteLine(str);
-            }
-            catch (Exception ex)
-            {
-                Trace("Tx ERROR Serial Port is:" + ex.Message);
-                OnConnectionChanged();
-            }
+                if (_sp == null || !_sp.IsOpen)
+                {
+                    Trace("IO ERROR Serial Port is closed. " + str);
+                    OnConnectionChanged();
+                    return null;
+                }
+                try
+                {
+                    Trace("Tx: " + str);
+                    _sp.WriteLine(str);
+                }
+                catch (Exception ex)
+                {
+                    Trace("Tx ERROR Serial Port is:" + ex.Message);
+                    OnConnectionChanged();
+                }
 
-            try
-            {
+                try
+                {
 
-                str = _sp.ReadLine();
-                // IoLog.Instance.WirteLine(str);
-                Trace("Rx: " + str);
-            }
-            catch (Exception ex)
-            {
-                Trace("Rx ERROR Serial Port is:" + ex.Message);
-                OnConnectionChanged();
+                    str = _sp.ReadLine();
+                    Trace("Rx: " + str);
+                }
+                catch (Exception ex)
+                {
+                    Trace("Rx ERROR Serial Port is:" + ex.Message);
+                    OnConnectionChanged();
+                }
             }
             return str;
         }
@@ -283,6 +287,18 @@
             else
                 Trace("IO-ERROR: Invalid Response.");
             return false;
+        }
+
+        public UInt16 GetInput() 
+        {
+            UInt16 retval = 0;
+            var resp = WriteRead("DIG:INP:U16?");
+            if (resp == null)
+                return 0;
+            else if (UInt16.TryParse(resp, NumberStyles.HexNumber, CultureInfo.GetCultureInfo("en-US"), out retval))
+                return retval;
+            else
+                return 0;
         }
 
         public void SetDisplay(bool onoff)

@@ -108,6 +108,24 @@ namespace Konvolucio.MGUI201222.Controls
                 Value[index -1] = state;
             }
         }
+
+        public void SetContent(UInt16 value)
+        {
+            bool[] bits = new bool[16];
+            UInt16 mask = 0x0001;
+            for (int i = 0; i < 16; i++)
+            {
+                if ((value & mask) == mask)
+                    bits[i] = true;
+                else
+                    bits[i] = false;
+
+                mask <<= 1;
+            }
+
+            
+        }
+
         private void checkBox_CheckedChanged(object sender, EventArgs e)
         {
             var cb = sender as DioItemControl;

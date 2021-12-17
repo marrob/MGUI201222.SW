@@ -36,8 +36,13 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.richTextBox3 = new System.Windows.Forms.RichTextBox();
+            this.richTextBox2 = new System.Windows.Forms.RichTextBox();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.knvIoInputs = new Konvolucio.MGUI201222.Controls.KnvIo16Control();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.knvIoOutputs = new Konvolucio.MGUI201222.Controls.KnvIo8Control();
             this.checkBoxPSP = new System.Windows.Forms.CheckBox();
             this.checkBoxDisplay = new System.Windows.Forms.CheckBox();
             this.textBoxTemp1 = new System.Windows.Forms.TextBox();
@@ -49,11 +54,6 @@
             this.textBoxTemp4 = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.richTextBox2 = new System.Windows.Forms.RichTextBox();
-            this.richTextBox3 = new System.Windows.Forms.RichTextBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.knvIoOutputs = new Konvolucio.MGUI201222.Controls.KnvIo8Control();
-            this.knvIoInputs = new Konvolucio.MGUI201222.Controls.KnvIo16Control();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDisplay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownButton)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -123,6 +123,28 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Bementek";
             // 
+            // richTextBox3
+            // 
+            this.richTextBox3.BackColor = System.Drawing.SystemColors.Control;
+            this.richTextBox3.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.richTextBox3.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.richTextBox3.Location = new System.Drawing.Point(-272, 73);
+            this.richTextBox3.Name = "richTextBox3";
+            this.richTextBox3.Size = new System.Drawing.Size(260, 157);
+            this.richTextBox3.TabIndex = 12;
+            this.richTextBox3.Text = "yvdfgsdfg\n ";
+            // 
+            // richTextBox2
+            // 
+            this.richTextBox2.BackColor = System.Drawing.SystemColors.Control;
+            this.richTextBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.richTextBox2.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.richTextBox2.Location = new System.Drawing.Point(-278, 79);
+            this.richTextBox2.Name = "richTextBox2";
+            this.richTextBox2.Size = new System.Drawing.Size(247, 134);
+            this.richTextBox2.TabIndex = 12;
+            this.richTextBox2.Text = resources.GetString("richTextBox2.Text");
+            // 
             // richTextBox1
             // 
             this.richTextBox1.BackColor = System.Drawing.SystemColors.Control;
@@ -133,6 +155,16 @@
             this.richTextBox1.Size = new System.Drawing.Size(573, 157);
             this.richTextBox1.TabIndex = 11;
             this.richTextBox1.Text = resources.GetString("richTextBox1.Text");
+            // 
+            // knvIoInputs
+            // 
+            this.knvIoInputs.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.knvIoInputs.Location = new System.Drawing.Point(28, 25);
+            this.knvIoInputs.Name = "knvIoInputs";
+            this.knvIoInputs.NotAvaliable = false;
+            this.knvIoInputs.ReadOnly = false;
+            this.knvIoInputs.Size = new System.Drawing.Size(440, 42);
+            this.knvIoInputs.TabIndex = 6;
             // 
             // groupBox2
             // 
@@ -146,6 +178,26 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Kimenetek";
             this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Location = new System.Drawing.Point(6, 89);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(169, 32);
+            this.label7.TabIndex = 6;
+            this.label7.Text = "DO3: PC-MAIN_ON - relés\r\nDO2: AC_SW";
+            // 
+            // knvIoOutputs
+            // 
+            this.knvIoOutputs.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.knvIoOutputs.Location = new System.Drawing.Point(21, 25);
+            this.knvIoOutputs.Name = "knvIoOutputs";
+            this.knvIoOutputs.NotAvaliable = false;
+            this.knvIoOutputs.ReadOnly = false;
+            this.knvIoOutputs.Size = new System.Drawing.Size(197, 42);
+            this.knvIoOutputs.TabIndex = 5;
             // 
             // checkBoxPSP
             // 
@@ -239,60 +291,8 @@
             // 
             // timer1
             // 
-            this.timer1.Interval = 500;
+            this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
-            // richTextBox2
-            // 
-            this.richTextBox2.BackColor = System.Drawing.SystemColors.Control;
-            this.richTextBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.richTextBox2.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.richTextBox2.Location = new System.Drawing.Point(-278, 79);
-            this.richTextBox2.Name = "richTextBox2";
-            this.richTextBox2.Size = new System.Drawing.Size(247, 134);
-            this.richTextBox2.TabIndex = 12;
-            this.richTextBox2.Text = resources.GetString("richTextBox2.Text");
-            // 
-            // richTextBox3
-            // 
-            this.richTextBox3.BackColor = System.Drawing.SystemColors.Control;
-            this.richTextBox3.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.richTextBox3.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.richTextBox3.Location = new System.Drawing.Point(-272, 73);
-            this.richTextBox3.Name = "richTextBox3";
-            this.richTextBox3.Size = new System.Drawing.Size(260, 157);
-            this.richTextBox3.TabIndex = 12;
-            this.richTextBox3.Text = "yvdfgsdfg\n ";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(6, 89);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(169, 32);
-            this.label7.TabIndex = 6;
-            this.label7.Text = "DO3: PC-MAIN_ON - relés\r\nDO2: AC_SW";
-            // 
-            // knvIoOutputs
-            // 
-            this.knvIoOutputs.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.knvIoOutputs.Location = new System.Drawing.Point(21, 25);
-            this.knvIoOutputs.Name = "knvIoOutputs";
-            this.knvIoOutputs.NotAvaliable = false;
-            this.knvIoOutputs.ReadOnly = false;
-            this.knvIoOutputs.Size = new System.Drawing.Size(197, 42);
-            this.knvIoOutputs.TabIndex = 5;
-            // 
-            // knvIoInputs
-            // 
-            this.knvIoInputs.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.knvIoInputs.Location = new System.Drawing.Point(28, 25);
-            this.knvIoInputs.Name = "knvIoInputs";
-            this.knvIoInputs.NotAvaliable = false;
-            this.knvIoInputs.ReadOnly = false;
-            this.knvIoInputs.Size = new System.Drawing.Size(440, 42);
-            this.knvIoInputs.TabIndex = 6;
             // 
             // FunctionsNode
             // 
