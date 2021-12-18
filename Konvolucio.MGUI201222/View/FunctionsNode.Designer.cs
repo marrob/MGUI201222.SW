@@ -177,7 +177,6 @@
             this.groupBox2.TabIndex = 10;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Kimenetek";
-            this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter);
             // 
             // label7
             // 
@@ -185,7 +184,7 @@
             this.label7.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.Location = new System.Drawing.Point(6, 89);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(169, 32);
+            this.label7.Size = new System.Drawing.Size(168, 32);
             this.label7.TabIndex = 6;
             this.label7.Text = "DO3: PC-MAIN_ON - relés\r\nDO2: AC_SW";
             // 
@@ -291,7 +290,7 @@
             // 
             // timer1
             // 
-            this.timer1.Interval = 1000;
+            this.timer1.Interval = 500;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // FunctionsNode

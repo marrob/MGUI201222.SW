@@ -57,7 +57,7 @@
 
         }
 
-        object SyncObject = new object();
+       static object SyncObject = new object();
 
         /// <summary>
         /// Srosport Nyitása
@@ -262,7 +262,7 @@
         /// <returns>True = aktív, Open Drain kimenetek </returns>
         public bool GetOutput(int channel)
         {
-            var resp = WriteRead("DIG:OUT:BIT?" + " " + channel.ToString());
+            var resp = WriteRead($"DIG:OUT:BIT? { channel }");
             if (resp == "0")
                 return false;
             else if (resp == "1")
@@ -272,8 +272,21 @@
             return false;   
         }
 
+        public byte GetOutputs()
+        {
+            byte retval = 0;
+            var resp = WriteRead("DIG:OUT:U8?");
+            if (resp == null)
+                return 0;
+            else if (byte.TryParse(resp, NumberStyles.HexNumber, CultureInfo.GetCultureInfo("en-US"), out retval))
+                return retval;
+            else
+                return 0;
+        }
+
         /// <summary>
         /// Egy digitális bemenet olvasása
+        /// Alaphelyzetben minden bemenet magas.
         /// </summary>
         /// <param name="channel">1..16-ig</param>
         /// <returns>True = aktív, alaphelyzetben: True</returns>
@@ -289,7 +302,14 @@
             return false;
         }
 
-        public UInt16 GetInput() 
+        /// <summary>
+        /// Bementek olvasása egy lépésben. Hatékonyabb, ha többet kell egyszerre olvasni
+        /// DI1 = 0x0001
+        /// DI16 = 0x8000
+        /// Alaphelyzetben minden bemenet magas.
+        /// </summary>
+        /// <returns>0x0000..0xFFFF</returns>
+        public UInt16 GetInputs() 
         {
             UInt16 retval = 0;
             var resp = WriteRead("DIG:INP:U16?");

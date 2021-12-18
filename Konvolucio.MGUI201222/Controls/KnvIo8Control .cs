@@ -101,10 +101,30 @@ namespace Konvolucio.MGUI201222.Controls
             foreach(DioItemControl ctrl in list)
             {
                 int index = int.Parse((string)ctrl.Tag);
-                bool state = value[index];
+                bool state = value[index - 1];
                 ctrl.Checked = state;
-                Value[index-1] = state;
+                Value[ index - 1] = state;
             }
+        }
+
+        /// <summary>
+        /// DI1 = 0x01
+        /// DI8= 0x80
+        /// </summary>
+        /// <param name="value">0x00..0xFF</param>
+        public void SetContent(byte value)
+        {
+            bool[] bits = new bool[8];
+            byte mask = 0x01;
+            for (int i = 0; i < 8; i++)
+            {
+                if ((value & mask) == mask)
+                    bits[i] = true;
+                else
+                    bits[i] = false;
+                mask <<= 1;
+            }
+            SetContent(bits);
         }
         private void checkBox_CheckedChanged(object sender, EventArgs e)
         {

@@ -419,7 +419,7 @@
             this.mdioFlagControl113.ReadOnly = false;
             this.mdioFlagControl113.Size = new System.Drawing.Size(15, 15);
             this.mdioFlagControl113.TabIndex = 42;
-            this.mdioFlagControl113.Tag = "1";
+            this.mdioFlagControl113.Tag = "2";
             this.mdioFlagControl113.CheckedChanged += new System.EventHandler(this.checkBox_CheckedChanged);
             // 
             // mdioFlagControl10
