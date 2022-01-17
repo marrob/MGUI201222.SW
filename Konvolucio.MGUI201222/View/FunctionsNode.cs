@@ -24,7 +24,13 @@
         public void UserEnter()
         { 
             knvIoOutputs.ChangedValue += KnvIo8Control1_ChangedValue;
+            numericUpDownDisplay.ValueChanged += new EventHandler(this.numericUpDownDisplay_ValueChanged);
+            numericUpDownButton.ValueChanged += new EventHandler(this.numericUpDownButton_ValueChanged);
 
+
+            numericUpDownDisplay.Value = DevIoSrv.Instance.GetDisplayLight();
+            numericUpDownButton.Value = DevIoSrv.Instance.GetPowerButtonLight();
+            
             UpdateData();
 
             timer1.Start();
@@ -34,15 +40,25 @@
         public void UserLeave()
         {
             knvIoOutputs.ChangedValue -= KnvIo8Control1_ChangedValue;
+            numericUpDownDisplay.ValueChanged -= new EventHandler(this.numericUpDownDisplay_ValueChanged);
+            numericUpDownButton.ValueChanged -= new EventHandler(this.numericUpDownButton_ValueChanged);
             timer1.Stop();
         }
 
         private void KnvIo8Control1_ChangedValue(object sender, KnvIoEventArg e)
         {
+            byte currentState = knvIoOutputs.GetValue();
+            byte newState;
             if (e.state == false)
-                DevIoSrv.Instance.SetOnOutput(e.Index);
+           
+                newState = (byte)(1 << e.Index - 1 | currentState);
+            
             else
-                DevIoSrv.Instance.SetOffOutput(e.Index);
+           
+                newState = (byte)( ~(1 << e.Index - 1) & currentState);
+            
+            DevIoSrv.Instance.SetOutputs(newState);
+            
 
         }
 
@@ -69,47 +85,7 @@
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-
             UpdateData();
- /*       
-            string in1 = "";
-            string in2 = "";
-            string in3 = "";
-            string in4 = "";
-            UInt16 inputs = 0;
-            byte outputs = 0;
-
-            new Action(() =>
-            {
-                if (!DevIoSrv.Instance.IsOpen)
-                { 
-                }
-                //knvIoOutputs.NotAvaliable = true;
-                else
-                {
-                    // knvIoOutputs.NotAvaliable = false;
-
-                    outputs = DevIoSrv.Instance.GetOutputs();
-                    inputs = DevIoSrv.Instance.GetInputs();
-                }
-                in1 = DevIoSrv.Instance.GetTemperature(1).ToString();
-                in2 = DevIoSrv.Instance.GetTemperature(2).ToString();
-                in3 = DevIoSrv.Instance.GetTemperature(3).ToString();
-                in4 = DevIoSrv.Instance.GetTemperature(4).ToString();
-            }).BeginInvoke((iftAR) => 
-            {
-               
-                knvIoOutputs.SetContent(outputs);
-                knvIoInputs.SetContent(inputs);
-            
-                textBoxTemp1.Text = in1;
-                textBoxTemp2.Text = in2;
-                textBoxTemp3.Text = in3;
-                textBoxTemp4.Text = in4;
-            
-            }, null);
-*/
-
         }
 
 
@@ -121,8 +97,9 @@
                 var sw = new Stopwatch();
                 sw.Restart();
 
-                checkBoxPSP.Checked = DevIoSrv.Instance.GetDisplay();
+                checkBoxDisplay.Checked = DevIoSrv.Instance.GetDisplay();
                 checkBoxPSP.Checked = DevIoSrv.Instance.GetPowerSupply();
+               
 
                 if (!DevIoSrv.Instance.IsOpen)
                     knvIoOutputs.NotAvaliable = true;
@@ -133,11 +110,14 @@
                     knvIoInputs.SetContent(DevIoSrv.Instance.GetInputs());
                 }
 
-                textBoxTemp1.Text = DevIoSrv.Instance.GetTemperature(1).ToString();
-                textBoxTemp2.Text = DevIoSrv.Instance.GetTemperature(2).ToString();
-                textBoxTemp3.Text = DevIoSrv.Instance.GetTemperature(3).ToString();
-                textBoxTemp4.Text = DevIoSrv.Instance.GetTemperature(4).ToString();
-
+                double[] temps = DevIoSrv.Instance.GetTemperatures();
+                if (temps.Length > 3)
+                {
+                    textBoxTemp1.Text = temps[0].ToString();
+                    textBoxTemp2.Text = temps[1].ToString();
+                    textBoxTemp3.Text = temps[2].ToString();
+                    textBoxTemp4.Text = temps[3].ToString();
+                }
                 sw.Stop();
                 Debug.WriteLine($"Update Data: { sw.ElapsedMilliseconds } ms ");
             }

@@ -215,6 +215,10 @@
                 Trace("IO-ERROR: Invalid Response.");
         }
 
+        /// <summary>
+        /// Power nyomógomb fényerje százalékban.
+        /// </summary>
+        /// <returns></returns>
         public int GetPowerButtonLight()
         {
             var retval = -1;
@@ -237,6 +241,7 @@
         /// Egy digitális kimenet bekapcsolása
         /// </summary>
         /// <param name="channel">1..8-ig</param>
+        [ObsoleteAttribute("Helyette SetOutputs()")]
         public void SetOnOutput(int channel)
         {
             if (WriteRead("DIG:OUT:ON:BIT" + "  " + channel.ToString()) != "RDY")
@@ -248,6 +253,7 @@
         /// Egy digitális kimenet kikapcsolása
         /// </summary>
         /// <param name="channel"></param>
+        [ObsoleteAttribute("Helyette SetOutputs()")]
         public void SetOffOutput(int channel)
         {
             if (WriteRead("DIG:OUT:OFF:BIT" + "  " + channel.ToString()) != "RDY")
@@ -256,10 +262,22 @@
         }
 
         /// <summary>
+        /// A digitális kimenetek frissítése, a paraméter alapján.
+        /// </summary>
+        /// <param name="states"> 0x00.. 0xFF, 0x01 = DO1 </param>
+        public void SetOutputs(byte states)
+        {
+            if (WriteRead("DIG:OUT:SET:U8" + "  " + states.ToString("X2")) != "RDY")
+                Trace("IO-ERROR: Invalid Response.");
+        }
+
+        /// <summary>
         /// Egy digitális kimenet olvasása
         /// </summary>
         /// <param name="channel">1..16-ig</param>
         /// <returns>True = aktív, Open Drain kimenetek </returns>
+        
+        [ObsoleteAttribute("Helyette GetOutputs()")]
         public bool GetOutput(int channel)
         {
             var resp = WriteRead($"DIG:OUT:BIT? { channel }");
@@ -272,6 +290,13 @@
             return false;   
         }
 
+
+
+
+        /// <summary>
+        /// Digitális kimenetek lekérdezése
+        /// </summary>
+        /// <returns> 0x00..0xFF-ig, pl: 0x01 = DO1, 0x80 = DO8 </returns>
         public byte GetOutputs()
         {
             byte retval = 0;
@@ -290,6 +315,7 @@
         /// </summary>
         /// <param name="channel">1..16-ig</param>
         /// <returns>True = aktív, alaphelyzetben: True</returns>
+        [ObsoleteAttribute("Helyette GetInputs()")]
         public bool GetInput(int channel)
         {
             var resp = WriteRead("DIG:INP:BIT?" + " " + channel.ToString());
@@ -308,7 +334,7 @@
         /// DI16 = 0x8000
         /// Alaphelyzetben minden bemenet magas.
         /// </summary>
-        /// <returns>0x0000..0xFFFF</returns>
+        /// <returns>0x0000..0xFFFF, alaphelyzetben 0xFFFF, 0x0001 = DI1 </returns>
         public UInt16 GetInputs() 
         {
             UInt16 retval = 0;
@@ -362,6 +388,7 @@
         /// </summary>
         /// <param name="channel">1..4-ig</param>
         /// <returns>0..2.5V</returns>
+        [ObsoleteAttribute("Helyette GetTemperatures()")]
         public double GetTemperature(int channel)
         {
             double retval = double.NaN;
@@ -372,6 +399,26 @@
                 return retval;
             else
                 return double.NaN;
+        }
+        /// <summary>
+        /// Hőmérséklet szenzorok értékeinek lekérdezése egyszerre
+        /// </summary>
+        /// <returns>0.index = Temp1, 0..2.5V </returns>
+        public double[] GetTemperatures()
+        {
+            var resp = WriteRead("TEM:ARR?");
+            string[] valueArr = resp.Split();
+            double[] resultArr = new double[valueArr.Length];
+            try
+            {
+                for (int i = 0; i < valueArr.Length; i++)
+                    resultArr[i] = double.Parse(valueArr[i].Trim(';'), NumberStyles.Float, CultureInfo.GetCultureInfo("en-US"));
+            }
+            catch (Exception ex)
+            {
+                Trace($"IO-ERROR: {ex.Message}");
+            }
+            return resultArr;
         }
 
         public void Close()

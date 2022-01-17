@@ -133,5 +133,24 @@ namespace Konvolucio.MGUI201222.Controls
                 .Invoke(this, new KnvIoEventArg(int.Parse(cb.Tag.ToString()), cb.Checked));
 
         }
+
+        private static byte ConvertBoolArrayToByte(bool[] source)
+        {
+            byte result = 0;
+            int index = 0; //8 - source.Length;
+            foreach (bool b in source)
+            {
+                if (b)
+                    result |= (byte)(1 << index);
+                index++;
+            }
+
+            return result;
+        }
+
+        public byte GetValue()
+        {
+            return ConvertBoolArrayToByte(Value);
+        }
     }
 }
