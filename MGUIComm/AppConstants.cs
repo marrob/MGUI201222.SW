@@ -2,7 +2,7 @@
 {
     public class AppConstants
     {
-        public const string ValueNotAvailable2 = "n/anem";
+        public const string ValueNotAvailable2 = "n/a";
         public const string InvalidFlieNameChar = "A file name can't contain any of flowing characters:";
         public const string SoftwareCustomer = "Konvolúció Bt.";
         public const string SoftwareTitle = "MGUI201222 - DIAG TOOL";
