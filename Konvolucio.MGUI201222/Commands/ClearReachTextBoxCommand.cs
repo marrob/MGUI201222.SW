@@ -6,6 +6,7 @@ namespace Konvolucio.MGUI201222.Commands
     using System.Text;
     using System.Windows.Forms; /*ToolStripMenuItem*/
     using Controls;
+    using Konvolucio.MGUIComm;
     using Properties;
 
 

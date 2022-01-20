@@ -290,5 +290,11 @@
   <ItemGroup>
     <None Include="Resources\Delete48x48.png" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MGUIComm\MGUIComm.csproj">
+      <Project>{a945ba89-ae10-4d1d-929f-ede5f8b7cad2}</Project>
+      <Name>MGUIComm</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
