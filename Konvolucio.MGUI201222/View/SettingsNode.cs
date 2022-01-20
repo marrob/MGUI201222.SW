@@ -13,6 +13,7 @@ namespace Konvolucio.MGUI201222.View
     using System.Threading.Tasks;
     using System.Windows.Forms;
     using Properties;
+    using Konvolucio.MGUIComm;
 
     public partial class SettingsNode : UserControl, IUIPanelProperties
     {

@@ -4,6 +4,8 @@
     using System.Windows.Forms;
     using Properties;
     using Events;
+    using Konvolucio.MGUIComm;
+
     class FwVersion : ToolStripStatusLabel
     { 
         public FwVersion()
