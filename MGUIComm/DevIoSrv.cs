@@ -238,6 +238,8 @@
                 Trace("IO-ERROR: Invalid Response.");
         }
 
+
+
         /// <summary>
         /// Egy digitális kimenet bekapcsolása
         /// </summary>

@@ -7,6 +7,7 @@
     using System.Threading.Tasks;
     using System.Windows.Forms;
     using Controls;
+    using Konvolucio.MGUIComm;
     using Properties;
 
     public partial class VoltageMeasNode : UserControl, IUIPanelProperties

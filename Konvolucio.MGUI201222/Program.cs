@@ -15,6 +15,7 @@
     using System.Reflection;
     using System.Text.RegularExpressions;
     using Controls;
+    using Konvolucio.MGUIComm;
 
     static class Program
     {

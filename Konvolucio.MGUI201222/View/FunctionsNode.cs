@@ -12,6 +12,7 @@
     using Controls;
     using Events;
     using System.Diagnostics;
+    using Konvolucio.MGUIComm;
 
     public partial class FunctionsNode : UserControl, IUIPanelProperties
     {

@@ -6,6 +6,7 @@ namespace Konvolucio.MGUI201222.Commands
     using System.Windows.Forms;
     using Properties;
     using Events;
+    using Konvolucio.MGUIComm;
 
     class ComPortSelectCommand : ToolStripComboBox
     {

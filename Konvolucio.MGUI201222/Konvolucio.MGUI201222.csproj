@@ -122,7 +122,6 @@
     <Compile Include="Controls\KnvRichTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DevIoSrv.cs" />
     <Compile Include="Events\ConnectionChangedAppEvent.cs" />
     <Compile Include="Events\ShowAppEvent.cs" />
     <Compile Include="Events\TreeNodeChangedAppEvent.cs" />

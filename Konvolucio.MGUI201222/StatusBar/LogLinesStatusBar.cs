@@ -1,5 +1,6 @@
 ﻿namespace Konvolucio.MGUI201222.StatusBar
 {
+    using Konvolucio.MGUIComm;
     using System;
     using System.Windows.Forms;
 

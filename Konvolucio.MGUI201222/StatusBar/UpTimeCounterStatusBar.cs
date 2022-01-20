@@ -4,6 +4,7 @@ namespace Konvolucio.MGUI201222.StatusBar
 {
     using System;
     using System.Windows.Forms;
+    using Konvolucio.MGUIComm;
     using Properties;
 
     class UpTimeCounterStatusBar : ToolStripStatusLabel
