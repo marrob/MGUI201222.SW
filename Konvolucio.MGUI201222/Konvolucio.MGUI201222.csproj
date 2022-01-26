@@ -185,11 +185,11 @@
     <Compile Include="View\MainView.Designer.cs">
       <DependentUpon>MainView.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\FunctionsNode.cs">
+    <Compile Include="View\PcReferenceNode.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="View\FunctionsNode.Designer.cs">
-      <DependentUpon>FunctionsNode.cs</DependentUpon>
+    <Compile Include="View\PcReferenceNode.Designer.cs">
+      <DependentUpon>PcReferenceNode.cs</DependentUpon>
     </Compile>
     <Compile Include="View\IUIPanelProperties.cs" />
     <Compile Include="View\UpdatesForm.cs">
@@ -242,8 +242,8 @@
     <EmbeddedResource Include="View\MainView.resx">
       <DependentUpon>MainView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\FunctionsNode.resx">
-      <DependentUpon>FunctionsNode.cs</DependentUpon>
+    <EmbeddedResource Include="View\PcReferenceNode.resx">
+      <DependentUpon>PcReferenceNode.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\UpdatesForm.resx">
       <DependentUpon>UpdatesForm.cs</DependentUpon>

@@ -14,12 +14,12 @@
     using System.Diagnostics;
     using Konvolucio.MGUIComm;
 
-    public partial class FunctionsNode : UserControl, IUIPanelProperties
+    public partial class PcReferenceNode : UserControl, IUIPanelProperties
     {
-        public FunctionsNode()
+        public PcReferenceNode()
         {
             InitializeComponent();
-            this.Name = "FunctionsNode";
+            this.Name = "PcReference";
         }
 
         public void UserEnter()
@@ -99,8 +99,7 @@
                 sw.Restart();
 
                 checkBoxDisplay.Checked = DevIoSrv.Instance.GetDisplay();
-                checkBoxPSP.Checked = DevIoSrv.Instance.GetPowerSupply();
-               
+
 
                 if (!DevIoSrv.Instance.IsOpen)
                     knvIoOutputs.NotAvaliable = true;
@@ -115,9 +114,6 @@
                 if (temps.Length > 3)
                 {
                     textBoxTemp1.Text = temps[0].ToString();
-                    textBoxTemp2.Text = temps[1].ToString();
-                    textBoxTemp3.Text = temps[2].ToString();
-                    textBoxTemp4.Text = temps[3].ToString();
                 }
                 sw.Stop();
                 Debug.WriteLine($"Update Data: { sw.ElapsedMilliseconds } ms ");

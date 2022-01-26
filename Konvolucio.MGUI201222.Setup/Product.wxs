@@ -98,7 +98,7 @@
           <RegistryValue Root='HKCU' Key='Software\[Manufacturer]\[ProductName]' Type='string' Value='' KeyPath='yes' />
         </Component>
         <Component  Guid="{620A4242-BAA7-4DA4-A3B1-8FFFF5251947}">
-              <File Name="_Konvolucio.MCEL181123.Calib.exe" Source="$(var.AppDirectory)\Konvolucio.MCEL181123.Calib.exe" KeyPath="yes" Checksum="yes">
+              <File Name="_Konvolucio.MCEL181123.Calib.exe" Source="$(var.AppDirectory)\Konvolucio.MGUI201222.exe" KeyPath="yes" Checksum="yes">
             <Shortcut Id="_Konvolucio.MDFU200325.exe" Directory="AppProgramsFolder" WorkingDirectory="AppFolder" Icon="AppAddRemove.ico" Name="$(var.ProductName)" Advertise="yes" />
             <Shortcut Id="DesktopShortcut"    Directory="DesktopFolder"  WorkingDirectory = "AppFolder"  Icon="AppAddRemove.ico"  Name="$(var.ProductName)" Advertise="yes" />
           </File>

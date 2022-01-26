@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Sugó");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Funkciók");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("PC Refrence");
             System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Beállítások");
             this.treeViewNavigator = new System.Windows.Forms.TreeView();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -45,8 +45,8 @@
             this.treeViewNavigator.Name = "treeViewNavigator";
             treeNode1.Name = "HelpNode";
             treeNode1.Text = "Sugó";
-            treeNode2.Name = "FunctionsNode";
-            treeNode2.Text = "Funkciók";
+            treeNode2.Name = "PcReference";
+            treeNode2.Text = "PC Refrence";
             treeNode3.Name = "SettingsNode";
             treeNode3.Text = "Beállítások";
             this.treeViewNavigator.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {

@@ -14,7 +14,7 @@ namespace Konvolucio.MGUI201222.View
     {
         private readonly HelpNode _helpNode;
         private readonly SettingsNode _settingsPanel;
-        private readonly FunctionsNode _functionNode;
+        private readonly PcReferenceNode _functionNode;
 
         private readonly UserControl[] _ctrlPanels;
 
@@ -27,7 +27,7 @@ namespace Konvolucio.MGUI201222.View
                 _helpNode = new HelpNode() { Dock = DockStyle.Fill },
                 _settingsPanel = new SettingsNode() { Dock = DockStyle.Fill },
              //   _configsNode = new ConfigsNode() { Dock = DockStyle.Fill },
-                _functionNode = new FunctionsNode() { Dock = DockStyle.Fill },
+                _functionNode = new PcReferenceNode() { Dock = DockStyle.Fill },
                // _currentMeasNode = new CurrentMeasNode() { Dock = DockStyle.Fill },
                // _voltageMeasNode = new VoltageMeasNode() { Dock = DockStyle.Fill },
             };
