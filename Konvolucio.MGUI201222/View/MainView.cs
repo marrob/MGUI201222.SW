@@ -14,10 +14,7 @@ namespace Konvolucio.MGUI201222.View
     {
         private readonly HelpNode _helpNode;
         private readonly SettingsNode _settingsPanel;
-        private readonly ConfigsNode _configsNode;
-        private readonly CurrentMeasNode _currentMeasNode;
         private readonly FunctionsNode _functionNode;
-        private readonly VoltageMeasNode _voltageMeasNode;
 
         private readonly UserControl[] _ctrlPanels;
 

@@ -54,10 +54,24 @@
             this.textBoxTemp4 = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.buttonStartShutdownCmd = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.buttonPwrLedFlashOff = new System.Windows.Forms.Button();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.numericUpDownPwrLedFlashPeriod = new System.Windows.Forms.NumericUpDown();
+            this.checkBoxPowerLedDimming = new System.Windows.Forms.CheckBox();
+            this.buttonPwrLedFlash = new System.Windows.Forms.Button();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDisplay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownButton)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPwrLedFlashPeriod)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
             // contextMenuStrip1
@@ -290,13 +304,134 @@
             // 
             // timer1
             // 
-            this.timer1.Interval = 250;
+            this.timer1.Interval = 500;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // buttonStartShutdownCmd
+            // 
+            this.buttonStartShutdownCmd.Location = new System.Drawing.Point(12, 350);
+            this.buttonStartShutdownCmd.Name = "buttonStartShutdownCmd";
+            this.buttonStartShutdownCmd.Size = new System.Drawing.Size(209, 23);
+            this.buttonStartShutdownCmd.TabIndex = 21;
+            this.buttonStartShutdownCmd.Text = "Start Shutdown Cmd";
+            this.buttonStartShutdownCmd.UseVisualStyleBackColor = true;
+            this.buttonStartShutdownCmd.Click += new System.EventHandler(this.buttonStartShutdownCmd_Click);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(90, 316);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(8, 8);
+            this.button2.TabIndex = 22;
+            this.button2.Text = "button2";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.buttonPwrLedFlashOff);
+            this.groupBox3.Controls.Add(this.label9);
+            this.groupBox3.Controls.Add(this.label8);
+            this.groupBox3.Controls.Add(this.numericUpDownPwrLedFlashPeriod);
+            this.groupBox3.Controls.Add(this.checkBoxPowerLedDimming);
+            this.groupBox3.Controls.Add(this.buttonPwrLedFlash);
+            this.groupBox3.Location = new System.Drawing.Point(12, 379);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(439, 47);
+            this.groupBox3.TabIndex = 23;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Power LED";
+            // 
+            // buttonPwrLedFlashOff
+            // 
+            this.buttonPwrLedFlashOff.Location = new System.Drawing.Point(332, 13);
+            this.buttonPwrLedFlashOff.Name = "buttonPwrLedFlashOff";
+            this.buttonPwrLedFlashOff.Size = new System.Drawing.Size(98, 23);
+            this.buttonPwrLedFlashOff.TabIndex = 29;
+            this.buttonPwrLedFlashOff.Text = "Power LED Off";
+            this.buttonPwrLedFlashOff.UseVisualStyleBackColor = true;
+            this.buttonPwrLedFlashOff.Click += new System.EventHandler(this.buttonPwrLedFlashOff_Click);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(174, 19);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(20, 13);
+            this.label9.TabIndex = 28;
+            this.label9.Text = "ms";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(65, 19);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(40, 13);
+            this.label8.TabIndex = 27;
+            this.label8.Text = "Period:";
+            // 
+            // numericUpDownPwrLedFlashPeriod
+            // 
+            this.numericUpDownPwrLedFlashPeriod.Location = new System.Drawing.Point(106, 16);
+            this.numericUpDownPwrLedFlashPeriod.Maximum = new decimal(new int[] {
+            2000,
+            0,
+            0,
+            0});
+            this.numericUpDownPwrLedFlashPeriod.Name = "numericUpDownPwrLedFlashPeriod";
+            this.numericUpDownPwrLedFlashPeriod.Size = new System.Drawing.Size(62, 20);
+            this.numericUpDownPwrLedFlashPeriod.TabIndex = 26;
+            this.numericUpDownPwrLedFlashPeriod.Value = new decimal(new int[] {
+            250,
+            0,
+            0,
+            0});
+            // 
+            // checkBoxPowerLedDimming
+            // 
+            this.checkBoxPowerLedDimming.AutoSize = true;
+            this.checkBoxPowerLedDimming.Location = new System.Drawing.Point(12, 17);
+            this.checkBoxPowerLedDimming.Name = "checkBoxPowerLedDimming";
+            this.checkBoxPowerLedDimming.Size = new System.Drawing.Size(47, 17);
+            this.checkBoxPowerLedDimming.TabIndex = 25;
+            this.checkBoxPowerLedDimming.Text = "Dim.";
+            this.checkBoxPowerLedDimming.UseVisualStyleBackColor = true;
+            // 
+            // buttonPwrLedFlash
+            // 
+            this.buttonPwrLedFlash.Location = new System.Drawing.Point(200, 13);
+            this.buttonPwrLedFlash.Name = "buttonPwrLedFlash";
+            this.buttonPwrLedFlash.Size = new System.Drawing.Size(126, 23);
+            this.buttonPwrLedFlash.TabIndex = 24;
+            this.buttonPwrLedFlash.Text = "Power LED Flash Cmd";
+            this.buttonPwrLedFlash.UseVisualStyleBackColor = true;
+            this.buttonPwrLedFlash.Click += new System.EventHandler(this.buttonPwrLedFlash_Click);
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(0, 0);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(80, 17);
+            this.checkBox1.TabIndex = 24;
+            this.checkBox1.Text = "checkBox1";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Location = new System.Drawing.Point(0, 0);
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(120, 20);
+            this.numericUpDown1.TabIndex = 25;
             // 
             // FunctionsNode
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.numericUpDown1);
+            this.Controls.Add(this.checkBox1);
+            this.Controls.Add(this.groupBox3);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.buttonStartShutdownCmd);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.textBoxTemp4);
             this.Controls.Add(this.label5);
@@ -314,12 +449,16 @@
             this.Controls.Add(this.numericUpDownButton);
             this.Controls.Add(this.numericUpDownDisplay);
             this.Name = "FunctionsNode";
-            this.Size = new System.Drawing.Size(882, 494);
+            this.Size = new System.Drawing.Size(882, 620);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDisplay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownButton)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPwrLedFlashPeriod)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -350,5 +489,16 @@
         private System.Windows.Forms.RichTextBox richTextBox2;
         private System.Windows.Forms.RichTextBox richTextBox3;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button buttonStartShutdownCmd;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Button buttonPwrLedFlashOff;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.NumericUpDown numericUpDownPwrLedFlashPeriod;
+        private System.Windows.Forms.CheckBox checkBoxPowerLedDimming;
+        private System.Windows.Forms.Button buttonPwrLedFlash;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.NumericUpDown numericUpDown1;
     }
 }

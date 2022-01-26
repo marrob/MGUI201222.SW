@@ -6,12 +6,16 @@
     using System.Text;
     using System.IO.Ports;
     using System.Globalization;
-    using Konvolucio.MGUI201222;
 
     public class DevIoSrv
     {
 
         public event EventHandler ConnectionChanged;
+        public event EventHandler ErrorHappened;
+
+        const string GenericTimestampFormat = "yyyy.MM.dd HH:mm:ss";
+
+        public bool TracingEnable { get; set; } = false;
 
         public static DevIoSrv Instance { get { return _instance; } }
 
@@ -124,7 +128,7 @@
                 catch (Exception ex)
                 {
                     Trace("Tx ERROR Serial Port is:" + ex.Message);
-                    OnConnectionChanged();
+                    OnErrorHappened();
                 }
 
                 try
@@ -136,7 +140,7 @@
                 catch (Exception ex)
                 {
                     Trace("Rx ERROR Serial Port is:" + ex.Message);
-                    OnConnectionChanged();
+                    OnErrorHappened();
                 }
             }
             return str;
@@ -198,7 +202,7 @@
         /// Beállított háttérfényerő százalékban
         /// </summary>
         /// <returns>0..100</returns>
-        public int GetDisplayLight()
+        public int DisplayLight()
         {
             var retval = -1;
             var resp = WriteRead("DIS:LIG?");
@@ -210,7 +214,7 @@
                 return -1;
         }
 
-        public void SetDisplayLight(int percent)
+        public void DisplayLight(int percent)
         {
             if (WriteRead("DIS:LIG" + "  " + percent.ToString()) != "RDY")
                 Trace("IO-ERROR: Invalid Response.");
@@ -220,10 +224,10 @@
         /// Power nyomógomb fényerje százalékban.
         /// </summary>
         /// <returns></returns>
-        public int GetPowerButtonLight()
+        public int LedLight()
         {
             var retval = -1;
-            var resp = WriteRead("PBT:LIG?");
+            var resp = WriteRead("LED:LIG?");
             if (resp == null)
                 return -1;
             else if (int.TryParse(resp, NumberStyles.Integer, CultureInfo.GetCultureInfo("en-US"), out retval))
@@ -232,12 +236,34 @@
                 return -1;
         }
 
-        public void SetPowerButtonLight(int percent)
+        public void LedLight(int percent)
         {
-            if(WriteRead("PBT:LIG" + "  " + percent.ToString())!= "RDY")
+            if (WriteRead($"LED:LIG { percent}")!= "RDY")
                 Trace("IO-ERROR: Invalid Response.");
         }
 
+        public void LedPeriodTime(int periodms)
+        {
+            if (WriteRead($"LED:PER { periodms }") != "RDY")
+                Trace("IO-ERROR: Invalid Response.");
+        }
+        public void LedDimming(bool onoff)
+        {
+            if (WriteRead("LED:DIM " + (onoff?"1":"0")) != "RDY")
+                Trace("IO-ERROR: Invalid Response.");
+        }
+
+        public void LedCustomFlashStart()
+        {
+            if (WriteRead("SEQ:LED:EXE 4") != "RDY")
+                Trace("IO-ERROR: Invalid Response.");
+        }
+
+        public void LedCustomFlashStop()
+        {
+            if (WriteRead("SEQ:LED:EXE 0") != "RDY")
+                Trace("IO-ERROR: Invalid Response.");
+        }
 
 
         /// <summary>
@@ -395,7 +421,7 @@
         public double GetTemperature(int channel)
         {
             double retval = double.NaN;
-            var resp = WriteRead("TEM:DBL?" + " " + channel.ToString());
+            var resp = WriteRead($"TEM:DBL? + { channel } ");
             if (resp == null)
                 return double.NaN;
             else if (double.TryParse(resp, NumberStyles.Float, CultureInfo.GetCultureInfo("en-US"), out retval))
@@ -424,17 +450,30 @@
             return resultArr;
         }
 
+        /// <summary>
+        /// Elindítja a leállítás folyamatát...
+        /// Figyelem! Feltételezi hogy a PC _BE VAN_ kapcsolva. 
+        /// </summary>
+        public void StartShutdownSequence() 
+        {
+            if (WriteRead("SEQ:PON:EXE 5") != "RDY")
+                Trace("IO-ERROR: Invalid Response.");
+        }
+
+
         public void Close()
         {
-            TraceQueue.Enqueue(DateTime.Now.ToString(AppConstants.GenericTimestampFormat) + " " + "Serial Port is: " + "Close");
+            TraceQueue.Enqueue(DateTime.Now.ToString(GenericTimestampFormat) + " " + "Serial Port is: " + "Close");
             _sp.Close();
             OnConnectionChanged();
         }
 
-        public void Trace(string msg)
+        void Trace(string msg)
         {
+            if (!TracingEnable)
+                return;
             TraceLines++;
-            TraceQueue.Enqueue(DateTime.Now.ToString(AppConstants.GenericTimestampFormat) + " " + msg);
+            TraceQueue.Enqueue(DateTime.Now.ToString(GenericTimestampFormat) + " " + msg);
         }
 
         public void TraceClear()
@@ -445,6 +484,11 @@
         protected virtual void OnConnectionChanged()
         {
             EventHandler handler = ConnectionChanged;
+            handler?.Invoke(this, EventArgs.Empty);
+        }
+        protected virtual void OnErrorHappened()
+        {
+            EventHandler handler = ErrorHappened;
             handler?.Invoke(this, EventArgs.Empty);
         }
     }

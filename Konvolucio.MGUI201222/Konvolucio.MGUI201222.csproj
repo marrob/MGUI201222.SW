@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppConstants.cs" />
     <Compile Include="Commands\AlwaysOnTopCommand.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -90,12 +91,6 @@
     </Compile>
     <Compile Include="View\VoltageMeasNode.Designer.cs">
       <DependentUpon>VoltageMeasNode.cs</DependentUpon>
-    </Compile>
-    <Compile Include="View\CurrentMeasNode.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="View\CurrentMeasNode.Designer.cs">
-      <DependentUpon>CurrentMeasNode.cs</DependentUpon>
     </Compile>
     <Compile Include="Commands\ClearReachTextBoxCommand.cs">
       <SubType>Component</SubType>
@@ -211,9 +206,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="View\VoltageMeasNode.resx">
       <DependentUpon>VoltageMeasNode.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="View\CurrentMeasNode.resx">
-      <DependentUpon>CurrentMeasNode.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
