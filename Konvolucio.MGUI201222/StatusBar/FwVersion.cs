@@ -4,7 +4,7 @@
     using System.Windows.Forms;
     using Properties;
     using Events;
-    using Konvolucio.MGUIComm;
+    using Konvolucio.MGUIcomm;
 
     class FwVersion : ToolStripStatusLabel
     { 
@@ -17,7 +17,7 @@
             EventAggregator.Instance.Subscribe((Action<ConnectionChangedAppEvent>)(e =>
             {
                 if (e.IsOpen)
-                    Text = "FW:" + DevIoSrv.Instance.GetVersion();
+                    Text = "FW:" + GuiIoSrv.Instance.GetVersion();
                 else
                     Text = "FW: " + AppConstants.ValueNotAvailable2;
             }));

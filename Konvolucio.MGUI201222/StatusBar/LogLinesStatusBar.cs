@@ -1,6 +1,6 @@
 ﻿namespace Konvolucio.MGUI201222.StatusBar
 {
-    using Konvolucio.MGUIComm;
+    using Konvolucio.MGUIcomm;
     using System;
     using System.Windows.Forms;
 
@@ -15,7 +15,7 @@
 
             TimerService.Instance.Tick += (s, e) =>
             {
-               Text = "Log Lines: " + DevIoSrv.Instance.TraceLines.ToString();
+               Text = "Log Lines: " + GuiIoSrv.Instance.TraceLines.ToString();
             };
         }
 

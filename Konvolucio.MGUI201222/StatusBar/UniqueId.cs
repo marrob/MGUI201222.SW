@@ -4,7 +4,7 @@
     using System.Windows.Forms;
     using Properties;
     using Events;
-    using Konvolucio.MGUIComm;
+    using Konvolucio.MGUIcomm;
 
     class UniqueId: ToolStripStatusLabel
     { 
@@ -18,7 +18,7 @@
             EventAggregator.Instance.Subscribe((Action<ConnectionChangedAppEvent>)(e =>
             {
                 if (e.IsOpen)
-                    Text = "UID:" + DevIoSrv.Instance.GetUniqeId();
+                    Text = "UID:" + GuiIoSrv.Instance.GetUniqeId();
                 else
                     Text = "UID: " + AppConstants.ValueNotAvailable2;
             }));

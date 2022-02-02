@@ -6,7 +6,7 @@ namespace Konvolucio.MGUI201222.Commands
     using System.Windows.Forms;
     using Properties;
     using Events;
-    using Konvolucio.MGUIComm;
+    using Konvolucio.MGUIcomm;
 
     class StartStopCommand : ToolStripMenuItem
     {
@@ -46,10 +46,10 @@ namespace Konvolucio.MGUI201222.Commands
             //_app.CanConfig();
             Debug.WriteLine(this.GetType().Namespace + "." + this.GetType().Name + "." + System.Reflection.MethodBase.GetCurrentMethod().Name + "()");
 
-            if (DevIoSrv.Instance.IsOpen)
-                DevIoSrv.Instance.Close();
+            if (GuiIoSrv.Instance.IsOpen)
+                GuiIoSrv.Instance.Close();
             else
-                DevIoSrv.Instance.Open(Settings.Default.SeriaPortName);
+                GuiIoSrv.Instance.Open(Settings.Default.SeriaPortName);
 
         }
     }

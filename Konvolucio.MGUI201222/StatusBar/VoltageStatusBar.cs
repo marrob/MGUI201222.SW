@@ -4,7 +4,7 @@
     using System.Windows.Forms;
     using Properties;
     using Events;
-    using Konvolucio.MGUIComm;
+    using Konvolucio.MGUIcomm;
 
     class VoltageStatusBar : ToolStripStatusLabel
     { 
@@ -16,7 +16,7 @@
             Text = "Voltages: " + AppConstants.ValueNotAvailable2;
             EventAggregator.Instance.Subscribe((Action<ConfigsChangedAppEvent>)(e =>
             {
-                Text = "Voltages: " + DevIoSrv.Instance.GetLastVoltage + "V";
+                Text = "Voltages: " + GuiIoSrv.Instance.GetLastVoltage + "V";
             }));
         }
     }

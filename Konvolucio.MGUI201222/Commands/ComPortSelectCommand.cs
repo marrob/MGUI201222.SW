@@ -6,7 +6,7 @@ namespace Konvolucio.MGUI201222.Commands
     using System.Windows.Forms;
     using Properties;
     using Events;
-    using Konvolucio.MGUIComm;
+    using Konvolucio.MGUIcomm;
 
     class ComPortSelectCommand : ToolStripComboBox
     {
@@ -27,7 +27,7 @@ namespace Konvolucio.MGUI201222.Commands
             DropDown += (o, e) =>
             {
                 Items.Clear();
-                Items.AddRange(DevIoSrv.GetPortNames());
+                Items.AddRange(GuiIoSrv.GetPortNames());
             };
 
             DropDownClosed += (o, e) =>{
@@ -42,7 +42,7 @@ namespace Konvolucio.MGUI201222.Commands
             EventAggregator.Instance.Subscribe((Action<ShowAppEvent>)(e =>
             {               
                 Items.Clear();
-                Items.AddRange(DevIoSrv.GetPortNames());
+                Items.AddRange(GuiIoSrv.GetPortNames());
 
                 if (!string.IsNullOrWhiteSpace(Settings.Default.SeriaPortName))
                 {

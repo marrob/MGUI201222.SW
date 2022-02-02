@@ -13,7 +13,7 @@ namespace Konvolucio.MGUI201222.View
     using System.Threading.Tasks;
     using System.Windows.Forms;
     using Properties;
-    using Konvolucio.MGUIComm;
+    using Konvolucio.MGUIcomm;
 
     public partial class SettingsNode : UserControl, IUIPanelProperties
     {
@@ -33,7 +33,7 @@ namespace Konvolucio.MGUI201222.View
     
         private void button1_Click_1(object sender, EventArgs e)
         {
-            DevIoSrv.Instance.Test();
+            GuiIoSrv.Instance.Test();
         }
 
         private void checkBoxUpTimeCounterPeriodicUpdateCheck_CheckedChanged(object sender, EventArgs e)

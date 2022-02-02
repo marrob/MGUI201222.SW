@@ -7,7 +7,7 @@
     using System.Threading.Tasks;
     using System.Windows.Forms;
     using Controls;
-    using Konvolucio.MGUIComm;
+    using Konvolucio.MGUIcomm;
     using Properties;
 
     public partial class VoltageMeasNode : UserControl, IUIPanelProperties
@@ -22,7 +22,7 @@
 
             TimerService.Instance.Tick += (s, e) =>
             {
-                if (UserInFocus && DevIoSrv.Instance.IsOpen)
+                if (UserInFocus && GuiIoSrv.Instance.IsOpen)
                 {
 
                 }

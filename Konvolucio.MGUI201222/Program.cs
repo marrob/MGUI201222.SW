@@ -15,7 +15,7 @@
     using System.Reflection;
     using System.Text.RegularExpressions;
     using Controls;
-    using Konvolucio.MGUIComm;
+    using Konvolucio.MGUIcomm;
 
     static class Program
     {
@@ -58,9 +58,9 @@
             _mainForm.FormClosing += MainForm_FormClosing;
             _mainForm.FormClosed += new FormClosedEventHandler(MainForm_FormClosed);
 
-            DevIoSrv.Instance.ConnectionChanged += (o, e) =>
+            GuiIoSrv.Instance.ConnectionChanged += (o, e) =>
             {
-                EventAggregator.Instance.Publish(new ConnectionChangedAppEvent(DevIoSrv.Instance.IsOpen));
+                EventAggregator.Instance.Publish(new ConnectionChangedAppEvent(GuiIoSrv.Instance.IsOpen));
             };
 
             /*** TimerService ***/
@@ -69,14 +69,13 @@
             /*** Trace ***/
             TimerService.Instance.Tick += (o, e) =>
             { 
-               
-               // _mainForm.RichTextBoxTrace.SuspendLayout();
+              
 
                 
-                for (int i = 0; DevIoSrv.Instance.TraceQueue.Count != 0; i++)
+                for (int i = 0; GuiIoSrv.Instance.TraceQueue.Count != 0; i++)
                 {
                    
-                    string str = DevIoSrv.Instance.TraceQueue.Dequeue();
+                    string str = GuiIoSrv.Instance.TraceQueue.Dequeue();
                     if (str.Contains("Rx:"))
                         _mainForm.RichTextBoxTrace.AppendText(str + "\r\n", System.Drawing.Color.DarkGreen, false);
                     else if (str.Contains("Tx:"))
@@ -86,9 +85,6 @@
                     else
                         _mainForm.RichTextBoxTrace.AppendText(str + "\r\n", System.Drawing.Color.Black);
                 }
-                
-
-               // _mainForm.RichTextBoxTrace.ResumeLayout();
                 
             };
 
@@ -181,7 +177,7 @@
             if (Settings.Default.OpenAfterStartUp)
             {
                 if (!string.IsNullOrWhiteSpace(Settings.Default.SeriaPortName))
-                    DevIoSrv.Instance.Open(Settings.Default.SeriaPortName);
+                    GuiIoSrv.Instance.Open(Settings.Default.SeriaPortName);
             }    
 
             EventAggregator.Instance.Publish(new ShowAppEvent());

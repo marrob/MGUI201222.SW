@@ -6,7 +6,7 @@ namespace Konvolucio.MGUI201222.Commands
     using System.Text;
     using System.Windows.Forms; /*ToolStripMenuItem*/
     using Controls;
-    using Konvolucio.MGUIComm;
+    using Konvolucio.MGUIcomm;
     using Properties;
 
 
@@ -26,7 +26,7 @@ namespace Konvolucio.MGUI201222.Commands
         protected override void OnClick(EventArgs e)
         {
             _KnvRtb.Clear();
-            DevIoSrv.Instance.TraceClear();
+            GuiIoSrv.Instance.TraceClear();
         }
     }
 }

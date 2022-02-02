@@ -12,7 +12,7 @@
     using Controls;
     using Events;
     using System.Diagnostics;
-    using Konvolucio.MGUIComm;
+    using Konvolucio.MGUIcomm;
 
     public partial class PcReferenceNode : UserControl, IUIPanelProperties
     {
@@ -29,8 +29,8 @@
             numericUpDownButton.ValueChanged += new EventHandler(this.numericUpDownButton_ValueChanged);
 
 
-            numericUpDownDisplay.Value = DevIoSrv.Instance.DisplayLight();
-            numericUpDownButton.Value = DevIoSrv.Instance.LedLight();
+            numericUpDownDisplay.Value = GuiIoSrv.Instance.DisplayLight();
+            numericUpDownButton.Value = GuiIoSrv.Instance.LedLight();
             
             UpdateData();
 
@@ -58,29 +58,29 @@
            
                 newState = (byte)( ~(1 << e.Index - 1) & currentState);
             
-            DevIoSrv.Instance.SetOutputs(newState);
+            GuiIoSrv.Instance.SetOutputs(newState);
             
 
         }
 
         private void numericUpDownButton_ValueChanged(object sender, EventArgs e)
         {
-            DevIoSrv.Instance.LedLight((int)numericUpDownButton.Value);
+            GuiIoSrv.Instance.LedLight((int)numericUpDownButton.Value);
         }
 
         private void numericUpDownDisplay_ValueChanged(object sender, EventArgs e)
         {
-            DevIoSrv.Instance.DisplayLight((int)numericUpDownDisplay.Value);
+            GuiIoSrv.Instance.DisplayLight((int)numericUpDownDisplay.Value);
         }
 
         private void checkBoxPSP_CheckedChanged(object sender, EventArgs e)
         {
-            DevIoSrv.Instance.SetPowerSupply((sender as CheckBox).Checked);
+            GuiIoSrv.Instance.SetPowerSupply((sender as CheckBox).Checked);
         }
 
         private void checkBoxDisplay_CheckedChanged(object sender, EventArgs e)
         {
-            DevIoSrv.Instance.SetDisplay((sender as CheckBox).Checked);
+            GuiIoSrv.Instance.SetDisplay((sender as CheckBox).Checked);
         }
 
 
@@ -93,24 +93,24 @@
 
         void UpdateData()
         {
-            if (DevIoSrv.Instance.IsOpen)
+            if (GuiIoSrv.Instance.IsOpen)
             {
                 var sw = new Stopwatch();
                 sw.Restart();
 
-                checkBoxDisplay.Checked = DevIoSrv.Instance.GetDisplay();
+                checkBoxDisplay.Checked = GuiIoSrv.Instance.GetDisplay();
 
 
-                if (!DevIoSrv.Instance.IsOpen)
+                if (!GuiIoSrv.Instance.IsOpen)
                     knvIoOutputs.NotAvaliable = true;
                 else
                 {
                     knvIoOutputs.NotAvaliable = false;
-                    knvIoOutputs.SetContent(DevIoSrv.Instance.GetOutputs());
-                    knvIoInputs.SetContent(DevIoSrv.Instance.GetInputs());
+                    knvIoOutputs.SetContent(GuiIoSrv.Instance.GetOutputs());
+                    knvIoInputs.SetContent(GuiIoSrv.Instance.GetInputs());
                 }
 
-                double[] temps = DevIoSrv.Instance.GetTemperatures();
+                double[] temps = GuiIoSrv.Instance.GetTemperatures();
                 if (temps.Length > 3)
                 {
                     textBoxTemp1.Text = temps[0].ToString();
@@ -122,24 +122,24 @@
 
         private void buttonStartShutdownCmd_Click(object sender, EventArgs e)
         {
-            if(DevIoSrv.Instance.IsOpen)
-                DevIoSrv.Instance.StartShutdownSequence();
+            if(GuiIoSrv.Instance.IsOpen)
+                GuiIoSrv.Instance.StartShutdownSequence();
         }
 
         private void buttonPwrLedFlash_Click(object sender, EventArgs e)
         {
-            if (!DevIoSrv.Instance.IsOpen)
+            if (!GuiIoSrv.Instance.IsOpen)
                 return;
 
-            DevIoSrv.Instance.LedDimming(checkBoxPowerLedDimming.Checked);
-            DevIoSrv.Instance.LedPeriodTime((int)numericUpDownPwrLedFlashPeriod.Value);
-            DevIoSrv.Instance.LedCustomFlashStart();
+            GuiIoSrv.Instance.LedDimming(checkBoxPowerLedDimming.Checked);
+            GuiIoSrv.Instance.LedPeriodTime((int)numericUpDownPwrLedFlashPeriod.Value);
+            GuiIoSrv.Instance.LedCustomFlashStart();
 
         }
 
         private void buttonPwrLedFlashOff_Click(object sender, EventArgs e)
         {
-            DevIoSrv.Instance.LedCustomFlashStop();
+            GuiIoSrv.Instance.LedCustomFlashStop();
         }
     }
 }
