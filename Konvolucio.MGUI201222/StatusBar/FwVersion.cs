@@ -4,7 +4,8 @@
     using System.Windows.Forms;
     using Properties;
     using Events;
-    using Konvolucio.MGUIcomm;
+    using MGUIcomm;
+    using DACcomm;
 
     class FwVersion : ToolStripStatusLabel
     { 
@@ -17,7 +18,12 @@
             EventAggregator.Instance.Subscribe((Action<ConnectionChangedAppEvent>)(e =>
             {
                 if (e.IsOpen)
-                    Text = "FW:" + GuiIoSrv.Instance.GetVersion();
+                {
+                    if (Settings.Default.LastDeviceName == AppConstants.DeviceNames[AppConstants.DEV_GUI])
+                        Text = "FW:" + GuiIoSrv.Instance.GetVersion();
+                    else if(Settings.Default.LastDeviceName == AppConstants.DeviceNames[AppConstants.DEV_DAC])
+                        Text = "FW:" + DacIoSrv.Instance.GetVersion();
+                }
                 else
                     Text = "FW: " + AppConstants.ValueNotAvailable2;
             }));

@@ -36,21 +36,7 @@
             }
         }
 
-
-        double _lastCurrent;
-        public double GetLastCurrentLimit
-        {
-            get { return _lastCurrent; }
-            set { _lastCurrent = value; }
-        }
-
-        double _lastVoltage;
-        public double GetLastVoltage
-        {
-            get { return _lastVoltage; }
-            set { _lastVoltage = value; }
-        }
-
+        int _consecutiveRxErrorCounter;
 
         public static string[] GetPortNames()
         {
@@ -62,7 +48,7 @@
 
         }
 
-       static object SyncObject = new object();
+       static readonly object _syncObject = new object();
 
         /// <summary>
         /// Srosport Nyitása
@@ -78,6 +64,7 @@
                     BaudRate = 460800,
                     NewLine = "\n"
                 };
+                _consecutiveRxErrorCounter = 0;
                 _sp.Open();
                 Trace("Serial Port: " + port + " is Open.");
                 Test();
@@ -111,7 +98,7 @@
 
         string WriteRead(string str)
         {
-            lock (SyncObject)
+            lock (_syncObject)
                 
             {
                 if (_sp == null || !_sp.IsOpen)
@@ -136,11 +123,18 @@
 
                     str = _sp.ReadLine();
                     Trace("Rx: " + str);
+                    _consecutiveRxErrorCounter = 0;
                 }
                 catch (Exception ex)
                 {
                     Trace("Rx ERROR Serial Port is:" + ex.Message);
+                    _consecutiveRxErrorCounter++;
                     OnErrorHappened();
+                }
+                if (_consecutiveRxErrorCounter >= 3)
+                {
+                    Trace("Három hibás egymást követő válasz! megszakítom a kapcsolatot...");
+                    Close();
                 }
             }
             return str;

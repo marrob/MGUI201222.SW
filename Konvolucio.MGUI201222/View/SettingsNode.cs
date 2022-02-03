@@ -13,7 +13,8 @@ namespace Konvolucio.MGUI201222.View
     using System.Threading.Tasks;
     using System.Windows.Forms;
     using Properties;
-    using Konvolucio.MGUIcomm;
+    using MGUIcomm;
+    using Events;
 
     public partial class SettingsNode : UserControl, IUIPanelProperties
     {
@@ -54,6 +55,15 @@ namespace Konvolucio.MGUI201222.View
         private void numericPeriodicUpdate_ValueChanged(object sender, EventArgs e)
         {
             Settings.Default.GuiRefreshRateMs = (int)numericPeriodicUpdate.Value;
+        }
+
+        private void checkBoxTracing_CheckedChanged(object sender, EventArgs e)
+        {
+            if (Settings.Default.TracingEnabled != checkBoxTracing.Checked)
+            {
+                Settings.Default.TracingEnabled = checkBoxTracing.Checked;
+                EventAggregator.Instance.Publish<TracingChanged>(new TracingChanged(checkBoxTracing.Checked));
+            }
         }
     }
 }

@@ -53,6 +53,9 @@
     <Compile Include="Commands\AlwaysOnTopCommand.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Commands\SelectDeviceCommand .cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\KnvIo8Control .cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -74,16 +77,12 @@
     </Compile>
     <Compile Include="Controls\RichTextBoxExtensions.cs" />
     <Compile Include="Events\ConfigsChangedAppEvent .cs" />
-    <Compile Include="StatusBar\VoltageStatusBar.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Events\DeviceNameChanged.cs" />
+    <Compile Include="Events\TracingChanged.cs" />
     <Compile Include="StatusBar\UniqueId.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="StatusBar\FwVersion.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="StatusBar\SeneseStatusBar.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="View\DacNode.cs">

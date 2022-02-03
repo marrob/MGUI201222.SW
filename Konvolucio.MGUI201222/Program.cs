@@ -15,7 +15,8 @@
     using System.Reflection;
     using System.Text.RegularExpressions;
     using Controls;
-    using Konvolucio.MGUIcomm;
+    using MGUIcomm;
+    using DACcomm;
 
     static class Program
     {
@@ -35,10 +36,8 @@
 
     public class App : IApp
     {
-
         public static SynchronizationContext SyncContext = null;
-
-        IMainForm _mainForm;
+        readonly IMainForm _mainForm;
 
         public App()
         {
@@ -58,34 +57,62 @@
             _mainForm.FormClosing += MainForm_FormClosing;
             _mainForm.FormClosed += new FormClosedEventHandler(MainForm_FormClosed);
 
+            /*** Connection ***/
+            DacIoSrv.Instance.ConnectionChanged += (o, e) =>
+                EventAggregator.Instance.Publish(new ConnectionChangedAppEvent(DacIoSrv.Instance.IsOpen));
+
             GuiIoSrv.Instance.ConnectionChanged += (o, e) =>
+                  EventAggregator.Instance.Publish(new ConnectionChangedAppEvent(GuiIoSrv.Instance.IsOpen));
+
+
+            /*** Tracing ***/
+            DacIoSrv.Instance.TracingEnable = Settings.Default.TracingEnabled;
+            GuiIoSrv.Instance.TracingEnable = Settings.Default.TracingEnabled;
+
+            EventAggregator.Instance.Subscribe((Action<TracingChanged>)(e =>
             {
-                EventAggregator.Instance.Publish(new ConnectionChangedAppEvent(GuiIoSrv.Instance.IsOpen));
-            };
+                DacIoSrv.Instance.TracingEnable = e.Enabled;
+                GuiIoSrv.Instance.TracingEnable = e.Enabled;
+            }));
+
 
             /*** TimerService ***/
             TimerService.Instance.Interval = Settings.Default.GuiRefreshRateMs;
 
             /*** Trace ***/
             TimerService.Instance.Tick += (o, e) =>
-            { 
-              
+            {
 
-                
-                for (int i = 0; GuiIoSrv.Instance.TraceQueue.Count != 0; i++)
+                if (Settings.Default.LastDeviceName == AppConstants.DeviceNames[AppConstants.DEV_GUI])
                 {
-                   
-                    string str = GuiIoSrv.Instance.TraceQueue.Dequeue();
-                    if (str.Contains("Rx:"))
-                        _mainForm.RichTextBoxTrace.AppendText(str + "\r\n", System.Drawing.Color.DarkGreen, false);
-                    else if (str.Contains("Tx:"))
-                        _mainForm.RichTextBoxTrace.AppendText(str + "\r\n", System.Drawing.Color.Blue);
-                    else if (str.Contains("ERROR"))
-                        _mainForm.RichTextBoxTrace.AppendText(str + "\r\n", System.Drawing.Color.Red);
-                    else
-                        _mainForm.RichTextBoxTrace.AppendText(str + "\r\n", System.Drawing.Color.Black);
+                    for (int i = 0; GuiIoSrv.Instance.TraceQueue.Count != 0; i++)
+                    {
+                        string str = GuiIoSrv.Instance.TraceQueue.Dequeue();
+                        if (str.Contains("Rx:"))
+                            _mainForm.RichTextBoxTrace.AppendText(str + "\r\n", System.Drawing.Color.DarkGreen, false);
+                        else if (str.Contains("Tx:"))
+                            _mainForm.RichTextBoxTrace.AppendText(str + "\r\n", System.Drawing.Color.Blue);
+                        else if (str.Contains("ERROR"))
+                            _mainForm.RichTextBoxTrace.AppendText(str + "\r\n", System.Drawing.Color.Red);
+                        else
+                            _mainForm.RichTextBoxTrace.AppendText(str + "\r\n", System.Drawing.Color.Black);
+                    }
                 }
-                
+                else if (Settings.Default.LastDeviceName == AppConstants.DeviceNames[AppConstants.DEV_DAC])
+                {
+                    for (int i = 0; DacIoSrv.Instance.TraceQueue.Count != 0; i++)
+                    {
+                        string str = DacIoSrv.Instance.TraceQueue.Dequeue();
+                        if (str.Contains("Rx:"))
+                            _mainForm.RichTextBoxTrace.AppendText(str + "\r\n", System.Drawing.Color.DarkGreen, false);
+                        else if (str.Contains("Tx:"))
+                            _mainForm.RichTextBoxTrace.AppendText(str + "\r\n", System.Drawing.Color.Blue);
+                        else if (str.Contains("ERROR"))
+                            _mainForm.RichTextBoxTrace.AppendText(str + "\r\n", System.Drawing.Color.Red);
+                        else
+                            _mainForm.RichTextBoxTrace.AppendText(str + "\r\n", System.Drawing.Color.Black);
+                    }
+                }
             };
 
             /*** Menu Bar ***/
@@ -116,8 +143,9 @@
 
             _mainForm.MenuBar = new ToolStripItem[]
                 {
+                   new Commands.SelectDeviceCommand(),
                    new Commands.ComPortSelectCommand(this),
-                   new Commands.StartStopCommand(this),
+                   new Commands.StartStopCommand(),
                    //configMenu,
                    //runMenu,
                    //viewMenu,

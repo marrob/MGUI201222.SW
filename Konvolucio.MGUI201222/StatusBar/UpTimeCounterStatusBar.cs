@@ -4,8 +4,9 @@ namespace Konvolucio.MGUI201222.StatusBar
 {
     using System;
     using System.Windows.Forms;
-    using Konvolucio.MGUIcomm;
     using Properties;
+    using MGUIcomm;
+    using DACcomm;
 
     class UpTimeCounterStatusBar : ToolStripStatusLabel
     { 
@@ -19,8 +20,15 @@ namespace Konvolucio.MGUI201222.StatusBar
 
             TimerService.Instance.Tick += (s, e) =>
             {
-                if(GuiIoSrv.Instance.IsOpen && Settings.Default.UpTimeCounterPeriodicUpdate)
-                    Text = "UpTime Counter: " + GuiIoSrv.Instance.GetUpTime();
+                if (Settings.Default.UpTimeCounterPeriodicUpdate)
+                {
+                    if (Settings.Default.LastDeviceName == AppConstants.DeviceNames[AppConstants.DEV_GUI])
+                        if(GuiIoSrv.Instance.IsOpen)
+                            Text = "UpTime Counter: " + GuiIoSrv.Instance.GetUpTime();
+                    else if (Settings.Default.LastDeviceName == AppConstants.DeviceNames[AppConstants.DEV_DAC])
+                        if (DacIoSrv.Instance.IsOpen)
+                            Text = "UpTime Counter: " + DacIoSrv.Instance.GetUpTime();
+                }
             };
         }
     }

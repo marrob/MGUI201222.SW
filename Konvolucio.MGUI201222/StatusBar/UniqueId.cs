@@ -4,7 +4,8 @@
     using System.Windows.Forms;
     using Properties;
     using Events;
-    using Konvolucio.MGUIcomm;
+    using MGUIcomm;
+    using DACcomm;
 
     class UniqueId: ToolStripStatusLabel
     { 
@@ -17,10 +18,16 @@
 
             EventAggregator.Instance.Subscribe((Action<ConnectionChangedAppEvent>)(e =>
             {
-                if (e.IsOpen)
-                    Text = "UID:" + GuiIoSrv.Instance.GetUniqeId();
-                else
-                    Text = "UID: " + AppConstants.ValueNotAvailable2;
+                if (Settings.Default.LastDeviceName == AppConstants.DeviceNames[AppConstants.DEV_GUI])
+                {
+                    if (GuiIoSrv.Instance.IsOpen)
+                        Text = "UID:" + GuiIoSrv.Instance.GetUniqeId();
+                }
+                else if (Settings.Default.LastDeviceName == AppConstants.DeviceNames[AppConstants.DEV_DAC])
+                {
+                    if (DacIoSrv.Instance.IsOpen)
+                        Text = "UID:" + DacIoSrv.Instance.GetUniqeId();
+                }
             }));
         }
     }

@@ -6,21 +6,18 @@ namespace Konvolucio.MGUI201222.Commands
     using System.Windows.Forms;
     using Properties;
     using Events;
-    using Konvolucio.MGUIcomm;
+    using MGUIcomm;
+    using DACcomm;
 
     class StartStopCommand : ToolStripMenuItem
     {
-        readonly IApp _app;
-
-        public StartStopCommand(IApp obj)
+        public StartStopCommand()
         {
-            _app = obj;
             Text = "A kapcsolódáshoz nyomd meg!";
             Image = Resources.Play_48x48;
             ShortcutKeys = Keys.F5;
             DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
             Enabled = true;
-
             EventAggregator.Instance.Subscribe((Action<ConnectionChangedAppEvent>)(e =>
             {
                 if (e.IsOpen)
@@ -34,7 +31,6 @@ namespace Konvolucio.MGUI201222.Commands
                     Text = "Kapcsolódás";
                 }
             }));
-
         }
 
         protected override void OnClick(EventArgs e)
@@ -42,11 +38,20 @@ namespace Konvolucio.MGUI201222.Commands
             base.OnClick(e);
             Debug.WriteLine(this.GetType().Namespace + "." + this.GetType().Name + "." + System.Reflection.MethodBase.GetCurrentMethod().Name + "()");
 
-            if (GuiIoSrv.Instance.IsOpen)
-                GuiIoSrv.Instance.Close();
-            else
-                GuiIoSrv.Instance.Open(Settings.Default.SeriaPortName);
-
+            if (Settings.Default.LastDeviceName == AppConstants.DeviceNames[AppConstants.DEV_GUI])
+            {
+                if (GuiIoSrv.Instance.IsOpen)
+                    GuiIoSrv.Instance.Close();
+                else
+                 GuiIoSrv.Instance.Open(Settings.Default.SeriaPortName);
+            }
+            else if (Settings.Default.LastDeviceName == AppConstants.DeviceNames[AppConstants.DEV_DAC])
+            {
+                if (DacIoSrv.Instance.IsOpen)
+                    DacIoSrv.Instance.Close();
+                else
+                    DacIoSrv.Instance.Open(Settings.Default.SeriaPortName);
+            }
         }
     }
 }

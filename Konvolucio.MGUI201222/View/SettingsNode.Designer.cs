@@ -33,6 +33,7 @@
             this.checkBoxUpTimeCounterPeriodicUpdateCheck = new System.Windows.Forms.CheckBox();
             this.numericPeriodicUpdate = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
+            this.checkBoxTracing = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericPeriodicUpdate)).BeginInit();
             this.SuspendLayout();
             // 
@@ -90,10 +91,22 @@
             this.label1.TabIndex = 11;
             this.label1.Text = "Felület firssítési gyakorisága";
             // 
+            // checkBox1
+            // 
+            this.checkBoxTracing.AutoSize = true;
+            this.checkBoxTracing.Location = new System.Drawing.Point(6, 131);
+            this.checkBoxTracing.Name = "checkBox1";
+            this.checkBoxTracing.Size = new System.Drawing.Size(256, 17);
+            this.checkBoxTracing.TabIndex = 12;
+            this.checkBoxTracing.Text = "Tracing Engedélyezése (Erőforrás igényes lehet!)";
+            this.checkBoxTracing.UseVisualStyleBackColor = true;
+            this.checkBoxTracing.CheckedChanged += new System.EventHandler(this.checkBoxTracing_CheckedChanged);
+            // 
             // SettingsNode
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.checkBoxTracing);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.numericPeriodicUpdate);
             this.Controls.Add(this.checkBoxUpTimeCounterPeriodicUpdateCheck);
@@ -113,5 +126,6 @@
         private System.Windows.Forms.CheckBox checkBoxUpTimeCounterPeriodicUpdateCheck;
         private System.Windows.Forms.NumericUpDown numericPeriodicUpdate;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.CheckBox checkBoxTracing;
     }
 }
