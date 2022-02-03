@@ -159,6 +159,7 @@
             {
                 new StatusBar.LogLinesStatusBar(),   
                 new StatusBar.UpTimeCounterStatusBar(),
+                new StatusBar.WhoIsStatusBar(),
                 new StatusBar.UniqueId(),
                 new StatusBar.FwVersion(),
                 new StatusBar.EmptyStatusBar(),

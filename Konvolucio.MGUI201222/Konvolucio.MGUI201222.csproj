@@ -79,6 +79,9 @@
     <Compile Include="Events\ConfigsChangedAppEvent .cs" />
     <Compile Include="Events\DeviceNameChanged.cs" />
     <Compile Include="Events\TracingChanged.cs" />
+    <Compile Include="StatusBar\WhoIsStatusBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="StatusBar\UniqueId.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -7,26 +7,26 @@
     using MGUIcomm;
     using DACcomm;
 
-    class UniqueId: ToolStripStatusLabel
+    class WhoIsStatusBar : ToolStripStatusLabel
     { 
-        public UniqueId()
+        public WhoIsStatusBar()
         {
             BorderSides = ToolStripStatusLabelBorderSides.Left;
             BorderStyle = Border3DStyle.Etched;
             Size = new System.Drawing.Size(58, 19);
-            Text = "UID: " + AppConstants.ValueNotAvailable2;
+            Text = "WhoIs: " + AppConstants.ValueNotAvailable2;
 
             EventAggregator.Instance.Subscribe((Action<ConnectionChangedAppEvent>)(e =>
             {
                 if (Settings.Default.LastDeviceName == AppConstants.DeviceNames[AppConstants.DEV_GUI])
                 {
                     if (GuiIoSrv.Instance.IsOpen)
-                        Text = "UID:" + GuiIoSrv.Instance.UniqeId();
+                        Text = "WhoIs:" + GuiIoSrv.Instance.WhoIs();
                 }
                 else if (Settings.Default.LastDeviceName == AppConstants.DeviceNames[AppConstants.DEV_DAC])
                 {
                     if (DacIoSrv.Instance.IsOpen)
-                        Text = "UID:" + DacIoSrv.Instance.UniqeId();
+                        Text = "WhoIs:" + DacIoSrv.Instance.WhoIs();
                 }
             }));
         }

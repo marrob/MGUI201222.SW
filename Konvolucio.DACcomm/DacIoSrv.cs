@@ -121,7 +121,7 @@
                 try
                 {
 
-                    str = _sp.ReadLine();
+                    str = _sp.ReadLine().Trim(new char[]{'\0', '\r', '\n' });
                     Trace("Rx: " + str);
                     _consecutiveRxErrorCounter = 0;
                 }
@@ -155,7 +155,7 @@
         /// Processzor egyedi azonsítója, hosza nem változik
         /// </summary>
         /// <returns>pl:20001E354D501320383252</returns>
-        public string GetUniqeId()
+        public string UniqeId()
         {
             var resp = WriteRead("*UID?");
             if (resp == null)
@@ -183,7 +183,7 @@
         /// A panel varáció neve pl: MGUI201222V00-PCREF
         /// </summary>
         /// <returns></returns>
-        public string GetWhoIs()
+        public string WhoIs()
         {
             var resp = WriteRead("*WHOIS?");
             if (resp == null)
