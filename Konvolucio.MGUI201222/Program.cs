@@ -196,8 +196,6 @@
             SyncContext = SynchronizationContext.Current;
             _mainForm.LayoutRestore();
 
-            //_mainForm.LayoutRestore();
-            /*Ö tölti be a projectet*/
             Start(Environment.GetCommandLineArgs());
             TimerService.Instance.Start();
             /*Kezdő Node Legyen az Adapter node*/
@@ -206,9 +204,17 @@
             if (Settings.Default.OpenAfterStartUp)
             {
                 if (!string.IsNullOrWhiteSpace(Settings.Default.SeriaPortName))
-                    GuiIoSrv.Instance.Open(Settings.Default.SeriaPortName);
-            }    
-
+                {
+                    if (Settings.Default.LastDeviceName == AppConstants.DeviceNames[AppConstants.DEV_GUI])
+                    {
+                        GuiIoSrv.Instance.Open(Settings.Default.SeriaPortName);
+                    }
+                    else if (Settings.Default.LastDeviceName == AppConstants.DeviceNames[AppConstants.DEV_DAC])
+                    {
+                        DacIoSrv.Instance.Open(Settings.Default.SeriaPortName);
+                    }
+                }
+            }
             EventAggregator.Instance.Publish(new ShowAppEvent());
         }
 

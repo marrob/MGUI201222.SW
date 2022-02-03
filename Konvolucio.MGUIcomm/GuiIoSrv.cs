@@ -222,11 +222,10 @@
         /// <returns></returns>
         public int LedLight()
         {
-            var retval = -1;
             var resp = WriteRead("LED:LIG?");
             if (resp == null)
                 return -1;
-            else if (int.TryParse(resp, NumberStyles.Integer, CultureInfo.GetCultureInfo("en-US"), out retval))
+            else if (int.TryParse(resp, NumberStyles.Integer, CultureInfo.GetCultureInfo("en-US"), out int retval))
                 return retval;
             else
                 return -1;

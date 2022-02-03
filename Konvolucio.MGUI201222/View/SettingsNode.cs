@@ -30,6 +30,7 @@ namespace Konvolucio.MGUI201222.View
             checkBoxOpenAfterStart.Checked = Settings.Default.OpenAfterStartUp;
             checkBoxUpTimeCounterPeriodicUpdateCheck.Checked = Settings.Default.UpTimeCounterPeriodicUpdate;
             numericPeriodicUpdate.Value = Settings.Default.GuiRefreshRateMs;
+            checkBoxTracing.Checked = Settings.Default.TracingEnabled;
         }
     
         private void button1_Click_1(object sender, EventArgs e)

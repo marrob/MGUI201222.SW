@@ -34,5 +34,23 @@
             timer1.Stop();
         }
 
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            var sw = new Stopwatch();
+            sw.Restart();
+            UpdateData();
+            sw.Stop();
+            textBoxUpdateTime.Text = $"{sw.ElapsedMilliseconds} ms";
+        }
+
+        void UpdateData()
+        {
+            if (DacIoSrv.Instance.IsOpen)
+            {
+                textBoxLrck.Text = $"{DacIoSrv.Instance.FreqLRCK() } Hz";
+                textBoxBclk.Text = $"{DacIoSrv.Instance.FreqBCLK() } Hz";
+                textBoxInputs.Text = $"0x{DacIoSrv.Instance.Inputs():X4}";
+            }
+        }
     }
 }

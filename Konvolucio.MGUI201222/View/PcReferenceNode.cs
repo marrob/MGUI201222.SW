@@ -86,7 +86,13 @@
 
         private void timer1_Tick(object sender, EventArgs e)
         {
+            var sw = new Stopwatch();
+            sw.Restart();
+
             UpdateData();
+
+            sw.Stop();
+            textBoxUpdateTime.Text = $"{sw.ElapsedMilliseconds} ms";
         }
 
 
@@ -94,10 +100,7 @@
         void UpdateData()
         {
             if (GuiIoSrv.Instance.IsOpen)
-            {
-                var sw = new Stopwatch();
-                sw.Restart();
-
+            { 
                 checkBoxDisplay.Checked = GuiIoSrv.Instance.GetDisplay();
 
 
@@ -115,8 +118,6 @@
                 {
                     textBoxTemp1.Text = temps[0].ToString();
                 }
-                sw.Stop();
-                Debug.WriteLine($"Update Data: { sw.ElapsedMilliseconds } ms ");
             }
         }
 
