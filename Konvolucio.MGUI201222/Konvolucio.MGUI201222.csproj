@@ -86,6 +86,12 @@
     <Compile Include="StatusBar\SeneseStatusBar.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="View\DacNode.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="View\DacNode.Designer.cs">
+      <DependentUpon>DacNode.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\VoltageMeasNode.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -204,6 +210,9 @@
     <EmbeddedResource Include="Controls\KnvIo16Control.resx">
       <DependentUpon>KnvIo16Control.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="View\DacNode.resx">
+      <DependentUpon>DacNode.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="View\VoltageMeasNode.resx">
       <DependentUpon>VoltageMeasNode.cs</DependentUpon>
     </EmbeddedResource>
@@ -279,6 +288,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Delete48x48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Konvolucio.DACcomm\Konvolucio.DACcomm.csproj">
+      <Project>{ee7ff540-d3a9-4f52-a74c-9bb19b1da211}</Project>
+      <Name>Konvolucio.DACcomm</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Konvolucio.MGUIcomm\Konvolucio.MGUIcomm.csproj">
+      <Project>{a945ba89-ae10-4d1d-929f-ede5f8b7cad2}</Project>
+      <Name>Konvolucio.MGUIcomm</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

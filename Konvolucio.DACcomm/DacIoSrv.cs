@@ -1,4 +1,4 @@
-﻿namespace Konvolucio.MGUIComm
+﻿namespace Konvolucio.DACcomm
 { 
     using System;
     using System.Collections.Generic;
@@ -7,7 +7,7 @@
     using System.IO.Ports;
     using System.Globalization;
 
-    public class DevIoSrv
+    public class DacIoSrv
     {
 
         public event EventHandler ConnectionChanged;
@@ -17,9 +17,9 @@
 
         public bool TracingEnable { get; set; } = false;
 
-        public static DevIoSrv Instance { get { return _instance; } }
+        public static DacIoSrv Instance { get { return _instance; } }
 
-        private static readonly DevIoSrv _instance = new DevIoSrv();
+        private static readonly DacIoSrv _instance = new DacIoSrv();
 
         public Queue<string> TraceQueue = new Queue<string>();
         public int TraceLines { get; private set; }
@@ -57,7 +57,7 @@
             return (SerialPort.GetPortNames());
         }
 
-        public DevIoSrv()
+        public DacIoSrv()
         {
 
         }

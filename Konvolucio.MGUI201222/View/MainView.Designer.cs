@@ -29,8 +29,9 @@
         private void InitializeComponent()
         {
             System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Sugó");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("PC Refrence");
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Beállítások");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("PC REFERENCE");
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("DENPO MK2 DAC");
+            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Beállítások");
             this.treeViewNavigator = new System.Windows.Forms.TreeView();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -46,13 +47,16 @@
             treeNode1.Name = "HelpNode";
             treeNode1.Text = "Sugó";
             treeNode2.Name = "PcReference";
-            treeNode2.Text = "PC Refrence";
-            treeNode3.Name = "SettingsNode";
-            treeNode3.Text = "Beállítások";
+            treeNode2.Text = "PC REFERENCE";
+            treeNode3.Name = "DacNode";
+            treeNode3.Text = "DENPO MK2 DAC";
+            treeNode4.Name = "SettingsNode";
+            treeNode4.Text = "Beállítások";
             this.treeViewNavigator.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode1,
             treeNode2,
-            treeNode3});
+            treeNode3,
+            treeNode4});
             this.treeViewNavigator.Size = new System.Drawing.Size(136, 327);
             this.treeViewNavigator.TabIndex = 2;
             this.treeViewNavigator.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TreeViewNavigator_AfterSelect);

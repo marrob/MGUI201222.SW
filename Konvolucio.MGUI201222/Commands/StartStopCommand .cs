@@ -37,13 +37,9 @@ namespace Konvolucio.MGUI201222.Commands
 
         }
 
-
-
-
         protected override void OnClick(EventArgs e)
         {
             base.OnClick(e);
-            //_app.CanConfig();
             Debug.WriteLine(this.GetType().Namespace + "." + this.GetType().Name + "." + System.Reflection.MethodBase.GetCurrentMethod().Name + "()");
 
             if (GuiIoSrv.Instance.IsOpen)

@@ -7,8 +7,8 @@
     <ProjectGuid>{EE7FF540-D3A9-4F52-A74C-9BB19B1DA211}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MGUIComm</RootNamespace>
-    <AssemblyName>MGUIComm</AssemblyName>
+    <RootNamespace>DACcomm</RootNamespace>
+    <AssemblyName>DACcomm</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
