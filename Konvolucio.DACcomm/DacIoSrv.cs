@@ -61,7 +61,7 @@
                 _sp = new SerialPort(port)
                 {
                     ReadTimeout = 1000,
-                    BaudRate = 460800,
+                    BaudRate = 115200,
                     NewLine = "\n"
                 };
                 _consecutiveRxErrorCounter = 0;

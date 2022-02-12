@@ -23,11 +23,15 @@ namespace Konvolucio.MGUI201222.StatusBar
                 if (Settings.Default.UpTimeCounterPeriodicUpdate)
                 {
                     if (Settings.Default.LastDeviceName == AppConstants.DeviceNames[AppConstants.DEV_GUI])
-                        if(GuiIoSrv.Instance.IsOpen)
+                    {
+                        if (GuiIoSrv.Instance.IsOpen)
                             Text = "UpTime Counter: " + GuiIoSrv.Instance.GetUpTime();
+                    }
                     else if (Settings.Default.LastDeviceName == AppConstants.DeviceNames[AppConstants.DEV_DAC])
+                    {
                         if (DacIoSrv.Instance.IsOpen)
                             Text = "UpTime Counter: " + DacIoSrv.Instance.GetUpTime();
+                    }
                 }
             };
         }
