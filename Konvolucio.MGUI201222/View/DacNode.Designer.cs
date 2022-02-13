@@ -39,6 +39,9 @@
             this.textBoxUpdateTime = new System.Windows.Forms.TextBox();
             this.textBoxInputs = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.comboBoxModes = new System.Windows.Forms.ComboBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // contextMenuStrip1
@@ -54,7 +57,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(34, 50);
+            this.label1.Location = new System.Drawing.Point(8, 32);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(38, 13);
             this.label1.TabIndex = 1;
@@ -63,7 +66,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(34, 76);
+            this.label2.Location = new System.Drawing.Point(8, 58);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(37, 13);
             this.label2.TabIndex = 2;
@@ -71,7 +74,7 @@
             // 
             // textBoxLrck
             // 
-            this.textBoxLrck.Location = new System.Drawing.Point(78, 47);
+            this.textBoxLrck.Location = new System.Drawing.Point(52, 29);
             this.textBoxLrck.Name = "textBoxLrck";
             this.textBoxLrck.ReadOnly = true;
             this.textBoxLrck.Size = new System.Drawing.Size(100, 20);
@@ -79,7 +82,7 @@
             // 
             // textBoxBclk
             // 
-            this.textBoxBclk.Location = new System.Drawing.Point(78, 73);
+            this.textBoxBclk.Location = new System.Drawing.Point(52, 55);
             this.textBoxBclk.Name = "textBoxBclk";
             this.textBoxBclk.ReadOnly = true;
             this.textBoxBclk.Size = new System.Drawing.Size(100, 20);
@@ -104,7 +107,7 @@
             // 
             // textBoxInputs
             // 
-            this.textBoxInputs.Location = new System.Drawing.Point(78, 99);
+            this.textBoxInputs.Location = new System.Drawing.Point(64, 191);
             this.textBoxInputs.Name = "textBoxInputs";
             this.textBoxInputs.ReadOnly = true;
             this.textBoxInputs.Size = new System.Drawing.Size(100, 20);
@@ -113,26 +116,50 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(34, 102);
+            this.label4.Location = new System.Drawing.Point(19, 194);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(39, 13);
             this.label4.TabIndex = 8;
             this.label4.Text = "Inputs:";
             // 
+            // comboBoxModes
+            // 
+            this.comboBoxModes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxModes.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.comboBoxModes.FormattingEnabled = true;
+            this.comboBoxModes.Location = new System.Drawing.Point(17, 17);
+            this.comboBoxModes.Name = "comboBoxModes";
+            this.comboBoxModes.Size = new System.Drawing.Size(551, 33);
+            this.comboBoxModes.TabIndex = 9;
+            this.comboBoxModes.SelectionChangeCommitted += new System.EventHandler(this.comboBoxModes_SelectionChangeCommitted);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.textBoxBclk);
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.textBoxLrck);
+            this.groupBox1.Location = new System.Drawing.Point(12, 84);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(165, 89);
+            this.groupBox1.TabIndex = 10;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Frequnecy Measurment";
+            // 
             // DacNode
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.comboBoxModes);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.textBoxInputs);
             this.Controls.Add(this.textBoxUpdateTime);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.textBoxBclk);
-            this.Controls.Add(this.textBoxLrck);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
             this.Name = "DacNode";
             this.Size = new System.Drawing.Size(797, 366);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -149,5 +176,7 @@
         private System.Windows.Forms.TextBox textBoxUpdateTime;
         private System.Windows.Forms.TextBox textBoxInputs;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.ComboBox comboBoxModes;
+        private System.Windows.Forms.GroupBox groupBox1;
     }
 }

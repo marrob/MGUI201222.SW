@@ -10,6 +10,18 @@
     public class DacIoSrv
     {
 
+       public enum Modes
+        {
+            MODE_NONE = 0,
+            MODE_USB_PCM,
+            MODE_USB_PCM_SRC_BYPAS,
+            MODE_USB_DSD,
+            MODE_BNC_SPDIF_SRC_BYPAS,
+            MODE_RCA_SPDIF_SRC_BYPAS,
+            MODE_XLR_SPDIF_SRC_BYPAS
+        }
+
+
         public event EventHandler ConnectionChanged;
         public event EventHandler ErrorHappened;
 
@@ -229,6 +241,24 @@
                 return retval;
             else
                 return 0;
+        }
+
+
+        public Modes GetMode()
+        {
+            var resp = WriteRead("MODE?");
+            if (resp == null)
+                return Modes.MODE_NONE;
+            else if (int.TryParse(resp, NumberStyles.Integer, CultureInfo.GetCultureInfo("en-US"), out int retval))
+                return (Modes)retval;
+            else
+                return Modes.MODE_NONE;
+        }
+
+        public void SelectMode(Modes mode)
+        {
+            if (WriteRead($"MODE { (int)mode}") != "RDY")
+                Trace("IO-ERROR: Invalid Response.");
         }
 
 

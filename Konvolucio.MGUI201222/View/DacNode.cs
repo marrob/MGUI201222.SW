@@ -16,16 +16,18 @@
 
     public partial class DacNode : UserControl, IUIPanelProperties
     {
+
         public DacNode()
         {
             InitializeComponent();
+            comboBoxModes.DataSource = Enum.GetValues(typeof(DacIoSrv.Modes));
             this.Name = "DacNode";
         }
 
         public void UserEnter()
         { 
             timer1.Start();
-
+            comboBoxModes.SelectedItem = DacIoSrv.Instance.GetMode();
         }
 
         public void UserLeave()
@@ -51,6 +53,11 @@
                 textBoxBclk.Text = $"{DacIoSrv.Instance.FreqBCLK() } Hz";
                 textBoxInputs.Text = $"0x{DacIoSrv.Instance.Inputs():X4}";
             }
+        }
+
+        private void comboBoxModes_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            DacIoSrv.Instance.SelectMode((DacIoSrv.Modes)comboBoxModes.SelectedItem);
         }
     }
 }
