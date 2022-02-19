@@ -13,12 +13,42 @@
        public enum Modes
         {
             MODE_NONE = 0,
-            MODE_USB_PCM,
-            MODE_USB_PCM_SRC_BYPAS,
+            MODE_USB_PCM_WITH_SRC,
+            MODE_USB_PCM_WITHOUT_SRC,
+
             MODE_USB_DSD,
-            MODE_BNC_SPDIF_SRC_BYPAS,
-            MODE_RCA_SPDIF_SRC_BYPAS,
-            MODE_XLR_SPDIF_SRC_BYPAS
+
+            MODE_HDMI_PCM_WITH_SRC,
+            MODE_HDMI_PCM_WITHOUT_SRC,
+            MODE_HDMI_DSD,
+
+            MODE_BNC_SPDIF_WITH_SRC,
+            MODE_BNC_SPDIF_WITHOUT_SRC,
+
+            MODE_RCA_SPDIF_WITH_SRC,
+            MODE_RCA_SPDIF_WITHOUT_SRC,
+
+            MODE_XLR_SPDIF_WITH_SRC,
+            MODE_XLR_SPDIF_WITHOUT_SRC
+
+        }
+
+        public enum Xtatus
+        {
+            UNKNOWN = 0xFF,
+            PCM44_1KHZ = 0x1F,
+            PCM48_0KHZ = 0x1E,
+            PCM88_2KHZ = 0x1D,
+            PCM96_0KHZ = 0x1C,
+            PCM176_4KHZ = 0x1B,
+            PCM192_KHZ	= 0x1A,
+            PCM352_8KHZ	= 0x19,
+            PCM384_KHZ	= 0x18,
+            DSD64_DOP = 0x0A,
+            DSD128_DOP = 0x08,
+            DSD64_NATVIE = 0x02,
+            DSD128_NATIVE = 0x00,
+            DSD256_NATIVE = 0x04
         }
 
 
@@ -225,42 +255,149 @@
             else
                 return -1;
         }
-        /// <summary>
-        /// Bementek olvasása egy lépésben. Hatékonyabb, ha többet kell egyszerre olvasni
-        /// DI1 = 0x0001
-        /// DI16 = 0x8000
-        /// Alaphelyzetben minden bemenet magas.
-        /// </summary>
-        /// <returns>0x0000..0xFFFF, alaphelyzetben 0xFFFF, 0x0001 = DI1 </returns>
-        public UInt32 Inputs()
+
+
+        public Modes Mode
         {
-            var resp = WriteRead("DIG:INP:U32?");
-            if (resp == null)
-                return 0;
-            else if (UInt32.TryParse(resp, NumberStyles.HexNumber, CultureInfo.GetCultureInfo("en-US"), out UInt32 retval))
-                return retval;
-            else
-                return 0;
+            get
+            {
+                var resp = WriteRead("MODE?");
+                if (resp == null)
+                    return Modes.MODE_NONE;
+                else if (int.TryParse(resp, NumberStyles.Integer, CultureInfo.GetCultureInfo("en-US"), out int retval))
+                    return (Modes)retval;
+                else
+                    return Modes.MODE_NONE;
+            }
+            set 
+            {
+                if (WriteRead($"MODE { (int)value}") != "RDY")
+                    Trace("IO-ERROR: Invalid Response.");
+            }
         }
 
-
-        public Modes GetMode()
+        public Xtatus XmosStatus
         {
-            var resp = WriteRead("MODE?");
-            if (resp == null)
-                return Modes.MODE_NONE;
-            else if (int.TryParse(resp, NumberStyles.Integer, CultureInfo.GetCultureInfo("en-US"), out int retval))
-                return (Modes)retval;
-            else
-                return Modes.MODE_NONE;
+            get 
+            {
+                var resp = WriteRead("XMOS:STATUS?");
+                if (resp == null)
+                    return Xtatus.UNKNOWN;
+                else if (int.TryParse(resp, NumberStyles.HexNumber, CultureInfo.GetCultureInfo("en-US"), out int retval))
+                    return (Xtatus)retval;
+                else
+                    return Xtatus.UNKNOWN;
+            }
         }
 
-        public void SelectMode(Modes mode)
+        public bool XmosMute
         {
-            if (WriteRead($"MODE { (int)mode}") != "RDY")
+            get
+            {
+                var resp = WriteRead("XMOS:MUTE?");
+                if (resp == null)
+                    return false;
+                else if (int.TryParse(resp, NumberStyles.Integer, CultureInfo.GetCultureInfo("en-US"), out int retval))
+                    return retval == 1;
+                else
+                    return false;
+            }
+        }
+
+        public bool SRCBypass
+        {
+            get
+            {
+                var resp = WriteRead("SRC:BYPAS?");
+                if (resp == null)
+                    return false;
+                else if (int.TryParse(resp, NumberStyles.Integer, CultureInfo.GetCultureInfo("en-US"), out int retval))
+                    return retval==1;
+                else
+                    return false;
+            }
+            set 
+            {
+             if (WriteRead($"SRC:BYPAS {(value == true?1:0)}") != "RDY")
                 Trace("IO-ERROR: Invalid Response.");
+            }
         }
 
+        public bool SRCMute 
+        {
+            get 
+            {
+                var resp = WriteRead("SRC:MUTE?");
+                if (resp == null)
+                    return false;
+                else if (int.TryParse(resp, NumberStyles.Integer, CultureInfo.GetCultureInfo("en-US"), out int retval))
+                    return retval == 1;
+                else
+                    return false;
+            }
+            set 
+            {
+                if (WriteRead($"SRC:MUTE {(value == true ? 1 : 0)}") != "RDY")
+                Trace("IO-ERROR: Invalid Response.");
+            }
+        }
+
+        public bool SRCPowerDown
+        {
+            get
+            {
+                var resp = WriteRead("SRC:PDN?");
+                if (resp == null)
+                    return false;
+                else if (int.TryParse(resp, NumberStyles.Integer, CultureInfo.GetCultureInfo("en-US"), out int retval))
+                    return retval == 1;
+                else
+                    return false;
+            }
+            set
+            {
+                if (WriteRead($"SRC:PDN {(value == true ? 1 : 0)}") != "RDY")
+                    Trace("IO-ERROR: Invalid Response.");
+            }
+        }
+
+        public int Volume1
+        {
+            get
+            {
+                var resp = WriteRead("DAC:VOL1?");
+                if (resp == null)
+                    return 0;
+                else if (int.TryParse(resp, NumberStyles.Integer, CultureInfo.GetCultureInfo("en-US"), out int retval))
+                    return retval;
+                else
+                    return 0;
+            }
+            set
+            {
+                if (WriteRead($"DAC:VOL1 {value}") != "RDY")
+                    Trace("IO-ERROR: Invalid Response.");
+            }
+        }
+
+        public int Volume2
+        {
+            get
+            {
+                var resp = WriteRead("DAC:VOL2?");
+                if (resp == null)
+                    return 0;
+                else if (int.TryParse(resp, NumberStyles.Integer, CultureInfo.GetCultureInfo("en-US"), out int retval))
+                    return retval;
+                else
+                    return 0;
+            }
+            set
+            {
+                if (WriteRead($"DAC:VOL2 {value}") != "RDY")
+                    Trace("IO-ERROR: Invalid Response.");
+            }
+        }
 
         public void Close()
         {
