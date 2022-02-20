@@ -6,7 +6,7 @@
     <ProductVersion>3.10</ProductVersion>
     <ProjectGuid>{b877aa26-a8da-484c-a7e9-71f10b44ccfd}</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>Konvolucio.MCEL181123.Setup</OutputName>
+    <OutputName>Konvolucio.MGUI201222.Setup</OutputName>
     <OutputType>Package</OutputType>
     <Name>Konvolucio.MCEL181123.Calib.Setup</Name>
   </PropertyGroup>
@@ -20,12 +20,21 @@
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Driver_FT230XS.wxs" />
     <Compile Include="Product.wxs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="config.wxi" />
   </ItemGroup>
   <ItemGroup>
+    <WixExtension Include="WixNetFxExtension">
+      <HintPath>$(WixExtDir)\WixNetFxExtension.dll</HintPath>
+      <Name>WixNetFxExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixUtilExtension">
+      <HintPath>$(WixExtDir)\WixUtilExtension.dll</HintPath>
+      <Name>WixUtilExtension</Name>
+    </WixExtension>
     <WixExtension Include="WixUIExtension">
       <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
       <Name>WixUIExtension</Name>

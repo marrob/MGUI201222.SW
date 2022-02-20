@@ -11,8 +11,8 @@
   
   <!-- Full version number to display -->
   <?define VersionNumber  = "$(var.MajorVersion).$(var.MinorVersion).$(var.BuildNumber).$(var.Revision)"?>
-  <?define ProductName = "MCEL181123 - Calibartor Tool"?>
-  <?define ProductCode = "{11EA3BB6-4F53-4817-9B99-9408D70427E7}"?>
+  <?define ProductName = "MGUI201222 - DIAG TOOL"?>
+  <?define ProductCode = "{02EC7D7B-1812-4675-94A6-9CDD7821475A}"?>
   
   
   <?define URL = "https://github.com/marrob"?>
@@ -21,13 +21,8 @@
   Upgrade code HAS to be the same for all updates.
   Once you've chosen it don't change it.
   -->
-  <?define UpgradeCode = "{41831322-EB25-400F-9F89-EB29C1094B25}"?>
+  <?define UpgradeCode = "{6064CC10-3E6F-4ABC-BE43-63AF1063127C}"?>
 
-  <!--
-  The name of your application exe file. This will be used to kill the process when updating
-  and creating the desktop shortcut
-  -->
-  <?define ExeProcessName="SuperForm.MainApp.exe" ?>
 
   <!--
   CopyRight.
@@ -38,7 +33,8 @@
   <!--
   Global Paths.
   -->
-  <?define AppDirectory               = "..\Konvolucio.MCEL181123.Calib\bin\Release"?>
-  <?define AppResourceDirectory       = "..\Resource"?>
+  <?define AppDirectory               = "..\Konvolucio.MGUI201222\bin\Release"?>
+  <?define AppResourceDirectory       = "..\Resources"?>
+  <?define DriverDirectory            = "..\Resources\Drivers\FT230XS_CDM212364\"?>
 </Include>
 

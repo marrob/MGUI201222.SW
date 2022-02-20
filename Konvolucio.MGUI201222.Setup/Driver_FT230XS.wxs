@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
+  <Fragment>
+
+    <!-- This is how we include wxi files -->
+    <?include $(sys.CURRENTDIR)Config.wxi ?>
+    
+    <!-- Directory Sturcture -->
+    <DirectoryRef Id="AppDriverFolder">
+		<Directory Id="DriverFolder" Name="MGUI201222">
+        <Directory Id="i386_DriverFolder" Name="i386"/>
+        <Directory Id="amd64_DriverFolder" Name="amd64"/>
+      </Directory>
+    </DirectoryRef>
+
+    <!-- Install Action -->
+    <CustomAction  Id='Install_x86_Driver' Directory='DriverFolder' Impersonate='no'
+       ExeCommand='"[DriverFolder]dpinst-x86.exe"  /PATH "[DriverFolder]' Execute ='deferred' Return ='ignore'>
+    </CustomAction>
+
+    <!-- Install Action -->
+    <CustomAction  Id='Install_x64_Driver' Directory='DriverFolder' Impersonate='no'
+       ExeCommand='"[DriverFolder]dpinst-amd64.exe" /PATH "[DriverFolder]' Execute ='deferred' Return ='ignore'>
+    </CustomAction>
+
+    <!-- Uninstall Action -->
+    <CustomAction  Id='Uninstall_Bus_x86_Driver' Directory='DriverFolder' Impersonate='no'
+      ExeCommand='"[DriverFolder]dpinst-x86.exe" /U "[DriverFolder]ftdibus.inf' Execute ='deferred' Return='ignore' >
+    </CustomAction>
+    
+     <!-- Uninstall Action -->
+    <CustomAction  Id='Uninstall_Port_x86_Driver' Directory='DriverFolder' Impersonate='no'
+      ExeCommand='"[DriverFolder]dpinst-x86.exe" /U "[DriverFolder]ftdiport.inf' Execute ='deferred' Return='ignore' >
+    </CustomAction>
+
+    <!-- Uninstall Action -->
+    <CustomAction  Id='Uninstall_Bus_x64_Driver' Directory='DriverFolder' Impersonate='no'
+      ExeCommand='"[DriverFolder]dpinst-amd64.exe" /U "[DriverFolder]ftdibus.inf' Execute ='deferred' Return='ignore' >
+    </CustomAction>
+    
+     <!-- Uninstall Action -->
+    <CustomAction  Id='Uninstall_Port_x64_Driver' Directory='DriverFolder' Impersonate='no'
+      ExeCommand='"[DriverFolder]dpinst-amd64.exe" /U "[DriverFolder]ftdiport.inf' Execute ='deferred' Return='ignore' >
+    </CustomAction>
+
+    <!-- Driver Files -->
+    <ComponentGroup Id="Driver_FT230XS_Components">
+      <Component Id="RootDrive_Files" Directory="DriverFolder" Guid="{DE8AAD43-EDC3-4721-82D0-CBB2F445FC56}">
+        <File Id = "_dpinst_x86.exe"       Source="$(var.DriverDirectory)dpinst-x86.exe"       KeyPath="no" Checksum="yes"/>
+        <File Id = "_dpinst_x64.exe"       Source="$(var.DriverDirectory)dpinst-amd64.exe"     KeyPath="no" Checksum="yes" />
+        <File Id = "_dpinst.xml"           Source="$(var.DriverDirectory)dpinst.xml"           KeyPath="no" Checksum="yes" />
+        <File Id = "_ftdibus.cat"          Source="$(var.DriverDirectory)ftdibus.cat"          KeyPath="no" Checksum="yes" />
+        <File Id = "_ftdibus.inf"          Source="$(var.DriverDirectory)ftdibus.inf"          KeyPath="no" Checksum="yes" />
+        <File Id = "_ftdiport.inf"         Source="$(var.DriverDirectory)ftdiport.inf"         KeyPath="no" Checksum="yes" />
+        <File Id = "_ftdiport.cat"         Source="$(var.DriverDirectory)ftdiport.cat"         KeyPath="no" Checksum="yes" />
+	    <File Id = "_dp_chooser.exe"       Source="$(var.DriverDirectory)dp-chooser.exe"       KeyPath="no" Checksum="yes" />
+	    <File Id = "_ftd2xx.h"             Source="$(var.DriverDirectory)ftd2xx.h"             KeyPath="no" Checksum="yes" />
+        <File Id = "_licence.txt"          Source="$(var.DriverDirectory)licence.txt"             KeyPath="no" Checksum="yes" />
+	  </Component>
+      <Component Id="i386_Driver_Files" Directory="i386_DriverFolder" Guid="{5322AC52-D3F8-48F4-876B-2D105E11790C}">
+        <File Id = "_ftbusui.dll_i386"     Source="$(var.DriverDirectory)i386\ftbusui.dll"     KeyPath="no" Checksum="yes" />
+        <File Id = "_ftcserco.dll_i386"    Source="$(var.DriverDirectory)i386\ftcserco.dll"    KeyPath="no" Checksum="yes" />
+        <File Id = "_ftd2xx.dll_i386"      Source="$(var.DriverDirectory)i386\ftd2xx.dll"      KeyPath="no" Checksum="yes" />
+        <File Id = "_ftd2xx.lib_i386"      Source="$(var.DriverDirectory)i386\ftd2xx.lib"      KeyPath="no" Checksum="yes" />
+        <File Id = "_ftdibus.sys_i386"     Source="$(var.DriverDirectory)i386\ftdibus.sys"     KeyPath="no" Checksum="yes" />
+        <File Id = "_ftlang.dll_i386"      Source="$(var.DriverDirectory)i386\ftlang.dll"      KeyPath="no" Checksum="yes" />
+        <File Id = "_ftser2k.sys_i386"     Source="$(var.DriverDirectory)i386\ftser2k.sys"     KeyPath="no" Checksum="yes" />
+        <File Id = "_ftserui2.dll_i386"    Source="$(var.DriverDirectory)i386\ftserui2.dll"    KeyPath="no" Checksum="yes" />
+      </Component>
+      <Component Id="amd64_Driver_Files" Directory="amd64_DriverFolder" Guid="{86ECD971-4A27-4E1C-9B46-9EA2016910E6}">
+        <File Id = "_ftbusui.dll_amd64"    Source="$(var.DriverDirectory)amd64\ftbusui.dll"    KeyPath="no" Checksum="yes" />
+        <File Id = "_ftcserco.dll_amd64"   Source="$(var.DriverDirectory)amd64\ftcserco.dll"   KeyPath="no" Checksum="yes" />
+        <File Id = "_ftd2xamd64.dll_amd64" Source="$(var.DriverDirectory)amd64\ftd2xx64.dll"   KeyPath="no" Checksum="yes" />
+        <File Id = "_ftd2xx.lib_amd64"     Source="$(var.DriverDirectory)amd64\ftd2xx.lib"     KeyPath="no" Checksum="yes" />
+        <File Id = "_ftdibus.sys_amd64"    Source="$(var.DriverDirectory)amd64\ftdibus.sys"    KeyPath="no" Checksum="yes" />
+        <File Id = "_ftlang.dll_amd64"     Source="$(var.DriverDirectory)amd64\ftlang.dll"     KeyPath="no" Checksum="yes" />
+        <File Id = "_ftser2k.sys_amd64"    Source="$(var.DriverDirectory)amd64\ftser2k.sys"    KeyPath="no" Checksum="yes" />
+        <File Id = "_ftserui2.dll_amd64"   Source="$(var.DriverDirectory)amd64\ftserui2.dll"   KeyPath="no" Checksum="yes" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>
