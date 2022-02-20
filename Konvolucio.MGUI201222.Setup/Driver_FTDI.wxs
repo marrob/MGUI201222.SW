@@ -44,18 +44,15 @@
     </CustomAction>
 
     <!-- Driver Files -->
-    <ComponentGroup Id="Driver_FT230XS_Components">
+    <ComponentGroup Id="Driver_FTDI_Components">
       <Component Id="RootDrive_Files" Directory="DriverFolder" Guid="{DE8AAD43-EDC3-4721-82D0-CBB2F445FC56}">
         <File Id = "_dpinst_x86.exe"       Source="$(var.DriverDirectory)dpinst-x86.exe"       KeyPath="no" Checksum="yes"/>
         <File Id = "_dpinst_x64.exe"       Source="$(var.DriverDirectory)dpinst-amd64.exe"     KeyPath="no" Checksum="yes" />
-        <File Id = "_dpinst.xml"           Source="$(var.DriverDirectory)dpinst.xml"           KeyPath="no" Checksum="yes" />
         <File Id = "_ftdibus.cat"          Source="$(var.DriverDirectory)ftdibus.cat"          KeyPath="no" Checksum="yes" />
         <File Id = "_ftdibus.inf"          Source="$(var.DriverDirectory)ftdibus.inf"          KeyPath="no" Checksum="yes" />
         <File Id = "_ftdiport.inf"         Source="$(var.DriverDirectory)ftdiport.inf"         KeyPath="no" Checksum="yes" />
         <File Id = "_ftdiport.cat"         Source="$(var.DriverDirectory)ftdiport.cat"         KeyPath="no" Checksum="yes" />
-	    <File Id = "_dp_chooser.exe"       Source="$(var.DriverDirectory)dp-chooser.exe"       KeyPath="no" Checksum="yes" />
 	    <File Id = "_ftd2xx.h"             Source="$(var.DriverDirectory)ftd2xx.h"             KeyPath="no" Checksum="yes" />
-        <File Id = "_licence.txt"          Source="$(var.DriverDirectory)licence.txt"             KeyPath="no" Checksum="yes" />
 	  </Component>
       <Component Id="i386_Driver_Files" Directory="i386_DriverFolder" Guid="{5322AC52-D3F8-48F4-876B-2D105E11790C}">
         <File Id = "_ftbusui.dll_i386"     Source="$(var.DriverDirectory)i386\ftbusui.dll"     KeyPath="no" Checksum="yes" />

@@ -20,7 +20,7 @@
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Driver_FT230XS.wxs" />
+    <Compile Include="Driver_FTDI.wxs" />
     <Compile Include="Product.wxs" />
   </ItemGroup>
   <ItemGroup>

@@ -35,6 +35,6 @@
   -->
   <?define AppDirectory               = "..\Konvolucio.MGUI201222\bin\Release"?>
   <?define AppResourceDirectory       = "..\Resources"?>
-  <?define DriverDirectory            = "..\Resources\Drivers\FT230XS_CDM212364\"?>
+  <?define DriverDirectory            = "..\Resources\Drivers\FTDI\"?>
 </Include>
 

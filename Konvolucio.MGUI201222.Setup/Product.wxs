@@ -29,6 +29,9 @@
 		<WixVariable Id="WixUIBannerBmp" Value="..\Resources\Installer\Banner_500x70.jpg" />
 		-->
 
+		
+		
+
 		<!-- Define App Icon -->
 		<Icon Id="AppAddRemove.ico" SourceFile="..\Resources\Installer\AppAddRemove.ico"/>
 		<!-- Set Your Installer's Icon in Add/Remove Programs -->
@@ -45,10 +48,15 @@
 		<Feature Id="Product_Feature" Title="Konvolucio.MGUI201222.Setup" Level="1">
 			<ComponentGroupRef Id="Product_Components" />
 			<Feature Id ="Driver_Feature" Title="USB Driver" Description="These are the drivers for the USB" Level="1">
-				<ComponentGroupRef Id="Driver_FT230XS_Components"/>
+				<ComponentGroupRef Id="Driver_FTDI_Components"/>
 			</Feature>
 		</Feature>
 
+
+		<Condition Message="Legalább a .NET Framework 4.6.1! Kellene..." >
+			<![CDATA[ NOT(WIX_IS_NETFRAMEWORK_461_OR_LATER_INSTALLED) ]]>
+		</Condition >
+		
 		<!--Beavatkozás a telepités folyamatába Minta-->
 		<InstallExecuteSequence>
 			<!--Reboot After Install-->
@@ -58,6 +66,8 @@
 				<![CDATA[(&Driver_Feature = 3) AND NOT (!Driver_Feature = 3)]]>
 			</ScheduleReboot>
 			-->
+
+			
 			<!--Driver Install ***************************************************************************-->
 			<Custom  Action="Install_x86_Driver"                Before='InstallFinalize'>
 				<![CDATA[(&Driver_Feature = 3) AND NOT(!Driver_Feature = 3) AND NOT VersionNT64 AND NOT REINSTALL ]]>
