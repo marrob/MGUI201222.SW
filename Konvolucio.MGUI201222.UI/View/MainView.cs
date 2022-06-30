@@ -13,6 +13,7 @@ namespace Konvolucio.MGUI201222.View
     public partial class MainView : UserControl
     {
         private readonly HelpNode _helpNode;
+        private readonly KarunaNode _karunaNode;
         private readonly SettingsNode _settingsPanel;
         private readonly PcReferenceNode _functionNode;
         private readonly DacNode _dacNode;
@@ -27,10 +28,9 @@ namespace Konvolucio.MGUI201222.View
             {
                 _helpNode = new HelpNode() { Dock = DockStyle.Fill },
                 _settingsPanel = new SettingsNode() { Dock = DockStyle.Fill },
-               //  _configsNode = new ConfigsNode() { Dock = DockStyle.Fill },
+                _karunaNode = new KarunaNode() { Dock = DockStyle.Fill },
                 _functionNode = new PcReferenceNode() { Dock = DockStyle.Fill },
                 _dacNode = new DacNode() { Dock = DockStyle.Fill },
-               // _voltageMeasNode = new VoltageMeasNode() { Dock = DockStyle.Fill },
             };
         }
 

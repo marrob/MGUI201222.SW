@@ -1,4 +1,4 @@
-﻿namespace Konvolucio.MGUIcomm
+﻿namespace Konvolucio.MGUI201222.IO
 { 
     using System;
     using System.Collections.Generic;
@@ -6,12 +6,14 @@
     using System.Text;
     using System.IO.Ports;
     using System.Globalization;
+    using System.ComponentModel;
 
     public class GuiIoSrv
     {
-
         public event EventHandler ConnectionChanged;
         public event EventHandler ErrorHappened;
+        public event RunWorkerCompletedEventHandler Completed;
+        public event ProgressChangedEventHandler ProgressChanged;
 
         const string GenericTimestampFormat = "yyyy.MM.dd HH:mm:ss";
 
@@ -101,7 +103,7 @@
         string WriteRead(string str)
         {
             lock (_syncObject)
-                
+
             {
                 if (_sp == null || !_sp.IsOpen)
                 {
@@ -151,7 +153,7 @@
             if (resp == null)
                 return "n/a";
             else
-               return resp;
+                return resp;
         }
         /// <summary>
         /// Processzor egyedi azonsítója, hosza nem változik
@@ -233,18 +235,18 @@
 
         public void LedLight(int percent)
         {
-            if (WriteRead($"LED:LIG { percent}")!= "RDY")
+            if (WriteRead($"LED:LIG {percent}") != "RDY")
                 Trace("IO-ERROR: Invalid Response.");
         }
 
         public void LedPeriodTime(int periodms)
         {
-            if (WriteRead($"LED:PER { periodms }") != "RDY")
+            if (WriteRead($"LED:PER {periodms}") != "RDY")
                 Trace("IO-ERROR: Invalid Response.");
         }
         public void LedDimming(bool onoff)
         {
-            if (WriteRead("LED:DIM " + (onoff?"1":"0")) != "RDY")
+            if (WriteRead("LED:DIM " + (onoff ? "1" : "0")) != "RDY")
                 Trace("IO-ERROR: Invalid Response.");
         }
 
@@ -300,18 +302,18 @@
         /// </summary>
         /// <param name="channel">1..16-ig</param>
         /// <returns>True = aktív, Open Drain kimenetek </returns>
-        
+
         [ObsoleteAttribute("Helyette GetOutputs()")]
         public bool GetOutput(int channel)
         {
-            var resp = WriteRead($"DIG:OUT:BIT? { channel }");
+            var resp = WriteRead($"DIG:OUT:BIT? {channel}");
             if (resp == "0")
                 return false;
             else if (resp == "1")
                 return true;
             else
                 Trace("IO-ERROR: Invalid Response.");
-            return false;   
+            return false;
         }
 
 
@@ -359,7 +361,7 @@
         /// Alaphelyzetben minden bemenet magas.
         /// </summary>
         /// <returns>0x0000..0xFFFF, alaphelyzetben 0xFFFF, 0x0001 = DI1 </returns>
-        public UInt16 GetInputs() 
+        public UInt16 GetInputs()
         {
             UInt16 retval = 0;
             var resp = WriteRead("DIG:INP:U16?");
@@ -373,7 +375,7 @@
 
         public void SetDisplay(bool onoff)
         {
-            if (WriteRead("DIS:" + (onoff?"ON":"OFF")) != "RDY")
+            if (WriteRead("DIS:" + (onoff ? "ON" : "OFF")) != "RDY")
                 Trace("IO-ERROR: Invalid Response.");
         }
 
@@ -416,7 +418,7 @@
         public double GetTemperature(int channel)
         {
             double retval = double.NaN;
-            var resp = WriteRead($"TEM:DBL? + { channel } ");
+            var resp = WriteRead($"TEM:DBL? + {channel} ");
             if (resp == null)
                 return double.NaN;
             else if (double.TryParse(resp, NumberStyles.Float, CultureInfo.GetCultureInfo("en-US"), out retval))
@@ -449,10 +451,56 @@
         /// Elindítja a leállítás folyamatát...
         /// Figyelem! Feltételezi hogy a PC _BE VAN_ kapcsolva. 
         /// </summary>
-        public void StartShutdownSequence() 
+        public void StartShutdownSequence()
         {
             if (WriteRead("SEQ:PON:EXE 5") != "RDY")
                 Trace("IO-ERROR: Invalid Response.");
+        }
+
+        public UInt32 GetLogLastAddress()
+        {
+            UInt32 retval = 0;
+            var resp = WriteRead("LOG:LAST?");
+            if (resp == null)
+                return 0;
+            else if (UInt32.TryParse(resp, NumberStyles.HexNumber, CultureInfo.GetCultureInfo("en-US"), out retval))
+                return retval;
+            else
+                return 0;
+        }
+
+        public void DownloadLog(string path)
+        {
+            int last = (int)GetLogLastAddress();
+            for (uint i = 0; i < last; i++)
+            {
+                string line = GetLogLine(i) + "\r\n";
+                if (System.IO.File.Exists(path))
+                    System.IO.File.AppendAllText(path, line);
+                else
+                    System.IO.File.WriteAllText(path, line);
+                OnProgressChanged(this, new ProgressChangedEventArgs((int)(i / last) * 100, null));
+            }
+            OnClompleted(this, new RunWorkerCompletedEventArgs(null, null, false));
+        }
+
+
+        protected void OnProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            if (ProgressChanged != null)
+                ProgressChanged(sender, e);
+        }
+
+        protected void OnClompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (Completed != null)
+                Completed(sender, e);
+        }
+
+        public string GetLogLine(UInt32 line)
+        {
+            var resp = WriteRead($"LOG:LINE? { line:X4} ");
+            return resp;
         }
 
 

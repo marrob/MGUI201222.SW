@@ -4,7 +4,7 @@
     using System.Windows.Forms;
     using Properties;
     using Events;
-    using MGUIcomm;
+    using IO;
     using DACcomm;
 
     class WhoIsStatusBar : ToolStripStatusLabel

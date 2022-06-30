@@ -23,7 +23,5 @@ namespace Konvolucio.MGUI201222.Controls
             box.AppendText(text);
             box.SelectionColor = box.ForeColor;
         }
-
-
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Konvolucio.MGUI201222.View
 {
-    partial class VoltageMeasNode
+    partial class KarunaNode
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,20 +28,33 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
-            // VoltageMeasNode
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
+            // 
+            // timer1
+            // 
+            this.timer1.Interval = 500;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // KarunaNode
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoSize = true;
-            this.BackColor = System.Drawing.SystemColors.Control;
-            this.Name = "VoltageMeasNode";
-            this.Size = new System.Drawing.Size(539, 279);
+            this.Name = "KarunaNode";
+            this.Size = new System.Drawing.Size(797, 366);
             this.ResumeLayout(false);
 
         }
 
         #endregion
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.Timer timer1;
     }
 }

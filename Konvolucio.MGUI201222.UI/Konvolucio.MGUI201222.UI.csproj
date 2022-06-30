@@ -94,11 +94,11 @@
     <Compile Include="View\DacNode.Designer.cs">
       <DependentUpon>DacNode.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\VoltageMeasNode.cs">
+    <Compile Include="View\KarunaNode.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="View\VoltageMeasNode.Designer.cs">
-      <DependentUpon>VoltageMeasNode.cs</DependentUpon>
+    <Compile Include="View\KarunaNode.Designer.cs">
+      <DependentUpon>KarunaNode.cs</DependentUpon>
     </Compile>
     <Compile Include="Commands\ClearReachTextBoxCommand.cs">
       <SubType>Component</SubType>
@@ -215,8 +215,8 @@
     <EmbeddedResource Include="View\DacNode.resx">
       <DependentUpon>DacNode.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\VoltageMeasNode.resx">
-      <DependentUpon>VoltageMeasNode.cs</DependentUpon>
+    <EmbeddedResource Include="View\KarunaNode.resx">
+      <DependentUpon>KarunaNode.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -296,9 +296,9 @@
       <Project>{ee7ff540-d3a9-4f52-a74c-9bb19b1da211}</Project>
       <Name>Konvolucio.DACcomm</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Konvolucio.MGUIcomm\Konvolucio.MGUIcomm.csproj">
+    <ProjectReference Include="..\Konvolucio.MGUI201222.IO\Konvolucio.MGUI201222.IO.csproj">
       <Project>{a945ba89-ae10-4d1d-929f-ede5f8b7cad2}</Project>
-      <Name>Konvolucio.MGUIcomm</Name>
+      <Name>Konvolucio.MGUI201222.IO</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

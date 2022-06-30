@@ -12,7 +12,12 @@
         public const string NewLine = "\r\n";
         public const string CsvFileSeparator = ",";
 
-        public static readonly string[] DeviceNames =  { "MGUI201222V00 - PCREF", "DENPO_MK2_DAC" };
+        public static readonly string[] DeviceNames =  
+            {
+                "KARUNA",  
+                "PCREF", 
+                "DAC" 
+            };
         public const int DEV_GUI = 0;
         public const int DEV_DAC = 1;
     }

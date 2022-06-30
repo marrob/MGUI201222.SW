@@ -33,7 +33,7 @@
   <!--
   Global Paths.
   -->
-  <?define AppDirectory               = "..\Konvolucio.MGUI201222\bin\Release"?>
+  <?define AppDirectory               = "..\Konvolucio.MGUI201222.UI\bin\Release"?>
   <?define AppResourceDirectory       = "..\Resources"?>
   <?define DriverDirectory            = "..\Resources\Drivers\FTDI\"?>
 </Include>

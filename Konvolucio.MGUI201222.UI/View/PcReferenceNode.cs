@@ -12,7 +12,7 @@
     using Controls;
     using Events;
     using System.Diagnostics;
-    using Konvolucio.MGUIcomm;
+    using IO;
 
     public partial class PcReferenceNode : UserControl, IUIPanelProperties
     {

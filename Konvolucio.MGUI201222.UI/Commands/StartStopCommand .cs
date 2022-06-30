@@ -6,7 +6,7 @@ namespace Konvolucio.MGUI201222.Commands
     using System.Windows.Forms;
     using Properties;
     using Events;
-    using MGUIcomm;
+    using IO;
     using DACcomm;
 
     class StartStopCommand : ToolStripMenuItem
