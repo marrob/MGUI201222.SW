@@ -20,8 +20,8 @@
             {
                 if (Settings.Default.LastDeviceName == AppConstants.DeviceNames[AppConstants.DEV_GUI])
                 {
-                    if (GuiIoSrv.Instance.IsOpen)
-                        Text = "UID:" + GuiIoSrv.Instance.UniqeId();
+                    if (GuiIo.Instance.IsOpen)
+                        Text = "UID:" + GuiIo.Instance.UniqeId();
                 }
                 else if (Settings.Default.LastDeviceName == AppConstants.DeviceNames[AppConstants.DEV_DAC])
                 {

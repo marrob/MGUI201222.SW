@@ -61,18 +61,18 @@
             DacIoSrv.Instance.ConnectionChanged += (o, e) =>
                 EventAggregator.Instance.Publish(new ConnectionChangedAppEvent(DacIoSrv.Instance.IsOpen));
 
-            GuiIoSrv.Instance.ConnectionChanged += (o, e) =>
-                  EventAggregator.Instance.Publish(new ConnectionChangedAppEvent(GuiIoSrv.Instance.IsOpen));
+            GuiIo.Instance.ConnectionChanged += (o, e) =>
+                  EventAggregator.Instance.Publish(new ConnectionChangedAppEvent(GuiIo.Instance.IsOpen));
 
 
             /*** Tracing ***/
             DacIoSrv.Instance.TracingEnable = Settings.Default.TracingEnabled;
-            GuiIoSrv.Instance.TracingEnable = Settings.Default.TracingEnabled;
+            GuiIo.Instance.TracingEnable = Settings.Default.TracingEnabled;
 
             EventAggregator.Instance.Subscribe((Action<TracingChanged>)(e =>
             {
                 DacIoSrv.Instance.TracingEnable = e.Enabled;
-                GuiIoSrv.Instance.TracingEnable = e.Enabled;
+                GuiIo.Instance.TracingEnable = e.Enabled;
             }));
 
 
@@ -85,9 +85,9 @@
 
                 if (Settings.Default.LastDeviceName == AppConstants.DeviceNames[AppConstants.DEV_GUI])
                 {
-                    for (int i = 0; GuiIoSrv.Instance.TraceQueue.Count != 0; i++)
+                    for (int i = 0; GuiIo.Instance.TraceQueue.Count != 0; i++)
                     {
-                        string str = GuiIoSrv.Instance.TraceQueue.Dequeue();
+                        string str = GuiIo.Instance.TraceQueue.Dequeue();
                         if (str.Contains("Rx:"))
                             _mainForm.RichTextBoxTrace.AppendText(str + "\r\n", System.Drawing.Color.DarkGreen, false);
                         else if (str.Contains("Tx:"))
@@ -207,7 +207,7 @@
                 {
                     if (Settings.Default.LastDeviceName == AppConstants.DeviceNames[AppConstants.DEV_GUI])
                     {
-                        GuiIoSrv.Instance.Open(Settings.Default.SeriaPortName);
+                        GuiIo.Instance.Open(Settings.Default.SeriaPortName);
                     }
                     else if (Settings.Default.LastDeviceName == AppConstants.DeviceNames[AppConstants.DEV_DAC])
                     {
@@ -247,7 +247,7 @@
         {
             Debug.WriteLine(GetType().Namespace + "." + GetType().Name + "." + MethodBase.GetCurrentMethod().Name + "(): " + e.PropertyName + ", NewValue: " + Settings.Default[e.PropertyName]);
 
-            if (e.PropertyName == Tools.GetPropertyName(() => Settings.Default.GuiRefreshRateMs))
+            if (e.PropertyName == Common.Tools.GetPropertyName(() => Settings.Default.GuiRefreshRateMs))
             {
                 TimerService.Instance.Interval = Settings.Default.GuiRefreshRateMs;
             }

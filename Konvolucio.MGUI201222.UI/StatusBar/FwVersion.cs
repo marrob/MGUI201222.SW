@@ -20,7 +20,7 @@
                 if (e.IsOpen)
                 {
                     if (Settings.Default.LastDeviceName == AppConstants.DeviceNames[AppConstants.DEV_GUI])
-                        Text = "FW:" + GuiIoSrv.Instance.GetVersion();
+                        Text = "FW:" + GuiIo.Instance.GetVersion();
                     else if(Settings.Default.LastDeviceName == AppConstants.DeviceNames[AppConstants.DEV_DAC])
                         Text = "FW:" + DacIoSrv.Instance.GetVersion();
                 }

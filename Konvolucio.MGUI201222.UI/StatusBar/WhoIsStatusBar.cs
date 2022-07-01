@@ -20,8 +20,8 @@
             {
                 if (Settings.Default.LastDeviceName == AppConstants.DeviceNames[AppConstants.DEV_GUI])
                 {
-                    if (GuiIoSrv.Instance.IsOpen)
-                        Text = "WhoIs:" + GuiIoSrv.Instance.WhoIs();
+                    if (GuiIo.Instance.IsOpen)
+                        Text = "WhoIs:" + GuiIo.Instance.WhoIs();
                 }
                 else if (Settings.Default.LastDeviceName == AppConstants.DeviceNames[AppConstants.DEV_DAC])
                 {

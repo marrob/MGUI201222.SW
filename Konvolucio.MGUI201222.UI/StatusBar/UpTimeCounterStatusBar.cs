@@ -24,8 +24,8 @@ namespace Konvolucio.MGUI201222.StatusBar
                 {
                     if (Settings.Default.LastDeviceName == AppConstants.DeviceNames[AppConstants.DEV_GUI])
                     {
-                        if (GuiIoSrv.Instance.IsOpen)
-                            Text = "UpTime Counter: " + GuiIoSrv.Instance.GetUpTime();
+                        if (GuiIo.Instance.IsOpen)
+                            Text = "UpTime Counter: " + GuiIo.Instance.GetUpTime();
                     }
                     else if (Settings.Default.LastDeviceName == AppConstants.DeviceNames[AppConstants.DEV_DAC])
                     {

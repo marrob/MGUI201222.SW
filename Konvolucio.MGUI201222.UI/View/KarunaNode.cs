@@ -56,8 +56,8 @@
 
         private void buttonStartShutdownCmd_Click(object sender, EventArgs e)
         {
-            if(GuiIoSrv.Instance.IsOpen)
-                GuiIoSrv.Instance.StartShutdownSequence();
+            if(GuiIo.Instance.IsOpen)
+                GuiIo.Instance.StartShutdownSequence();
         }
 
         private void buttonPwrLedFlash_Click(object sender, EventArgs e)
@@ -67,7 +67,7 @@
 
         private void buttonPwrLedFlashOff_Click(object sender, EventArgs e)
         {
-            GuiIoSrv.Instance.LedCustomFlashStop();
+            GuiIo.Instance.LedCustomFlashStop();
         }
     }
 }

@@ -35,7 +35,7 @@ namespace Konvolucio.MGUI201222.View
     
         private void button1_Click_1(object sender, EventArgs e)
         {
-            GuiIoSrv.Instance.Test();
+            GuiIo.Instance.Test();
         }
 
         private void checkBoxUpTimeCounterPeriodicUpdateCheck_CheckedChanged(object sender, EventArgs e)

@@ -29,8 +29,8 @@
             numericUpDownButton.ValueChanged += new EventHandler(this.numericUpDownButton_ValueChanged);
 
 
-            numericUpDownDisplay.Value = GuiIoSrv.Instance.DisplayLight();
-            numericUpDownButton.Value = GuiIoSrv.Instance.LedLight();
+            numericUpDownDisplay.Value = GuiIo.Instance.DisplayLight();
+            numericUpDownButton.Value = GuiIo.Instance.LedLight();
             
             UpdateData();
 
@@ -58,29 +58,29 @@
            
                 newState = (byte)( ~(1 << e.Index - 1) & currentState);
             
-            GuiIoSrv.Instance.SetOutputs(newState);
+            GuiIo.Instance.SetOutputs(newState);
             
 
         }
 
         private void numericUpDownButton_ValueChanged(object sender, EventArgs e)
         {
-            GuiIoSrv.Instance.LedLight((int)numericUpDownButton.Value);
+            GuiIo.Instance.LedLight((int)numericUpDownButton.Value);
         }
 
         private void numericUpDownDisplay_ValueChanged(object sender, EventArgs e)
         {
-            GuiIoSrv.Instance.DisplayLight((int)numericUpDownDisplay.Value);
+            GuiIo.Instance.DisplayLight((int)numericUpDownDisplay.Value);
         }
 
         private void checkBoxPSP_CheckedChanged(object sender, EventArgs e)
         {
-            GuiIoSrv.Instance.SetPowerSupply((sender as CheckBox).Checked);
+            GuiIo.Instance.SetPowerSupply((sender as CheckBox).Checked);
         }
 
         private void checkBoxDisplay_CheckedChanged(object sender, EventArgs e)
         {
-            GuiIoSrv.Instance.SetDisplay((sender as CheckBox).Checked);
+            GuiIo.Instance.SetDisplay((sender as CheckBox).Checked);
         }
 
 
@@ -99,21 +99,21 @@
 
         void UpdateData()
         {
-            if (GuiIoSrv.Instance.IsOpen)
+            if (GuiIo.Instance.IsOpen)
             { 
-                checkBoxDisplay.Checked = GuiIoSrv.Instance.GetDisplay();
+                checkBoxDisplay.Checked = GuiIo.Instance.GetDisplay();
 
 
-                if (!GuiIoSrv.Instance.IsOpen)
+                if (!GuiIo.Instance.IsOpen)
                     knvIoOutputs.NotAvaliable = true;
                 else
                 {
                     knvIoOutputs.NotAvaliable = false;
-                    knvIoOutputs.SetContent(GuiIoSrv.Instance.GetOutputs());
-                    knvIoInputs.SetContent(GuiIoSrv.Instance.GetInputs());
+                    knvIoOutputs.SetContent(GuiIo.Instance.GetOutputs());
+                    knvIoInputs.SetContent(GuiIo.Instance.GetInputs());
                 }
 
-                double[] temps = GuiIoSrv.Instance.GetTemperatures();
+                double[] temps = GuiIo.Instance.GetTemperatures();
                 if (temps.Length > 3)
                 {
                     textBoxTemp1.Text = temps[0].ToString();
@@ -123,24 +123,24 @@
 
         private void buttonStartShutdownCmd_Click(object sender, EventArgs e)
         {
-            if(GuiIoSrv.Instance.IsOpen)
-                GuiIoSrv.Instance.StartShutdownSequence();
+            if(GuiIo.Instance.IsOpen)
+                GuiIo.Instance.StartShutdownSequence();
         }
 
         private void buttonPwrLedFlash_Click(object sender, EventArgs e)
         {
-            if (!GuiIoSrv.Instance.IsOpen)
+            if (!GuiIo.Instance.IsOpen)
                 return;
 
-            GuiIoSrv.Instance.LedDimming(checkBoxPowerLedDimming.Checked);
-            GuiIoSrv.Instance.LedPeriodTime((int)numericUpDownPwrLedFlashPeriod.Value);
-            GuiIoSrv.Instance.LedCustomFlashStart();
+            GuiIo.Instance.LedDimming(checkBoxPowerLedDimming.Checked);
+            GuiIo.Instance.LedPeriodTime((int)numericUpDownPwrLedFlashPeriod.Value);
+            GuiIo.Instance.LedCustomFlashStart();
 
         }
 
         private void buttonPwrLedFlashOff_Click(object sender, EventArgs e)
         {
-            GuiIoSrv.Instance.LedCustomFlashStop();
+            GuiIo.Instance.LedCustomFlashStop();
         }
     }
 }

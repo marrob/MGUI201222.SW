@@ -26,7 +26,7 @@ namespace Konvolucio.MGUI201222.Commands
         protected override void OnClick(EventArgs e)
         {
             _KnvRtb.Clear();
-            GuiIoSrv.Instance.TraceClear();
+            GuiIo.Instance.TraceClear();
         }
     }
 }

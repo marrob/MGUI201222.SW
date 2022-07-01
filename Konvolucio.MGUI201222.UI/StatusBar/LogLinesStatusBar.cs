@@ -15,7 +15,7 @@
 
             TimerService.Instance.Tick += (s, e) =>
             {
-               Text = "Log Lines: " + GuiIoSrv.Instance.TraceLines.ToString();
+               Text = "Log Lines: " + GuiIo.Instance.TraceLines.ToString();
             };
         }
 

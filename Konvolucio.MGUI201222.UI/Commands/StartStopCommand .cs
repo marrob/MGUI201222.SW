@@ -40,10 +40,10 @@ namespace Konvolucio.MGUI201222.Commands
 
             if (Settings.Default.LastDeviceName == AppConstants.DeviceNames[AppConstants.DEV_GUI])
             {
-                if (GuiIoSrv.Instance.IsOpen)
-                    GuiIoSrv.Instance.Close();
+                if (GuiIo.Instance.IsOpen)
+                    GuiIo.Instance.Close();
                 else
-                 GuiIoSrv.Instance.Open(Settings.Default.SeriaPortName);
+                 GuiIo.Instance.Open(Settings.Default.SeriaPortName);
             }
             else if (Settings.Default.LastDeviceName == AppConstants.DeviceNames[AppConstants.DEV_DAC])
             {
