@@ -26,9 +26,11 @@ namespace Konvolucio.MGUI201222.IO
             remove { _bkWorker.ProgressChanged -= value; }
         }
 
+
         readonly BackgroundWorker _bkWorker;
         readonly AutoResetEvent _waitForDoneEvent;
         readonly AutoResetEvent _waitForDelayEvent;
+     
         bool _disposed = false;
 
         public string FlashLock()
@@ -50,21 +52,54 @@ namespace Konvolucio.MGUI201222.IO
 
         public string FlashProgram(UInt32 address, Byte[] data)
         {
+            UInt32 secotrs = (UInt32)data.Length / FLASH_SECTOR_SIZE;
+            byte[] dest = new byte[FLASH_SECTOR_SIZE];
+            int sourceOffset = 0;
+            string response = "OK";
+            for (int i = 0; i < secotrs; i++)
+            {
+                Buffer.BlockCopy(data, sourceOffset, dest, 0, FLASH_SECTOR_SIZE);
+                response = FlashSectorProgram(address, dest);
+                if (response != "OK")
+                {
+                    Trace("IO-ERROR: Invalid Response." + response);
+                    return response;
+                }
+                sourceOffset += FLASH_SECTOR_SIZE;
+                address += FLASH_SECTOR_SIZE;
+            }
+
+
+            UInt32 singles = (UInt32)data.Length % FLASH_SECTOR_SIZE;
+            dest = new byte[singles];
+            if (singles != 0)
+            {
+                Buffer.BlockCopy(data, sourceOffset, dest, 0, (int)singles);
+
+                response = FlashSectorProgram(address, dest);
+                if (response != "OK")
+                {
+                    Trace("IO-ERROR: Invalid Response." + response);
+                    return response;
+                }
+            }
+            return response;
+        }
+
+        private string FlashSectorProgram(UInt32 address, Byte[] data)
+        {         
             /*
              * PG 00000000 00 000000000 0000 //cmd addr size data crc         
              */
             string response = WriteRead($"FP {address:X8} {data.Length:X3} {Tools.ByteArrayToString(data)} {Tools.CalcCrc16Ansi(0, data):X4}");
             if (response != "OK")
                 Trace("IO-ERROR: Invalid Response." + response);
-
             return response;
         }
 
         public Byte[] FlashRead(UInt32 address, UInt32 size)
         {
-
             byte[] retval = new byte[size];
-
             UInt32 secotrs = size / FLASH_SECTOR_SIZE;
             int destOffset = 0;
             for (int i = 0; i < secotrs; i++)
@@ -74,11 +109,9 @@ namespace Konvolucio.MGUI201222.IO
                 address += FLASH_SECTOR_SIZE;
                 destOffset += FLASH_SECTOR_SIZE;
             }
-
             UInt16 singles = (UInt16)(size % FLASH_SECTOR_SIZE);
             byte[] bytes = FlashSectorRead(address, singles);
             Buffer.BlockCopy(bytes, 0, retval, destOffset, singles);
-
             return retval;
         }
 
