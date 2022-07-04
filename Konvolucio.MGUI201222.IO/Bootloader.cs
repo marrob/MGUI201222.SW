@@ -50,6 +50,13 @@ namespace Konvolucio.MGUI201222.IO
             return response;
         }
 
+        /// <summary>
+        /// Internal Flash: 0x0800 0000 ... 
+        /// External Flash: 0x1000 0000 ...
+        /// </summary>
+        /// <param name="address"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public string FlashProgram(UInt32 address, Byte[] data)
         {
             UInt32 secotrs = (UInt32)data.Length / FLASH_SECTOR_SIZE;
