@@ -118,7 +118,7 @@ namespace Konvolucio.MGUI201222.IO
                     Trace("Rx: " + str);
                     _consecutiveRxErrorCounter = 0;
                 }
-                catch (Exception ex)
+                catch (Exception ex) //TODO: Nem jol van kezelve a TIMOUT
                 {
                     Trace("Rx ERROR Serial Port is:" + ex.Message);
                     _consecutiveRxErrorCounter++;
@@ -129,6 +129,8 @@ namespace Konvolucio.MGUI201222.IO
                 {
                     Trace("Három hibás egymást követő válasz! megszakítom a kapcsolatot...");
                     Close();
+
+                    //TODO: Innen ha kilép, akkor a kiküldött értékkel tér vissza...
                 }
             }
             return str;

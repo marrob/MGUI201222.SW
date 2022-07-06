@@ -55,7 +55,7 @@ namespace Konvolucio.MGUI201222.Bootloader
             sw.Start();
 
             Console.WriteLine($"Unlock:{srv.FlashUnlock()}");
-            Console.WriteLine($"Erase:{srv.FlashSectorErase(4, 1):X08}");
+            //Console.WriteLine($"Erase:{srv.FlashSectorErase(4, 1):X08}");
             Console.WriteLine($"Lock: {srv.FlashLock()}");
 
             Console.WriteLine($"Unlock: {srv.FlashUnlock()}");
@@ -86,7 +86,7 @@ namespace Konvolucio.MGUI201222.Bootloader
             sw.Start();
 
             Console.WriteLine($"Unlock:{srv.FlashUnlock()}");
-            Console.WriteLine($"Erase:{srv.FlashSectorErase(4, 2):X08}");
+           // Console.WriteLine($"Erase:{srv.FlashSectorErase(4, 2):X08}");
             Console.WriteLine($"Lock: {srv.FlashLock()}");
 
             Console.WriteLine($"Unlock: {srv.FlashUnlock()}");

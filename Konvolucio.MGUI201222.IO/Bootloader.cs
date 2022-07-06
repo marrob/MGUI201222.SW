@@ -166,16 +166,12 @@ namespace Konvolucio.MGUI201222.IO
         /// <param name="start">STM32F207: FLASH_SECTOR_0..FLASH_SECTOR_11</param>
         /// <param name="num">STM32F207: FLASH_SECTOR_0..FLASH_SECTOR_11</param>
         /// <returns></returns>
-        public UInt32 FlashSectorErase(int start, int num)
+        public string FlashSectorErase(int start)
         {
-            UInt32 retval = 0;
-            var resp = WriteRead($"FE {start:X2} {num:X2}");
-            if (resp == null)
-                return 0;
-            else if (UInt32.TryParse(resp, NumberStyles.AllowHexSpecifier, CultureInfo.GetCultureInfo("en-US"), out retval))
-                return retval;
-            else
-                return 0;
+            var response = WriteRead($"FE {start:X2}");
+            if (response != "OK")
+                Trace("IO-ERROR: Invalid Response." + response);
+            return response;
         }
 
         public void Abort()
