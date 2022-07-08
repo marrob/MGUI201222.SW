@@ -23,7 +23,7 @@ namespace Konvolucio.MGUI201222.IO
         public Queue<string> TraceQueue = new Queue<string>();
         public int TraceLines { get; private set; }
         
-        int _consecutiveRxErrorCounter;
+
         
         SerialPort _sp;
         public bool IsOpen
@@ -53,11 +53,10 @@ namespace Konvolucio.MGUI201222.IO
             {
                 _sp = new SerialPort(port)
                 {
-                    ReadTimeout = 1000,
+                    ReadTimeout = 5000,
                     BaudRate = 460800,
                     NewLine = "\n"
                 };
-                _consecutiveRxErrorCounter = 0;
                 _sp.Open();
                 Trace("Serial Port: " + port + " is Open.");
                 Test();
@@ -90,50 +89,54 @@ namespace Konvolucio.MGUI201222.IO
         }
 
 
-        internal string WriteRead(string str)
+        internal string WriteRead(string request)
         {
-            lock (_syncObject)
+            string response = string.Empty;
+            Exception exception = null;
+            int rxErrors = 0;
+            int txErrors = 0;
 
+            do
             {
                 if (_sp == null || !_sp.IsOpen)
                 {
-                    Trace("IO ERROR Serial Port is closed. " + str);
+                    var msg = $"The {_sp.PortName} Serial Port is closed. Please open it.";
+                    Trace(msg);
                     OnConnectionChanged();
-                    return null;
+                    throw new ApplicationException(msg);
                 }
                 try
                 {
-                    Trace("Tx: " + str);
-                    _sp.WriteLine(str);
+                    Trace("Tx: " + request);
+                    _sp.WriteLine(request);
+
+                    try
+                    {
+                        response = _sp.ReadLine().Trim(new char[] { '\0', '\r', '\n' }); ;
+                        Trace("Rx: " + response);
+                        return response;
+                    }
+                    catch (Exception ex) //TODO: Nem jol van kezelve a TIMOUT
+                    {
+                        Trace("Rx ERROR Serial Port is:" + ex.Message);
+                        exception = ex;
+                        rxErrors++;
+                        OnErrorHappened();
+                    }
                 }
                 catch (Exception ex)
                 {
                     Trace("Tx ERROR Serial Port is:" + ex.Message);
+                    exception = ex;
+                    txErrors++;
                     OnErrorHappened();
                 }
 
-                try
-                {
-                    str = _sp.ReadLine().Trim(new char[] { '\0', '\r', '\n' }); ;
-                    Trace("Rx: " + str);
-                    _consecutiveRxErrorCounter = 0;
-                }
-                catch (Exception ex) //TODO: Nem jol van kezelve a TIMOUT
-                {
-                    Trace("Rx ERROR Serial Port is:" + ex.Message);
-                    _consecutiveRxErrorCounter++;
-                    OnErrorHappened();
-                }
-
-                if (_consecutiveRxErrorCounter >= 3)
-                {
-                    Trace("Három hibás egymást követő válasz! megszakítom a kapcsolatot...");
-                    Close();
-
-                    //TODO: Innen ha kilép, akkor a kiküldött értékkel tér vissza...
-                }
-            }
-            return str;
+            } while (rxErrors < 3 && txErrors < 3);
+          
+            Trace("There were three consecutive io error. I close the connection.");
+            Close();
+            throw exception;
         }
         public void Close()
         {

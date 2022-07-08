@@ -33,21 +33,47 @@ namespace Konvolucio.MGUI201222.IO
      
         bool _disposed = false;
 
-        public string FlashLock()
+        public void InternalFlashLock()
         { 
-            string response = WriteRead("FL");
-            if (response != "OK")    
-                Trace("IO-ERROR: Invalid Response." + response);
-
-            return response;
+            string response = WriteRead("FL I");
+            if (response != "OK")
+            {
+                string msg = $"{response} ";
+                Trace(msg);
+                throw new ApplicationException(msg);
+            }
+        }
+        public void ExternalFlashLock()
+        {
+            string response = WriteRead("FL E");
+            if (response != "OK")
+            {
+                string msg = $"{response} ";
+                Trace(msg);
+                throw new ApplicationException(msg);
+            }
         }
 
-        public string FlashUnlock()
+        public void InternalFlashUnlock()
         {
-            string response = WriteRead("FU");
+            string response = WriteRead("FU I");
             if (response != "OK")
-                Trace("IO-ERROR: Invalid Response." + response);
-            return response;
+            {
+                string msg = $"{response}"; 
+                Trace(msg);
+                throw new ApplicationException(msg);
+            }  
+        }
+
+        public void ExternalFlashUnlock()
+        {
+            string response = WriteRead("FU E");
+            if (response != "OK")
+            {
+                string msg = $"{response}";
+                Trace(msg);
+                throw new ApplicationException(msg);
+            }
         }
 
         /// <summary>
@@ -57,20 +83,20 @@ namespace Konvolucio.MGUI201222.IO
         /// <param name="address"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        public string FlashProgram(UInt32 address, Byte[] data)
+        public void FlashProgram(UInt32 address, Byte[] data)
         {
             UInt32 secotrs = (UInt32)data.Length / FLASH_SECTOR_SIZE;
             byte[] dest = new byte[FLASH_SECTOR_SIZE];
             int sourceOffset = 0;
-            string response = "OK";
             for (int i = 0; i < secotrs; i++)
             {
                 Buffer.BlockCopy(data, sourceOffset, dest, 0, FLASH_SECTOR_SIZE);
-                response = FlashSectorProgram(address, dest);
+                var response = FlashSectorProgram(address, dest);
                 if (response != "OK")
                 {
-                    Trace("IO-ERROR: Invalid Response." + response);
-                    return response;
+                    string msg = $"Bootloader: {response}";
+                    Trace(msg);
+                    throw new ApplicationException(msg);
                 }
                 sourceOffset += FLASH_SECTOR_SIZE;
                 address += FLASH_SECTOR_SIZE;
@@ -82,15 +108,14 @@ namespace Konvolucio.MGUI201222.IO
             if (singles != 0)
             {
                 Buffer.BlockCopy(data, sourceOffset, dest, 0, (int)singles);
-
-                response = FlashSectorProgram(address, dest);
+                var response = FlashSectorProgram(address, dest);
                 if (response != "OK")
                 {
-                    Trace("IO-ERROR: Invalid Response." + response);
-                    return response;
+                    string msg = $"{response}";
+                    Trace(msg);
+                    throw new ApplicationException(msg);
                 }
             }
-            return response;
         }
 
         private string FlashSectorProgram(UInt32 address, Byte[] data)
@@ -104,10 +129,10 @@ namespace Konvolucio.MGUI201222.IO
             return response;
         }
 
-        public Byte[] FlashRead(UInt32 address, UInt32 size)
+        public Byte[] FlashRead(UInt32 address, int size)
         {
             byte[] retval = new byte[size];
-            UInt32 secotrs = size / FLASH_SECTOR_SIZE;
+            UInt32 secotrs = (UInt32)size / FLASH_SECTOR_SIZE;
             int destOffset = 0;
             for (int i = 0; i < secotrs; i++)
             {
@@ -163,17 +188,44 @@ namespace Konvolucio.MGUI201222.IO
         /// <summary>
         /// Flash Sector Erase
         /// </summary>
-        /// <param name="start">STM32F207: FLASH_SECTOR_0..FLASH_SECTOR_11</param>
         /// <param name="num">STM32F207: FLASH_SECTOR_0..FLASH_SECTOR_11</param>
         /// <returns></returns>
-        public string FlashSectorErase(int start)
+        public void InternalFlashErase(int sector)
         {
-            var response = WriteRead($"FE {start:X2}");
+            var response = WriteRead($"FE I {sector:X2}");
             if (response != "OK")
-                Trace("IO-ERROR: Invalid Response." + response);
-            return response;
+            {
+                var msg = $"{response}";
+                Trace(msg);
+                throw new ApplicationException(msg);
+            }
         }
 
+        public void ExternalFlashErase()
+        {
+            var response = WriteRead($"FE E 00");
+            if (response != "OK")
+            {
+                var msg = $"Bootloader: Invalid Response: {response}";
+                Trace(msg);
+                throw new ApplicationException(msg);
+            }
+        }
+
+        public bool ExtrnalFlashIsBusy()
+        {
+            var response = WriteRead($"FB E");
+            if (response == "FREE")
+                return false;
+            else if (response == "BUSY")
+                return true;
+            else
+            {
+                var msg = $"Bootloader: Invalid Response: {response}";
+                Trace(msg);
+                throw new ApplicationException(msg);
+            }
+        }
         public void Abort()
         {
             if (_bkWorker.IsBusy)

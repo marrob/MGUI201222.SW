@@ -76,5 +76,12 @@ namespace Konvolucio.MGUI201222.IO
             using (FileStream fs = new FileStream(path, FileMode.CreateNew))
                 fs.Write(data, 0, data.Length);
         }
+
+        public static void GenerateRandomBytesFile(string path, int size)
+        {
+            byte[] bytes = new byte[size];
+            new Random().NextBytes(bytes);
+            Tools.CreateFile(path, bytes);
+        }
     }
 }

@@ -104,11 +104,6 @@ namespace Konvolucio.MGUI201222.Bootloader
             Console.ReadLine();
         }
 
-        void GenerateRandomBytesFile(string path, int size)
-        {
-            byte[] bytes = new byte[size];
-            new Random().NextBytes(bytes);
-            Tools.CreateFile(path, bytes);
-        }
+
     }
 }
