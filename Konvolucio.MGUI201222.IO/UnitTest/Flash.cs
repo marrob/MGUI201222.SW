@@ -18,18 +18,19 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
         const string DEVICE_VERSION = "220629_1834";
 
         const int BTLDR_FLASH_LAST_SECTOR = 5;
-        const int EXT_FLASH_START_ADDR = 0x10000000;
 
         const UInt32 BTLDR_FLASH_END_ADDR = 0x0803FFFF;
-        const UInt32 BTLDR_SIZE = 0x3FFFF;
+        const UInt32 BTLDR_SIZE = 0x40000;
 
         const UInt32 APP_FLASH_START_ADDR = 0x08040000;
         const UInt32 APP_FLASH_END_ADDR = 0x080FFFFF;
 
+        const UInt32 EXT_FLASH_OFFSET_ADDR = 0x10000000;
+        const UInt32 EXT_FLASH_END_ADDR = 0x01FFFFFF;
+        const UInt32 EXT_FLASH_SIZE = 0x02000000;
+
         Bootloader _btldr;
 
- 
-     
         [SetUp]
         public void TestSetup()
         {
@@ -47,7 +48,41 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
             _btldr.Close();
         }
 
+        #region Low Level Tests
+        [Test]
+        public void LowlLevelFlashProgram()
+        {
+            _btldr.InternalFlashUnlock();
+            //cmd, size, bytes, crc
+            Assert.AreEqual("OK", _btldr.WriteRead($"FP {APP_FLASH_START_ADDR:X8} 003 000102 060C"));
+            _btldr.InternalFlashLock();
+        }
+
+        [Test]
+        public void FlashProgramInvlaidCRC()
+        {
+            //cmd, size, bytes, crc
+            Assert.AreEqual("ERROR: RECEIVED DATA HAS INVALID CRC!",    _btldr.WriteRead($"FP {APP_FLASH_START_ADDR:X8} 003 000102 00FF"));
+        }
+
+        [Test]
+        public void FlashProgramInvlaidSize()
+        {
+            //cmd, size, bytes, crc
+            Assert.AreEqual("ERROR: RECEIVED DATA SIZE IS INVALID!", _btldr.WriteRead($"FP {APP_FLASH_START_ADDR:X8} 002 000102 060C"));
+        }
+        #endregion
         #region Test Of Exceptions
+        [Test]
+        public void YouTryToProgramInvalidAddress()
+        {
+            Exception ex = Assert.Throws<ApplicationException>(delegate
+            {
+                _btldr.FlashProgram(0, new byte[] {0x00, 0x01 });
+            });
+            Assert.That(ex.Message, Is.EqualTo("ERROR: YOU TRY TO WRITE INVALID ADDRESS!"));
+        }
+
         [Test]
         public void YouTryToEraseBootloaderSector()
         {
@@ -64,7 +99,7 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
             var toWrite = new byte[] { 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x57, 0x6F, 0x72, 0x6C, 0x64 };
             Exception ex = Assert.Throws<ApplicationException>(delegate
             {
-                _btldr.FlashProgram(BTLDR_FLASH_END_ADDR - BTLDR_SIZE, toWrite);
+                _btldr.FlashProgram(BTLDR_FLASH_END_ADDR - (BTLDR_SIZE - 1), toWrite);
             });
             Assert.That(ex.Message, Is.EqualTo("ERROR: YOU TRY TO WRITE BOOTLOADER AREA!"));
         }
@@ -106,9 +141,9 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
         [TestCase((UInt32)0x08040001, 10,  new int[] { 6 })]
         [TestCase((UInt32)0x08040002, 256, new int[] { 6 })]
         [TestCase((UInt32)0x08040003, 4096, new int[] { 6 })]
-        public void IntWriteReadBytes(UInt32 address, int bytes, int[] sectors)
+        public void IntWriteReadBytes(UInt32 address, int size, int[] sectors)
         {
-            byte[] toWrite = new byte[bytes];
+            byte[] toWrite = new byte[size];
             new Random().NextBytes(toWrite);
 
             _btldr.InternalFlashUnlock();
@@ -116,7 +151,7 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
                 _btldr.InternalFlashErase(sectors[i]);
             _btldr.FlashProgram(address, toWrite);
             _btldr.InternalFlashLock();
-            byte[] toRead = _btldr.FlashRead(address, bytes);
+            byte[] toRead = _btldr.FlashRead(address, size);
             Assert.AreEqual(toWrite, toRead);
         }
 
@@ -132,32 +167,129 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
         }
 
         [Test]
+        public void ExtFlashBusy()
+        {
+            _btldr.ExternalFlashErase(0);
+            Assert.AreEqual(true, _btldr.ExtrnalFlashIsBusy());
+
+            long timestamp = DateTime.Now.Ticks;
+            do
+            {
+                if ((DateTime.Now.Ticks - timestamp) > 1000 * 10000)
+                    throw new TimeoutException();
+            } while (_btldr.ExtrnalFlashIsBusy());
+        }
+
+        [Test]
         public void ExtWriteReadBytes()
         {
-            _btldr.ExternalFlashUnlock();
-            _btldr.ExternalFlashErase();
-
-
+            _btldr.ExternalFlashErase(0);
             Stopwatch sw = new Stopwatch();
             sw.Start();
 
+            long timestamp = DateTime.Now.Ticks;
             do
             {
-
+                if ((DateTime.Now.Ticks - timestamp) > 1000 * 10000)
+                    throw new TimeoutException();
             } while (_btldr.ExtrnalFlashIsBusy());
-            _btldr.ExternalFlashLock();
             sw.Stop();
 
-            Console.WriteLine($"Chip Erase Elapsed Time: {sw.ElapsedMilliseconds/1000}sec");
+            Console.WriteLine($"Sector Erase Elapsed Time: {sw.ElapsedMilliseconds/1000}sec");
 
-            _btldr.ExternalFlashUnlock();
             var toWrite = new byte[] { 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x57, 0x6F, 0x72, 0x6C, 0x64 };
-            _btldr.FlashProgram(EXT_FLASH_START_ADDR, toWrite);
-            _btldr.ExternalFlashLock();
+            _btldr.FlashProgram(EXT_FLASH_OFFSET_ADDR, toWrite);
 
-            byte[] toRead = _btldr.FlashRead(EXT_FLASH_START_ADDR, 11);
+            byte[] toRead = _btldr.FlashRead(EXT_FLASH_OFFSET_ADDR, 11);
             Console.WriteLine(ASCIIEncoding.ASCII.GetString(toRead));
 
+            Assert.AreEqual(toWrite, toRead);
+        }
+
+        [TestCase((UInt32)0x00000001, 256, 1)]
+        public void ExtFlashNotAligned(UInt32 address, int size, int sectors)
+        {
+            byte[] toWrite = new byte[size];
+            new Random().NextBytes(toWrite);
+
+            for (int s = 0; s < sectors; s++)
+            {
+                long timestamp = DateTime.Now.Ticks;
+                _btldr.ExternalFlashErase(s);
+                do
+                {
+                    if ((DateTime.Now.Ticks - timestamp) > 1000 * 10000)
+                        throw new TimeoutException();
+                } while (_btldr.ExtrnalFlashIsBusy());
+
+            }
+
+            Exception ex = Assert.Throws<ApplicationException>(delegate
+            {
+                _btldr.FlashProgram(EXT_FLASH_OFFSET_ADDR + address, toWrite);
+            });
+            Assert.That(ex.Message, Is.EqualTo("ERROR: NOT ALIGNED!"));
+        }
+        [Test]
+        public void ExtFlashOverwritng()
+        {
+            byte[] toWrite = new byte[] { 0 };
+            new Random().NextBytes(toWrite);
+
+            Exception ex = Assert.Throws<ApplicationException>(delegate
+            {
+                _btldr.FlashProgram(EXT_FLASH_OFFSET_ADDR + EXT_FLASH_END_ADDR, toWrite);
+            });
+            Assert.That(ex.Message, Is.EqualTo("ERROR: YOU TRY TO WRITE OUT OF EXT FLASH AREA!"));
+        }
+
+       [Test]
+        public void ExtFlashWriteReadLastByte()
+        {
+            UInt32 address = EXT_FLASH_OFFSET_ADDR + 0;
+            int size = 1;
+
+            byte[] toWrite = new byte[size];
+            new Random().NextBytes(toWrite);
+
+            long timestamp = DateTime.Now.Ticks;
+            _btldr.ExternalFlashErase(0);
+            do
+            {
+                if ((DateTime.Now.Ticks - timestamp) > 1000 * 10000)
+                    throw new TimeoutException();
+            } while (_btldr.ExtrnalFlashIsBusy());
+
+
+            _btldr.FlashProgram(address, toWrite);
+            byte[] toRead = _btldr.FlashRead(address, size);
+            Assert.AreEqual(toWrite, toRead);
+        }
+
+
+        [TestCase((UInt32)0x00000000, 10,   1)]
+        [TestCase((UInt32)0x00000000, 256,  1)]
+        [TestCase((UInt32)0x00000000, 4096,  1 )]
+        [TestCase((UInt32)0x00000000, 65536, 1)]
+        [TestCase((UInt32)0x00000001, 255, 1)]
+        public void ExtFlashWriteRead(UInt32 address, int size, int sectors)
+        {
+            byte[] toWrite = new byte[size];
+            new Random().NextBytes(toWrite);
+
+            for (int s = 0; s < sectors; s++)
+            { 
+                long timestamp = DateTime.Now.Ticks;
+                _btldr.ExternalFlashErase(s);
+                do
+                {
+                    if ((DateTime.Now.Ticks - timestamp) > 1000 * 10000)
+                        throw new TimeoutException();
+                } while (_btldr.ExtrnalFlashIsBusy());
+                
+            }
+            _btldr.FlashProgram(EXT_FLASH_OFFSET_ADDR + address, toWrite);
+            byte[] toRead = _btldr.FlashRead(EXT_FLASH_OFFSET_ADDR + address, size);
             Assert.AreEqual(toWrite, toRead);
         }
 

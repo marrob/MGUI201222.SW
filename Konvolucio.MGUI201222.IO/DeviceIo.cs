@@ -54,7 +54,7 @@ namespace Konvolucio.MGUI201222.IO
                 _sp = new SerialPort(port)
                 {
                     ReadTimeout = 5000,
-                    BaudRate = 460800,
+                    BaudRate = 921600, //460800,
                     NewLine = "\n"
                 };
                 _sp.Open();

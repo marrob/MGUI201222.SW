@@ -15,37 +15,11 @@ namespace Konvolucio.MGUI201222.IO
     {
         public const UInt16 FLASH_SECTOR_SIZE = 0x100;
         
-        public event RunWorkerCompletedEventHandler Completed
-        {
-            remove { _bkWorker.RunWorkerCompleted -= value; }
-            add { _bkWorker.RunWorkerCompleted += value; }
-        }
-        public event ProgressChangedEventHandler ProgressChange
-        {
-            add{ _bkWorker.ProgressChanged += value; }
-            remove { _bkWorker.ProgressChanged -= value; }
-        }
-
-
-        readonly BackgroundWorker _bkWorker;
-        readonly AutoResetEvent _waitForDoneEvent;
-        readonly AutoResetEvent _waitForDelayEvent;
-     
         bool _disposed = false;
 
         public void InternalFlashLock()
         { 
             string response = WriteRead("FL I");
-            if (response != "OK")
-            {
-                string msg = $"{response} ";
-                Trace(msg);
-                throw new ApplicationException(msg);
-            }
-        }
-        public void ExternalFlashLock()
-        {
-            string response = WriteRead("FL E");
             if (response != "OK")
             {
                 string msg = $"{response} ";
@@ -63,17 +37,6 @@ namespace Konvolucio.MGUI201222.IO
                 Trace(msg);
                 throw new ApplicationException(msg);
             }  
-        }
-
-        public void ExternalFlashUnlock()
-        {
-            string response = WriteRead("FU E");
-            if (response != "OK")
-            {
-                string msg = $"{response}";
-                Trace(msg);
-                throw new ApplicationException(msg);
-            }
         }
 
         /// <summary>
@@ -94,14 +57,13 @@ namespace Konvolucio.MGUI201222.IO
                 var response = FlashSectorProgram(address, dest);
                 if (response != "OK")
                 {
-                    string msg = $"Bootloader: {response}";
+                    string msg = $"{response}";
                     Trace(msg);
                     throw new ApplicationException(msg);
                 }
                 sourceOffset += FLASH_SECTOR_SIZE;
                 address += FLASH_SECTOR_SIZE;
             }
-
 
             UInt32 singles = (UInt32)data.Length % FLASH_SECTOR_SIZE;
             dest = new byte[singles];
@@ -187,12 +149,13 @@ namespace Konvolucio.MGUI201222.IO
 
         /// <summary>
         /// Flash Sector Erase
+        /// Please check the current used chip
         /// </summary>
         /// <param name="num">STM32F207: FLASH_SECTOR_0..FLASH_SECTOR_11</param>
         /// <returns></returns>
         public void InternalFlashErase(int sector)
         {
-            var response = WriteRead($"FE I {sector:X2}");
+            var response = WriteRead($"FE I {sector:X8}");
             if (response != "OK")
             {
                 var msg = $"{response}";
@@ -201,12 +164,17 @@ namespace Konvolucio.MGUI201222.IO
             }
         }
 
-        public void ExternalFlashErase()
+        /// <summary>
+        /// 1 sector = 64Kb
+        /// </summary>
+        /// <param name="sector"></param>
+        /// <exception cref="ApplicationException"></exception>
+        public void ExternalFlashErase(int sector)
         {
-            var response = WriteRead($"FE E 00");
+            var response = WriteRead($"FE E {sector:X8}");
             if (response != "OK")
             {
-                var msg = $"Bootloader: Invalid Response: {response}";
+                var msg = $"{response}";
                 Trace(msg);
                 throw new ApplicationException(msg);
             }
@@ -226,15 +194,6 @@ namespace Konvolucio.MGUI201222.IO
                 throw new ApplicationException(msg);
             }
         }
-        public void Abort()
-        {
-            if (_bkWorker.IsBusy)
-            {
-                _waitForDelayEvent.Set();
-                _bkWorker.CancelAsync();
-                _waitForDoneEvent.WaitOne();
-            }
-        }
 
         public void Dispose()
         {
@@ -246,17 +205,6 @@ namespace Konvolucio.MGUI201222.IO
         {
             if (_disposed)
                 return;
-
-            if (disposing)
-            {
-                // Free any other managed objects here. 
-                if (_bkWorker.IsBusy)
-                {
-                    _bkWorker.CancelAsync();
-                    _waitForDoneEvent.WaitOne();
-                    Console.WriteLine("Auth Dispose.");
-                }
-            }
 
             // Free any unmanaged objects here. 
             //
