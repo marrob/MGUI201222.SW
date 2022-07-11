@@ -1,13 +1,13 @@
-﻿namespace Konvolucio.MGUI201222.IO
+﻿
+namespace Konvolucio.MGUI201222.IO
 {
     using System;
     using System.ComponentModel;
     using System.Threading;
     using System.Diagnostics;
 
-    public sealed class IntFlashUpload : IDisposable
+    public sealed class ExtFlashDownload : IDisposable
     {
-
         public event RunWorkerCompletedEventHandler Completed
         {
             remove { _bw.RunWorkerCompleted -= value; }
@@ -27,91 +27,84 @@
         class BackroundWorkerArg
         {
             public int Address { get; private set; }
-            public byte[] Data { get; private set; }
+            public int Size { get; private set; }
             public readonly BackgroundWorker Worker;
-            public BackroundWorkerArg(BackgroundWorker worker, int address, byte[] data)
+            public BackroundWorkerArg(BackgroundWorker worker, int address, int size)
             {
                 Worker = worker;
                 Address = address;
-                Data = data;
+                Size = size;
             }
         }
 
-        readonly Memory _mem;
+        readonly Memory  _memory;
 
-        public IntFlashUpload(Memory memory)
+        public ExtFlashDownload(Memory memory)
         {
-            _mem = memory;
+            _memory = memory;
             _bw = new BackgroundWorker();
             _bw.DoWork += new DoWorkEventHandler(BackgroundWorker_DoWork);
             _waitForDoneEvent = new AutoResetEvent(false);
         }
 
-        public void Begin(int address, byte[] data)
+        public void Begin(int address, int size)
         {
             _bw.WorkerReportsProgress = true;
             _bw.WorkerSupportsCancellation = true;
-            _bw.RunWorkerAsync(new BackroundWorkerArg(_bw, address, data));
+            _bw.RunWorkerAsync(new BackroundWorkerArg(_bw, address, size));
         }
 
         void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker bw = (e.Argument as BackroundWorkerArg).Worker;
-            byte[] data = (e.Argument as BackroundWorkerArg).Data;
+            int size = (e.Argument as BackroundWorkerArg).Size;
             int address = (e.Argument as BackroundWorkerArg).Address;
-            int frameSize = _mem.FrameSize;
+
+            int frameSize = _memory.FrameSize;
 
             Stopwatch watch = new Stopwatch();
             watch.Start();
             int offset = 0;
             int frames = 0;
+            byte[] data = new byte[size];
             try
             {
-               
-                _mem.IntFlashUnlock();
-
-                for (int i = _mem.AppFirstSector; i <= _mem.AppLastSector; i++)
-                { 
-                    bw.ReportProgress(1, $"INTERNAL FLASH SECTORS: {i} ERASING... ");
-                    _mem.IntFlashErase(i);
-                }
                 do
                 {
-                    if (data.Length - offset >= frameSize)
+                    byte[] temp;
+                    if (size - offset >= frameSize)
                     {
-                        byte[] temp = new byte[frameSize];
-                        Buffer.BlockCopy(data, offset, temp, 0, frameSize);
-                        _mem.IntFlashWrite(address, temp);
+                        temp = _memory.ExtFlashRead(address, frameSize);
+                        Buffer.BlockCopy(temp, 0, data, offset, frameSize);
                         address += frameSize;
                         offset += frameSize;
                     }
                     else
                     {
-                        byte[] temp = new byte[data.Length - offset];
-                        Buffer.BlockCopy(data, offset, temp, 0, data.Length - offset);
-                        _mem.IntFlashWrite(address, temp);
-                        address += (data.Length - offset);
-                        offset += (data.Length - offset);
+                        temp = _memory.ExtFlashRead(address,  size - offset);
+                        Buffer.BlockCopy(temp, 0, data, offset, size - offset);
+                        address += (size - offset);
+                        offset += (size - offset);
                     }
                     if (bw.CancellationPending)
                     {
                         e.Cancel = true;
                         break;
                     }
-                    bw.ReportProgress((int)(((double)offset / data.Length) * 100.0), $"INTERNAL FLASH UPLOAD STATUS: { data.Length } / { offset } ({frames++}).");
-                } while (offset != data.Length);
+                    bw.ReportProgress((int)(((double)offset / data.Length) * 100.0), $"EXTERNAL FLASH DOWNLOAD STATUS: {data.Length} / {offset} ({frames++}).");
+                } while (offset != size);
 
                 watch.Stop();
 
                 if (!bw.CancellationPending)
                 {
 
-                    bw.ReportProgress(0, $"INTERNAL FLASH UPLOAD COMPLETED {watch.ElapsedMilliseconds / 1000.0} sec");
+                    bw.ReportProgress(0, $"EXTERNAL FLASH DOWNLOAD COMPLETED {watch.ElapsedMilliseconds / 1000.0} sec");
                     e.Result = data;
                 }
                 else
                 {
-                    bw.ReportProgress(0, $"INTERNAL FLASH UPLOAD ABORTED {watch.ElapsedMilliseconds / 1000.0} sec");
+                    bw.ReportProgress(0, $"EXTERNAL FLASH DOWNLOAD ABORTED {watch.ElapsedMilliseconds / 1000.0} sec");
                 }
             }
             catch (Exception ex)
@@ -120,7 +113,6 @@
             }
             finally
             {
-                _mem.IntFlashLock();
                 _waitForDoneEvent.Set();
             }
         }
@@ -140,7 +132,7 @@
             GC.SuppressFinalize(this);
         }
 
-        protected void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (_disposed)
                 return;

@@ -48,15 +48,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExtFlashDownload.cs" />
     <Compile Include="IntFlashDownload.cs" />
+    <Compile Include="ExtFlashUpload.cs" />
     <Compile Include="IntFlashUpload.cs" />
     <Compile Include="Memory.cs" />
     <Compile Include="Io.cs" />
-    <Compile Include="UnitTest\MemoryUnitTest.cs" />
+    <Compile Include="UnitTest\Memory_UnitTest.cs" />
     <Compile Include="GuiIo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools.cs" />
-    <Compile Include="UnitTest\UploadDownloadUnitTest.cs" />
+    <Compile Include="UnitTest\UpDown_UnitTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

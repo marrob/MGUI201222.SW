@@ -5,7 +5,7 @@
     using System.Threading;
     using System.Diagnostics;
 
-    public sealed class IntFlashUpload : IDisposable
+    public sealed class ExtFlashUpload : IDisposable
     {
 
         public event RunWorkerCompletedEventHandler Completed
@@ -39,7 +39,7 @@
 
         readonly Memory _mem;
 
-        public IntFlashUpload(Memory memory)
+        public ExtFlashUpload(Memory memory)
         {
             _mem = memory;
             _bw = new BackgroundWorker();
@@ -67,13 +67,23 @@
             int frames = 0;
             try
             {
-               
-                _mem.IntFlashUnlock();
+                int blocks = data.Length / _mem.ExtFlashBlockSize;
 
-                for (int i = _mem.AppFirstSector; i <= _mem.AppLastSector; i++)
-                { 
-                    bw.ReportProgress(1, $"INTERNAL FLASH SECTORS: {i} ERASING... ");
-                    _mem.IntFlashErase(i);
+                if((data.Length%_mem.ExtFlashBlockSize)!=0)
+                    blocks++;
+
+                int er_addr = address;
+                for (int i = 0; i < blocks; i++)
+                {
+                    long timestamp = DateTime.Now.Ticks;
+                    _mem.ExtFlashBlockErase(er_addr);
+                    do
+                    {
+                        if ((DateTime.Now.Ticks - timestamp) > 1000 * 10000)
+                            throw new TimeoutException();
+                    } while (_mem.ExtrnalFlashIsBusy());
+                    bw.ReportProgress(1, $"EXTERNAL FLASH BLOCKS: {i} ERASING... ");
+                    er_addr += _mem.ExtFlashBlockSize;
                 }
                 do
                 {
@@ -81,7 +91,7 @@
                     {
                         byte[] temp = new byte[frameSize];
                         Buffer.BlockCopy(data, offset, temp, 0, frameSize);
-                        _mem.IntFlashWrite(address, temp);
+                        _mem.ExtFlashWrite(address, temp);
                         address += frameSize;
                         offset += frameSize;
                     }
@@ -89,7 +99,7 @@
                     {
                         byte[] temp = new byte[data.Length - offset];
                         Buffer.BlockCopy(data, offset, temp, 0, data.Length - offset);
-                        _mem.IntFlashWrite(address, temp);
+                        _mem.ExtFlashWrite(address, temp);
                         address += (data.Length - offset);
                         offset += (data.Length - offset);
                     }
@@ -98,7 +108,7 @@
                         e.Cancel = true;
                         break;
                     }
-                    bw.ReportProgress((int)(((double)offset / data.Length) * 100.0), $"INTERNAL FLASH UPLOAD STATUS: { data.Length } / { offset } ({frames++}).");
+                    bw.ReportProgress((int)(((double)offset / data.Length) * 100.0), $"EXTERNAL FLASH UPLOAD STATUS: { data.Length } / { offset } ({frames++}).");
                 } while (offset != data.Length);
 
                 watch.Stop();
@@ -106,12 +116,12 @@
                 if (!bw.CancellationPending)
                 {
 
-                    bw.ReportProgress(0, $"INTERNAL FLASH UPLOAD COMPLETED {watch.ElapsedMilliseconds / 1000.0} sec");
+                    bw.ReportProgress(0, $"EXTERNAL FLASH UPLOAD COMPLETED {watch.ElapsedMilliseconds / 1000.0} sec");
                     e.Result = data;
                 }
                 else
                 {
-                    bw.ReportProgress(0, $"INTERNAL FLASH UPLOAD ABORTED {watch.ElapsedMilliseconds / 1000.0} sec");
+                    bw.ReportProgress(0, $"EXTERNAL FLASH UPLOAD ABORTED {watch.ElapsedMilliseconds / 1000.0} sec");
                 }
             }
             catch (Exception ex)

@@ -14,16 +14,15 @@ namespace Konvolucio.MGUI201222.IO
     public class Memory : Io, IDisposable
     {
 
-        public const UInt16 FRAME_SIZE = 0x100;
+        public const int FRAME_SIZE = 0x100;
 
         //STM32F207
-        public const UInt32 APP_FLASH_SIZE = 0x100000 - 0x40000; //-> 768KB
+        public const int APP_FLASH_SIZE = 0x100000 - 0x40000; //-> 768KB
         public const int BTLDR_FLASH_LAST_SECTOR = 5;
 
 
-        public const UInt32 EXT_FLASH_BASE_ADDR = 0x00000000;
-        public const UInt32 EXT_FLASH_SIZE = 0x02000000;        //0x02000000 -> 32MB
-        public const UInt32 EXT_FLASH_BLOCK_SIZE = 0x10000;
+        public const int EXT_FLASH_BASE_ADDR = 0x00000000;
+        public const int EXT_FLASH_SIZE = 0x02000000;        //0x02000000 -> 32MB
 
 
         bool _disposed = false;
@@ -32,6 +31,7 @@ namespace Konvolucio.MGUI201222.IO
         public int FrameSize { get { return FRAME_SIZE; } }
         public int AppFirstSector { get { return 6; } }
         public int AppLastSector { get { return 11; } }
+        public int ExtFlashBlockSize { get { return 0x10000; } }
 
         #region Internal
 
@@ -86,7 +86,7 @@ namespace Konvolucio.MGUI201222.IO
             }
         }
 
-        public Byte[] IntFlashRead(UInt32 address, int size)
+        public Byte[] IntFlashRead(int address, int size)
         {
             string result = WriteRead($"FR I {address:X8} {size:X3}");
 
@@ -94,14 +94,14 @@ namespace Konvolucio.MGUI201222.IO
                 new ApplicationException(result);
 
             var array = result.Split(' '); //addr size data crc
-            UInt16 rx_bsize;
-            UInt32 rx_addr;
-            UInt16 rx_crc;
+            int rx_bsize;
+            int rx_addr;
+            int rx_crc;
 
-            UInt32.TryParse(array[0], NumberStyles.HexNumber, CultureInfo.GetCultureInfo("en-US"), out rx_addr);
-            UInt16.TryParse(array[1], NumberStyles.HexNumber, CultureInfo.GetCultureInfo("en-US"), out rx_bsize);
+            int.TryParse(array[0], NumberStyles.HexNumber, CultureInfo.GetCultureInfo("en-US"), out rx_addr);
+            int.TryParse(array[1], NumberStyles.HexNumber, CultureInfo.GetCultureInfo("en-US"), out rx_bsize);
             Byte[] rx_data = Tools.StringToByteArray(array[2]);
-            UInt16.TryParse(array[3], NumberStyles.HexNumber, CultureInfo.GetCultureInfo("en-US"), out rx_crc);
+            int.TryParse(array[3], NumberStyles.HexNumber, CultureInfo.GetCultureInfo("en-US"), out rx_crc);
 
             if (rx_data.Length != rx_bsize)
                 new ApplicationException("Size Error:");
@@ -120,7 +120,7 @@ namespace Konvolucio.MGUI201222.IO
         /// <param name="address">Internal size from 0x0000 0000 up to APP_FLASH_SIZE </param>
         /// <param name="data">Cannot longer than the frame/block size</param>
         /// <exception cref="ApplicationException"></exception>
-        public void IntFlashWrite(UInt32 address, Byte[] data)
+        public void IntFlashWrite(int address, Byte[] data)
         {
             string response = WriteRead($"FW I {address:X8} {data.Length:X3} {Tools.ByteArrayToString(data)} {Tools.CalcCrc16Ansi(0, data):X4}");
             if (response != "OK")
@@ -134,7 +134,7 @@ namespace Konvolucio.MGUI201222.IO
 
 
         #region External
-        public Byte[] ExtFlashRead(UInt32 address, int size)
+        public Byte[] ExtFlashRead(int address, int size)
         {
             /*
              * FR E 00000000 00 //cmd addr size
@@ -146,10 +146,10 @@ namespace Konvolucio.MGUI201222.IO
 
             var array = result.Split(' '); //addr size data crc
             UInt16 rx_bsize;
-            UInt32 rx_addr;
+            int rx_addr;
             UInt16 rx_crc;
 
-            UInt32.TryParse(array[0], NumberStyles.HexNumber, CultureInfo.GetCultureInfo("en-US"), out rx_addr);
+            int.TryParse(array[0], NumberStyles.HexNumber, CultureInfo.GetCultureInfo("en-US"), out rx_addr);
             UInt16.TryParse(array[1], NumberStyles.HexNumber, CultureInfo.GetCultureInfo("en-US"), out rx_bsize);
             Byte[] rx_data = Tools.StringToByteArray(array[2]);
             UInt16.TryParse(array[3], NumberStyles.HexNumber, CultureInfo.GetCultureInfo("en-US"), out rx_crc);
@@ -171,7 +171,7 @@ namespace Konvolucio.MGUI201222.IO
         /// <param name="address">Internal size from 0x0000 0000 up to APP_FLASH_SIZE </param>
         /// <param name="data">Cannot longer than the frame/block size</param>
         /// <exception cref="ApplicationException"></exception>
-        public void ExtFlashWrite(UInt32 address, Byte[] data)
+        public void ExtFlashWrite(int address, Byte[] data)
         {
             string response = WriteRead($"FW E {address:X8} {data.Length:X3} {Tools.ByteArrayToString(data)} {Tools.CalcCrc16Ansi(0, data):X4}");
             if (response != "OK")
@@ -187,7 +187,7 @@ namespace Konvolucio.MGUI201222.IO
         /// </summary>
         /// <param name="address">Absoulte address</param>
         /// <exception cref="ApplicationException"></exception>
-        public void ExtFlashBlockErase(UInt32 address)
+        public void ExtFlashBlockErase(int address)
         {
             var response = WriteRead($"FE E {address:X8}");
             if (response != "OK")

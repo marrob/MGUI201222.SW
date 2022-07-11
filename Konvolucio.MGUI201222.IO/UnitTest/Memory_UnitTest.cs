@@ -10,7 +10,7 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
     using NUnit.Framework;
 
     [TestFixture]
-    public class MemoryUnitTest
+    public class Memory_UnitTest
     {
         const string FileNameTimestampFormat = "yyMMdd_HHmmss";
         const string COMX = "COM9";
@@ -48,7 +48,7 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
         [Test]
         public void LowlLevelIntFlashWrite()
         {
-            UInt32 address = 0;
+            int address = 0;
             _mem.IntFlashUnlock();
             Assert.AreEqual("OK", _mem.WriteRead($"FW I {address:X8} 003 000102 060C"));
             _mem.IntFlashLock();
@@ -57,14 +57,14 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
         [Test]
         public void IntFlashWriteInvlaidCRC()
         {
-            UInt32 address = 0;
+            int address = 0;
             Assert.AreEqual("ERROR: RECEIVED DATA HAS INVALID CRC!", _mem.WriteRead($"FW I {address:X8} 003 000102 00FF"));
         }
 
         [Test]
         public void FlashProgramInvlaidSize()
         {
-            UInt32 address = 0;
+            int address = 0;
             Assert.AreEqual("ERROR: RECEIVED DATA SIZE IS INVALID!", _mem.WriteRead($"FW I {address:X8} 002 000102 060C"));
         }
         #endregion
@@ -94,7 +94,7 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
         [Test]
         public void YouTryToWriteOutOfAppFlashArea()
         {
-            UInt32 address = Memory.APP_FLASH_SIZE ;
+            int address = Memory.APP_FLASH_SIZE ;
             Exception ex = Assert.Throws<ApplicationException>(delegate
             {
                 _mem.IntFlashWrite(address, new byte[] { 0, 1 });
@@ -121,9 +121,9 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
             Assert.AreEqual(toWrite, toRead);
         }   
 
-        [TestCase((UInt32)0x00000000, 10,  new int[] { 6 })]
-        [TestCase((UInt32)0x00000000, 256, new int[] { 6 })]
-        public void IntWriteReadBytes(UInt32 address, int size, int[] sectors)
+        [TestCase((int)0x00000000, 10,  new int[] { 6 })]
+        [TestCase((int)0x00000000, 256, new int[] { 6 })]
+        public void IntWriteReadBytes(int address, int size, int[] sectors)
         {
             byte[] toWrite = new byte[size];
             new Random().NextBytes(toWrite);
@@ -140,8 +140,8 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
         #endregion
         #region External Flash Exceptions
 
-        [TestCase((UInt32)0x00000001, 256)]
-        public void ExtFlashNotAligned(UInt32 address, int size)
+        [TestCase((int)0x00000001, 256)]
+        public void ExtFlashNotAligned(int address, int size)
         {
             byte[] toWrite = new byte[size];
             new Random().NextBytes(toWrite);
@@ -232,13 +232,13 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
        [Test]
         public void ExtFlashWriteReadLastByte()
         {
-            UInt32 address = Memory.EXT_FLASH_BASE_ADDR + (Memory.EXT_FLASH_SIZE - 1) - 1;
+            int address = Memory.EXT_FLASH_BASE_ADDR + (Memory.EXT_FLASH_SIZE - 1) - 1;
             int size = 1;
 
             byte[] toWrite = new byte[size];
             new Random().NextBytes(toWrite);
 
-            UInt32 last64kBlockAddress = Memory.EXT_FLASH_SIZE - Memory.EXT_FLASH_BLOCK_SIZE;
+            int last64kBlockAddress = Memory.EXT_FLASH_SIZE - _mem.ExtFlashBlockSize;
             _mem.ExtFlashBlockErase(Memory.EXT_FLASH_BASE_ADDR + last64kBlockAddress);
             long timestamp = DateTime.Now.Ticks;
             do
@@ -253,10 +253,10 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
         }
 
 
-        [TestCase((UInt32)0x00000000, 10)]
-        [TestCase((UInt32)0x00000000, 256)]
-        [TestCase((UInt32)0x00000001, 255)]
-        public void ExtFlashWriteRead(UInt32 address, int size)
+        [TestCase((int)0x00000000, 10)]
+        [TestCase((int)0x00000000, 256)]
+        [TestCase((int)0x00000001, 255)]
+        public void ExtFlashWriteRead(int address, int size)
         {
             byte[] toWrite = new byte[size];
             new Random().NextBytes(toWrite);
@@ -281,8 +281,8 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
         [Test]
         public void ExtFlashErase()
         {
-            UInt32 blocks = Memory.EXT_FLASH_SIZE / Memory.EXT_FLASH_BLOCK_SIZE;
-            UInt32 addr = Memory.EXT_FLASH_BASE_ADDR;
+            int blocks = Memory.EXT_FLASH_SIZE / _mem.ExtFlashBlockSize;
+            int addr = Memory.EXT_FLASH_BASE_ADDR;
 
             for (int b = 0; b < blocks; b++)
             { 
@@ -294,7 +294,7 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
                         throw new TimeoutException();
                 } while (_mem.ExtrnalFlashIsBusy());
 
-                addr+= Memory.EXT_FLASH_BLOCK_SIZE;
+                addr+= _mem.ExtFlashBlockSize;
             }    
         }
         #endregion

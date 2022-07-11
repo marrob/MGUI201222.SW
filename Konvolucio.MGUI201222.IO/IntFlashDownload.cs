@@ -74,14 +74,14 @@ namespace Konvolucio.MGUI201222.IO
                     byte[] temp;
                     if (size - offset >= frameSize)
                     {
-                        temp = _memory.IntFlashRead((UInt32)address, frameSize);
+                        temp = _memory.IntFlashRead(address, frameSize);
                         Buffer.BlockCopy(temp, 0, data, offset, frameSize);
                         address += frameSize;
                         offset += frameSize;
                     }
                     else
                     {
-                        temp = _memory.IntFlashRead((UInt32)address,  size - offset);
+                        temp = _memory.IntFlashRead(address,  size - offset);
                         Buffer.BlockCopy(temp, 0, data, offset, size - offset);
                         address += (size - offset);
                         offset += (size - offset);
@@ -91,7 +91,7 @@ namespace Konvolucio.MGUI201222.IO
                         e.Cancel = true;
                         break;
                     }
-                    bw.ReportProgress((int)(((double)offset / data.Length) * 100.0), $"DOWNLOAD STATUS: {data.Length} / {offset} ({frames++}).");
+                    bw.ReportProgress((int)(((double)offset / data.Length) * 100.0), $"INTERNAL FLASH DOWNLOAD STATUS: {data.Length} / {offset} ({frames++}).");
                 } while (offset != size);
 
                 watch.Stop();
@@ -99,12 +99,12 @@ namespace Konvolucio.MGUI201222.IO
                 if (!bw.CancellationPending)
                 {
 
-                    bw.ReportProgress(0, $"DOWNLOAD COMPLETED {watch.ElapsedMilliseconds / 1000.0} sec");
+                    bw.ReportProgress(0, $"INTERNAL FLASH DOWNLOAD COMPLETED {watch.ElapsedMilliseconds / 1000.0} sec");
                     e.Result = data;
                 }
                 else
                 {
-                    bw.ReportProgress(0, $"DOWNLOAD ABORTED {watch.ElapsedMilliseconds / 1000.0} sec");
+                    bw.ReportProgress(0, $"INTERNAL FLASH DOWNLOAD ABORTED {watch.ElapsedMilliseconds / 1000.0} sec");
                 }
             }
             catch (Exception ex)

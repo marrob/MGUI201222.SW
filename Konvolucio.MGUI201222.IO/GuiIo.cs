@@ -280,19 +280,19 @@
                 Trace("IO-ERROR: Invalid Response.");
         }
 
-        public UInt32 GetLogLastAddress()
+        public int GetLogLastAddress()
         {
-            UInt32 retval = 0;
+            int retval = 0;
             var resp = WriteRead("LOG:LAST?");
             if (resp == null)
                 return 0;
-            else if (UInt32.TryParse(resp, NumberStyles.HexNumber, CultureInfo.GetCultureInfo("en-US"), out retval))
+            else if (int.TryParse(resp, NumberStyles.HexNumber, CultureInfo.GetCultureInfo("en-US"), out retval))
                 return retval;
             else
                 return 0;
         }
 
-        public string GetLogLine(UInt32 line)
+        public string GetLogLine(int line)
         {
             var resp = WriteRead($"LOG:LINE? {line:X4} ");
             return resp;
@@ -302,7 +302,7 @@
         public void DownloadLog(string path)
         {
             int last = (int)GetLogLastAddress();
-            for (uint i = 0; i < last; i++)
+            for (int i = 0; i < last; i++)
             {
                 string line = GetLogLine(i) + "\r\n";
                 if (System.IO.File.Exists(path))
