@@ -1,13 +1,13 @@
-﻿
-namespace Konvolucio.MGUI201222.IO
+﻿namespace Konvolucio.MGUI201222.IO
 {
     using System;
     using System.ComponentModel;
     using System.Threading;
     using System.Diagnostics;
 
-    public sealed class IntFlashDownload : IDisposable
+    public sealed class IntFlashUpload : IDisposable
     {
+
         public event RunWorkerCompletedEventHandler Completed
         {
             remove { _bw.RunWorkerCompleted -= value; }
@@ -27,19 +27,19 @@ namespace Konvolucio.MGUI201222.IO
         class BackroundWorkerArg
         {
             public int Address { get; private set; }
-            public int Size { get; private set; }
+            public byte[] Data { get; private set; }
             public readonly BackgroundWorker Worker;
-            public BackroundWorkerArg(BackgroundWorker worker, int address, int size)
+            public BackroundWorkerArg(BackgroundWorker worker, int address, byte[] data)
             {
                 Worker = worker;
                 Address = address;
-                Size = size;
+                Data = data;
             }
         }
 
-        readonly Memory  _memory;
+        readonly Memory _memory;
 
-        public IntFlashDownload(Memory memory)
+        public IntFlashUpload(Memory memory)
         {
             _memory = memory;
             _bw = new BackgroundWorker();
@@ -47,52 +47,50 @@ namespace Konvolucio.MGUI201222.IO
             _waitForDoneEvent = new AutoResetEvent(false);
         }
 
-        public void Begin(int address, int size)
+        public void Begin(int address, byte[] data)
         {
             _bw.WorkerReportsProgress = true;
             _bw.WorkerSupportsCancellation = true;
-            _bw.RunWorkerAsync(new BackroundWorkerArg(_bw, address, size));
+            _bw.RunWorkerAsync(new BackroundWorkerArg(_bw, address, data));
         }
 
         void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker bw = (e.Argument as BackroundWorkerArg).Worker;
-            int size = (e.Argument as BackroundWorkerArg).Size;
+            byte[] data = (e.Argument as BackroundWorkerArg).Data;
             int address = (e.Argument as BackroundWorkerArg).Address;
-
             int frameSize = _memory.FrameSize;
 
             Stopwatch watch = new Stopwatch();
             watch.Start();
             int offset = 0;
-
-            byte[] data = new byte[size];
             try
             {
                 do
                 {
-                    byte[] temp;
-                    if (size - offset >= frameSize)
+                    if (data.Length - offset >= frameSize)
                     {
-                        temp = _memory.IntFlashRead((UInt32)address, frameSize);
-                        Buffer.BlockCopy(temp, 0, data, offset, frameSize);
+                        byte[] temp = new byte[frameSize];
+                        Buffer.BlockCopy(data, offset, temp, 0, frameSize);
+                        _memory.IntFlashWrite((UInt32)address, temp);
                         address += frameSize;
                         offset += frameSize;
                     }
                     else
                     {
-                        temp = _memory.IntFlashRead((UInt32)address,  size - offset);
-                        Buffer.BlockCopy(temp, 0, data, offset, size - offset);
-                        address += (size - offset);
-                        offset += (size - offset);
+                        byte[] temp = new byte[data.Length - offset];
+                        Buffer.BlockCopy(data, offset, temp, 0, data.Length - offset);
+                        _memory.IntFlashWrite((UInt32)address, temp);
+                        address += (data.Length - offset);
+                        offset += (data.Length - offset);
                     }
                     if (bw.CancellationPending)
                     {
                         e.Cancel = true;
                         break;
                     }
-                    bw.ReportProgress((int)(((double)offset / size) * 100.0), "STATUS: " + size.ToString() + "/" + offset.ToString() + ".");
-                } while (offset != size);
+                    bw.ReportProgress((int)(((double)offset / data.Length) * 100.0), "STATUS: " + data.Length.ToString() + "/" + offset.ToString() + ".");
+                } while (offset != data.Length);
 
                 watch.Stop();
 
@@ -132,7 +130,7 @@ namespace Konvolucio.MGUI201222.IO
             GC.SuppressFinalize(this);
         }
 
-        private void Dispose(bool disposing)
+        protected void Dispose(bool disposing)
         {
             if (_disposed)
                 return;

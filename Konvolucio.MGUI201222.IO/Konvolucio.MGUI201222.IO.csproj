@@ -49,12 +49,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IntFlashDownload.cs" />
+    <Compile Include="IntFlashUpload.cs" />
     <Compile Include="Memory.cs" />
     <Compile Include="Io.cs" />
     <Compile Include="UnitTest\MemoryUnitTest.cs" />
     <Compile Include="GuiIo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools.cs" />
+    <Compile Include="UnitTest\UploadDownloadUnitTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

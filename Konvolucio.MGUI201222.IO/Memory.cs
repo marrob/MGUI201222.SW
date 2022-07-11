@@ -11,28 +11,43 @@ namespace Konvolucio.MGUI201222.IO
     using System.ComponentModel;
     using System.Threading;
 
-    public class Memory: Io, IDisposable
+    public class Memory : Io, IDisposable
     {
 
-        public const UInt16 PAGE_SIZE = 0x100;
+        public const UInt16 FRAME_SIZE = 0x100;
 
         //STM32F207
         public const UInt32 APP_FLASH_START_ADDR = 0x00040000;
         public const UInt32 APP_FLASH_SIZE = 0x100000 - 0x40000; //-> 768KB
 
 
-        public const int    BTLDR_FLASH_LAST_SECTOR = 5;
+        public const int BTLDR_FLASH_LAST_SECTOR = 5;
         public const UInt32 BTLDR_BASE_ADDR = 0x00000000;
         public const UInt32 BTLDR_SIZE = 0x40000;               //0x40000-> 256KB
 
         public const UInt32 EXT_FLASH_BASE_ADDR = 0x00000000;
         public const UInt32 EXT_FLASH_SIZE = 0x02000000;        //0x02000000 -> 32MB
         public const UInt32 EXT_FLASH_BLOCK_SIZE = 0x10000;
-     
-        
+
+
         bool _disposed = false;
 
+
+        public int FrameSize { get { return FRAME_SIZE; } }
+
         #region Internal
+
+
+
+        public Memory()
+        {
+
+        }
+
+        public Memory( string COMx)
+        {
+            Open(COMx);
+        }
 
         public void IntFlashLock()
         { 
