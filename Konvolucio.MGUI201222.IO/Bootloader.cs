@@ -165,13 +165,13 @@ namespace Konvolucio.MGUI201222.IO
         }
 
         /// <summary>
-        /// 1 sector = 64Kb
+        /// Block Size = 64kB = 0x10000 byte
         /// </summary>
-        /// <param name="sector"></param>
+        /// <param name="address">Absoulte address</param>
         /// <exception cref="ApplicationException"></exception>
-        public void ExternalFlashErase(int sector)
+        public void ExternalFlashBlockErase(UInt32 address)
         {
-            var response = WriteRead($"FE E {sector:X8}");
+            var response = WriteRead($"FE E {address:X8}");
             if (response != "OK")
             {
                 var msg = $"{response}";
