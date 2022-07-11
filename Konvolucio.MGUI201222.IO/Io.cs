@@ -9,7 +9,7 @@ namespace Konvolucio.MGUI201222.IO
     using System.IO.Ports;
     using System.Globalization;
     using System.ComponentModel;
-    public class DeviceIo
+    public class Io
     {
         const string GenericTimestampFormat = "yyyy.MM.dd HH:mm:ss";
 

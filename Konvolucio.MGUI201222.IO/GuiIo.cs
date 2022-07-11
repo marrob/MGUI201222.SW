@@ -8,7 +8,7 @@
     using System.Globalization;
     using System.ComponentModel;
 
-    public class GuiIo:DeviceIo
+    public class GuiIo:Io
     {
         public event RunWorkerCompletedEventHandler Completed;
         public event ProgressChangedEventHandler ProgressChanged;
