@@ -17,30 +17,16 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
         const string DEVICE_NAME = "BOOTLOADER";
         const string DEVICE_VERSION = "220629_1834";
 
-        const int BTLDR_FLASH_LAST_SECTOR = 5;
-
-        const UInt32 BTLDR_FLASH_END_ADDR = 0x0803FFFF;
-        const UInt32 BTLDR_SIZE = 0x40000;
-
-        const UInt32 APP_FLASH_START_ADDR = 0x08040000;
-        const UInt32 APP_FLASH_END_ADDR = 0x080FFFFF;
-
-        const UInt32 EXT_FLASH_BASE_ADDR = 0x10000000;
-        const UInt32 EXT_FLASH_END_ADDR = 0x01FFFFFF;
-        const UInt32 EXT_FLASH_SIZE = 0x02000000;
-        const UInt32 EXT_FLASH_64K_BLOCK_SIZE = 0x10000;
-
-        Bootloader _btldr;
+        Memory _btldr;
 
         [SetUp]
         public void TestSetup()
         {
-            _btldr = new Bootloader();
+            _btldr = new Memory();
             _btldr.Open(COMX);
 
             Assert.AreEqual(DEVICE_NAME, _btldr.WhoIs());
             Assert.AreEqual(DEVICE_VERSION, _btldr.GetVersion());
-
         }
 
         [TearDown]
@@ -55,7 +41,7 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
         {
             _btldr.InternalFlashUnlock();
             //cmd, size, bytes, crc
-            Assert.AreEqual("OK", _btldr.WriteRead($"FP {APP_FLASH_START_ADDR:X8} 003 000102 060C"));
+            Assert.AreEqual("OK", _btldr.WriteRead($"FP {Memory.APP_FLASH_START_ADDR:X8} 003 000102 060C"));
             _btldr.InternalFlashLock();
         }
 
@@ -63,14 +49,14 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
         public void FlashProgramInvlaidCRC()
         {
             //cmd, size, bytes, crc
-            Assert.AreEqual("ERROR: RECEIVED DATA HAS INVALID CRC!",    _btldr.WriteRead($"FP {APP_FLASH_START_ADDR:X8} 003 000102 00FF"));
+            Assert.AreEqual("ERROR: RECEIVED DATA HAS INVALID CRC!",    _btldr.WriteRead($"FP {Memory.APP_FLASH_START_ADDR:X8} 003 000102 00FF"));
         }
 
         [Test]
         public void FlashProgramInvlaidSize()
         {
             //cmd, size, bytes, crc
-            Assert.AreEqual("ERROR: RECEIVED DATA SIZE IS INVALID!", _btldr.WriteRead($"FP {APP_FLASH_START_ADDR:X8} 002 000102 060C"));
+            Assert.AreEqual("ERROR: RECEIVED DATA SIZE IS INVALID!", _btldr.WriteRead($"FP {Memory.APP_FLASH_START_ADDR:X8} 002 000102 060C"));
         }
         #endregion
         #region Internal Flash Exceptions
@@ -89,7 +75,7 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
         {
             Exception ex = Assert.Throws<ApplicationException>(delegate
             {
-                _btldr.InternalFlashErase(BTLDR_FLASH_LAST_SECTOR);
+                _btldr.InternalFlashErase(Memory.BTLDR_FLASH_LAST_SECTOR);
             });
             Assert.That(ex.Message, Is.EqualTo("ERROR: YOU TRY TO ERASE A BOOTLOADER SECTOR!"));
         }
@@ -97,10 +83,9 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
         [Test]
         public void YouTryToWriteBootloaderArea()
         {
-            var toWrite = new byte[] { 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x57, 0x6F, 0x72, 0x6C, 0x64 };
             Exception ex = Assert.Throws<ApplicationException>(delegate
             {
-                _btldr.FlashProgram(BTLDR_FLASH_END_ADDR - (BTLDR_SIZE - 1), toWrite);
+                _btldr.FlashProgram(Memory.BTLDR_BASE_ADDR + (Memory.BTLDR_SIZE - 1), new byte[] { 1 });
             });
             Assert.That(ex.Message, Is.EqualTo("ERROR: YOU TRY TO WRITE BOOTLOADER AREA!"));
         }
@@ -128,10 +113,10 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
 
             _btldr.InternalFlashUnlock();
             var toWrite = new byte[]{ 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x57, 0x6F, 0x72, 0x6C, 0x64 };
-            _btldr.FlashProgram(APP_FLASH_START_ADDR, toWrite);
+            _btldr.FlashProgram(Memory.APP_FLASH_START_ADDR, toWrite);
             _btldr.InternalFlashLock();
 
-            byte[] toRead = _btldr.FlashRead(APP_FLASH_START_ADDR, 11);
+            byte[] toRead = _btldr.FlashRead(Memory.APP_FLASH_START_ADDR, 11);
             Console.WriteLine(ASCIIEncoding.ASCII.GetString(toRead));
             Assert.AreEqual(toWrite, toRead);
         }   
@@ -168,8 +153,6 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
             Assert.That(ex.Message, Is.EqualTo("ERROR: TRY TO ERASE NOT EXT FLASH AREA!"));
         }
 
-
-
         [TestCase((UInt32)0x00000001, 256)]
         public void ExtFlashNotAligned(UInt32 address, int size)
         {
@@ -177,7 +160,7 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
             new Random().NextBytes(toWrite);
 
             long timestamp = DateTime.Now.Ticks;
-            _btldr.ExternalFlashBlockErase(EXT_FLASH_BASE_ADDR);
+            _btldr.ExternalFlashBlockErase(Memory.EXT_FLASH_BASE_ADDR);
             do
             {
                 if ((DateTime.Now.Ticks - timestamp) > 1000 * 10000)
@@ -186,7 +169,7 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
 
             Exception ex = Assert.Throws<ApplicationException>(delegate
             {
-                _btldr.FlashProgram(EXT_FLASH_BASE_ADDR + address, toWrite);
+                _btldr.FlashProgram(Memory.EXT_FLASH_BASE_ADDR + address, toWrite);
             });
             Assert.That(ex.Message, Is.EqualTo("ERROR: NOT ALIGNED!"));
         }
@@ -196,7 +179,7 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
         {
             Exception ex = Assert.Throws<ApplicationException>(delegate
             {
-                _btldr.ExternalFlashBlockErase(EXT_FLASH_BASE_ADDR + EXT_FLASH_SIZE);
+                _btldr.ExternalFlashBlockErase(Memory.EXT_FLASH_BASE_ADDR + Memory.EXT_FLASH_SIZE);
             });
             Assert.That(ex.Message, Is.EqualTo("ERROR: YOU TRY TO ERASE OUT OF EXT FLASH AREA!"));
         }
@@ -206,7 +189,7 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
         {
             Exception ex = Assert.Throws<ApplicationException>(delegate
             {
-                _btldr.FlashProgram(EXT_FLASH_BASE_ADDR + EXT_FLASH_SIZE, new byte[] { 0 });
+                _btldr.FlashProgram(Memory.EXT_FLASH_BASE_ADDR + Memory.EXT_FLASH_SIZE, new byte[] { 0 });
             });
             Assert.That(ex.Message, Is.EqualTo("ERROR: YOU TRY TO WRITE OUT OF EXT FLASH AREA!"));
         }
@@ -222,7 +205,7 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
         [Test]
         public void ExtFlashBusy()
         {
-            _btldr.ExternalFlashBlockErase(EXT_FLASH_BASE_ADDR);
+            _btldr.ExternalFlashBlockErase(Memory.EXT_FLASH_BASE_ADDR);
             Assert.AreEqual(true, _btldr.ExtrnalFlashIsBusy());
 
             long timestamp = DateTime.Now.Ticks;
@@ -236,7 +219,7 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
         [Test]
         public void ExtWriteReadBytes()
         {
-            _btldr.ExternalFlashBlockErase(EXT_FLASH_BASE_ADDR);
+            _btldr.ExternalFlashBlockErase(Memory.EXT_FLASH_BASE_ADDR);
             Stopwatch sw = new Stopwatch();
             sw.Start();
 
@@ -251,9 +234,9 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
             Console.WriteLine($"Sector Erase Elapsed Time: {sw.ElapsedMilliseconds/1000}sec");
 
             var toWrite = new byte[] { 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x57, 0x6F, 0x72, 0x6C, 0x64 };
-            _btldr.FlashProgram(EXT_FLASH_BASE_ADDR, toWrite);
+            _btldr.FlashProgram(Memory.EXT_FLASH_BASE_ADDR, toWrite);
 
-            byte[] toRead = _btldr.FlashRead(EXT_FLASH_BASE_ADDR, 11);
+            byte[] toRead = _btldr.FlashRead(Memory.EXT_FLASH_BASE_ADDR, 11);
             Console.WriteLine(ASCIIEncoding.ASCII.GetString(toRead));
 
             Assert.AreEqual(toWrite, toRead);
@@ -262,14 +245,14 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
        [Test]
         public void ExtFlashWriteReadLastByte()
         {
-            UInt32 address = EXT_FLASH_BASE_ADDR + (EXT_FLASH_SIZE - 1) - 1;
+            UInt32 address = Memory.EXT_FLASH_BASE_ADDR + (Memory.EXT_FLASH_SIZE - 1) - 1;
             int size = 1;
 
             byte[] toWrite = new byte[size];
             new Random().NextBytes(toWrite);
 
-            UInt32 last64kBlockAddress =  EXT_FLASH_SIZE - EXT_FLASH_64K_BLOCK_SIZE;
-            _btldr.ExternalFlashBlockErase(EXT_FLASH_BASE_ADDR + last64kBlockAddress);
+            UInt32 last64kBlockAddress = Memory.EXT_FLASH_SIZE - Memory.EXT_FLASH_BLOCK_SIZE;
+            _btldr.ExternalFlashBlockErase(Memory.EXT_FLASH_BASE_ADDR + last64kBlockAddress);
             long timestamp = DateTime.Now.Ticks;
             do
             {
@@ -294,16 +277,28 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
             new Random().NextBytes(toWrite);
 
             long timestamp = DateTime.Now.Ticks;
-            _btldr.ExternalFlashBlockErase(EXT_FLASH_BASE_ADDR);
+            _btldr.ExternalFlashBlockErase(Memory.EXT_FLASH_BASE_ADDR);
             do
             {
                 if ((DateTime.Now.Ticks - timestamp) > 1000 * 10000)
                     throw new TimeoutException();
             } while (_btldr.ExtrnalFlashIsBusy());
 
-            _btldr.FlashProgram(EXT_FLASH_BASE_ADDR + address, toWrite);
-            byte[] toRead = _btldr.FlashRead(EXT_FLASH_BASE_ADDR + address, size);
+            _btldr.FlashProgram(Memory.EXT_FLASH_BASE_ADDR + address, toWrite);
+            byte[] toRead = _btldr.FlashRead(Memory.EXT_FLASH_BASE_ADDR + address, size);
             Assert.AreEqual(toWrite, toRead);
+        }
+
+        [Test]
+        public void ExtFlashErase()
+        {
+
+            UInt32 blocks = Memory.EXT_FLASH_SIZE / Memory.EXT_FLASH_BLOCK_SIZE;
+            for (int b = 0; b < blocks; b++) 
+            {
+            
+            }
+            
         }
 
         #endregion

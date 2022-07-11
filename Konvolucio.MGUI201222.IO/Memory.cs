@@ -11,9 +11,24 @@ namespace Konvolucio.MGUI201222.IO
     using System.ComponentModel;
     using System.Threading;
 
-    public class Bootloader: DeviceIo, IDisposable
+    public class Memory: DeviceIo, IDisposable
     {
-        public const UInt16 FLASH_SECTOR_SIZE = 0x100;
+
+        public const UInt16 PAGE_SIZE = 0x100;
+
+        //STM32F207
+        public const UInt32 APP_FLASH_START_ADDR = 0x08040000;
+        public const UInt32 APP_FLASH_SIZE = 0x100000 - 0x40000; //-> 768KB
+
+
+        public const int    BTLDR_FLASH_LAST_SECTOR = 5;
+        public const UInt32 BTLDR_BASE_ADDR = 0x08000000;
+        public const UInt32 BTLDR_SIZE = 0x40000;               //0x40000-> 256KB
+
+        public const UInt32 EXT_FLASH_BASE_ADDR = 0x10000000;
+        public const UInt32 EXT_FLASH_SIZE = 0x02000000;        //0x02000000 -> 32MB
+        public const UInt32 EXT_FLASH_BLOCK_SIZE = 0x10000;
+     
         
         bool _disposed = false;
 
@@ -48,12 +63,12 @@ namespace Konvolucio.MGUI201222.IO
         /// <returns></returns>
         public void FlashProgram(UInt32 address, Byte[] data)
         {
-            UInt32 secotrs = (UInt32)data.Length / FLASH_SECTOR_SIZE;
-            byte[] dest = new byte[FLASH_SECTOR_SIZE];
+            UInt32 secotrs = (UInt32)data.Length / PAGE_SIZE;
+            byte[] dest = new byte[PAGE_SIZE];
             int sourceOffset = 0;
             for (int i = 0; i < secotrs; i++)
             {
-                Buffer.BlockCopy(data, sourceOffset, dest, 0, FLASH_SECTOR_SIZE);
+                Buffer.BlockCopy(data, sourceOffset, dest, 0, PAGE_SIZE);
                 var response = FlashSectorProgram(address, dest);
                 if (response != "OK")
                 {
@@ -61,11 +76,11 @@ namespace Konvolucio.MGUI201222.IO
                     Trace(msg);
                     throw new ApplicationException(msg);
                 }
-                sourceOffset += FLASH_SECTOR_SIZE;
-                address += FLASH_SECTOR_SIZE;
+                sourceOffset += PAGE_SIZE;
+                address += PAGE_SIZE;
             }
 
-            UInt32 singles = (UInt32)data.Length % FLASH_SECTOR_SIZE;
+            UInt32 singles = (UInt32)data.Length % PAGE_SIZE;
             dest = new byte[singles];
             if (singles != 0)
             {
@@ -94,16 +109,16 @@ namespace Konvolucio.MGUI201222.IO
         public Byte[] FlashRead(UInt32 address, int size)
         {
             byte[] retval = new byte[size];
-            UInt32 secotrs = (UInt32)size / FLASH_SECTOR_SIZE;
+            UInt32 secotrs = (UInt32)size / PAGE_SIZE;
             int destOffset = 0;
             for (int i = 0; i < secotrs; i++)
             {
-                byte[] temp = FlashSectorRead(address, FLASH_SECTOR_SIZE);
-                Buffer.BlockCopy(temp, 0, retval, destOffset, FLASH_SECTOR_SIZE);
-                address += FLASH_SECTOR_SIZE;
-                destOffset += FLASH_SECTOR_SIZE;
+                byte[] temp = FlashSectorRead(address, PAGE_SIZE);
+                Buffer.BlockCopy(temp, 0, retval, destOffset, PAGE_SIZE);
+                address += PAGE_SIZE;
+                destOffset += PAGE_SIZE;
             }
-            UInt16 singles = (UInt16)(size % FLASH_SECTOR_SIZE);
+            UInt16 singles = (UInt16)(size % PAGE_SIZE);
             byte[] bytes = FlashSectorRead(address, singles);
             Buffer.BlockCopy(bytes, 0, retval, destOffset, singles);
             return retval;

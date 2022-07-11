@@ -48,7 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bootloader.cs" />
+    <Compile Include="Memory.cs" />
     <Compile Include="DeviceIo.cs" />
     <Compile Include="UnitTest\Flash.cs" />
     <Compile Include="GuiIo.cs" />
