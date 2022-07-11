@@ -37,27 +37,48 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
 
         #region Internal Flash Low Level Tests
         [Test]
-        public void LowlLevelIntFlashWrite()
+        public void IntSectorsErase()
         {
             _mem.IntFlashUnlock();
-            Assert.AreEqual("OK", _mem.WriteRead($"FP I {Memory.APP_FLASH_START_ADDR:X8} 003 000102 060C"));
+            for (int i = _mem.AppFirstSector; i <= _mem.AppLastSector; i++)
+                _mem.IntFlashErase(i);
+            _mem.IntFlashLock();
+        }
+
+        [Test]
+        public void LowlLevelIntFlashWrite()
+        {
+            UInt32 address = 0;
+            _mem.IntFlashUnlock();
+            Assert.AreEqual("OK", _mem.WriteRead($"FW I {address:X8} 003 000102 060C"));
             _mem.IntFlashLock();
         }
 
         [Test]
         public void IntFlashWriteInvlaidCRC()
-        { 
-            Assert.AreEqual("ERROR: RECEIVED DATA HAS INVALID CRC!", _mem.WriteRead($"FP I {Memory.APP_FLASH_START_ADDR:X8} 003 000102 00FF"));
+        {
+            UInt32 address = 0;
+            Assert.AreEqual("ERROR: RECEIVED DATA HAS INVALID CRC!", _mem.WriteRead($"FW I {address:X8} 003 000102 00FF"));
         }
 
         [Test]
         public void FlashProgramInvlaidSize()
         {
-            //cmd, size, bytes, crc
-            Assert.AreEqual("ERROR: RECEIVED DATA SIZE IS INVALID!", _mem.WriteRead($"FP {Memory.APP_FLASH_START_ADDR:X8} 002 000102 060C"));
+            UInt32 address = 0;
+            Assert.AreEqual("ERROR: RECEIVED DATA SIZE IS INVALID!", _mem.WriteRead($"FW I {address:X8} 002 000102 060C"));
         }
         #endregion
         #region Internal Flash Exceptions
+
+        [Test]
+        public void YouTryToEraseOutOfAppFlashSector()
+        {
+            Exception ex = Assert.Throws<ApplicationException>(delegate
+            {
+                _mem.IntFlashErase(_mem.AppLastSector + 1);
+            });
+            Assert.That(ex.Message, Is.EqualTo("ERROR: YOU TRY TO ERASE OUT OF APP FLASH SECTOR!"));
+        }
 
         [Test]
         public void YouTryToEraseBootloaderSector()
@@ -69,23 +90,14 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
             Assert.That(ex.Message, Is.EqualTo("ERROR: YOU TRY TO ERASE A BOOTLOADER SECTOR!"));
         }
 
-        [Test]
-        public void YouTryToWriteBootloaderArea()
-        {
-            Exception ex = Assert.Throws<ApplicationException>(delegate
-            {
-                _mem.IntFlashWrite(Memory.BTLDR_BASE_ADDR + (Memory.BTLDR_SIZE - 1), new byte[] { 1 });
-            });
-            Assert.That(ex.Message, Is.EqualTo("ERROR: YOU TRY TO WRITE BOOTLOADER AREA!"));
-        }
 
         [Test]
         public void YouTryToWriteOutOfAppFlashArea()
         {
-            UInt32 address = Memory.APP_FLASH_START_ADDR + Memory.APP_FLASH_SIZE - 1;
+            UInt32 address = Memory.APP_FLASH_SIZE ;
             Exception ex = Assert.Throws<ApplicationException>(delegate
             {
-                _mem.IntFlashWrite(address, new byte[] { 0 });
+                _mem.IntFlashWrite(address, new byte[] { 0, 1 });
             });
             Assert.That(ex.Message, Is.EqualTo("ERROR: YOU TRY TO WRITE OUT OF APP FLASH AREA!"));
         }
@@ -101,16 +113,16 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
 
             _mem.IntFlashUnlock();
             var toWrite = new byte[]{ 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x57, 0x6F, 0x72, 0x6C, 0x64 };
-            _mem.IntFlashWrite(Memory.APP_FLASH_START_ADDR, toWrite);
+            _mem.IntFlashWrite(0, toWrite);
             _mem.IntFlashLock();
 
-            byte[] toRead = _mem.IntFlashRead(Memory.APP_FLASH_START_ADDR, 11);
+            byte[] toRead = _mem.IntFlashRead(0, 11);
             Console.WriteLine(ASCIIEncoding.ASCII.GetString(toRead));
             Assert.AreEqual(toWrite, toRead);
         }   
 
-        [TestCase((UInt32)0x00040000, 10,  new int[] { 6 })]
-        [TestCase((UInt32)0x00040000, 256, new int[] { 6 })]
+        [TestCase((UInt32)0x00000000, 10,  new int[] { 6 })]
+        [TestCase((UInt32)0x00000000, 256, new int[] { 6 })]
         public void IntWriteReadBytes(UInt32 address, int size, int[] sectors)
         {
             byte[] toWrite = new byte[size];
@@ -263,37 +275,6 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
         }
 
         /// <summary>
-        /// 4block = 256kB -> 37sec (22.07.11)
-        /// </summary>
-        /// <exception cref="TimeoutException"></exception>
-        [Test, Ignore("masho lesz")]
-        public void ExtFlashWriteReadMultiplyBlock()
-        {
-            UInt32 address = 0;
-            int size = 4 * (int) Memory.EXT_FLASH_BLOCK_SIZE;
-            byte[] toWrite = new byte[size];
-            new Random().NextBytes(toWrite);
-
-            UInt32 eAddr = Memory.EXT_FLASH_BASE_ADDR;
-            for (int b = 0; b < size / Memory.EXT_FLASH_BLOCK_SIZE; b++)
-            {
-                long timestamp = DateTime.Now.Ticks;
-                _mem.ExtFlashBlockErase(eAddr);
-                do
-                {
-                    if ((DateTime.Now.Ticks - timestamp) > 1000 * 10000)
-                        throw new TimeoutException();
-                } while (_mem.ExtrnalFlashIsBusy());
-
-                eAddr += Memory.EXT_FLASH_BLOCK_SIZE;
-            }
-
-            _mem.ExtFlashWrite(Memory.EXT_FLASH_BASE_ADDR + address, toWrite);
-            byte[] toRead = _mem.ExtFlashRead(Memory.EXT_FLASH_BASE_ADDR + address, size);
-            Assert.AreEqual(toWrite, toRead);
-        }
-
-        /// <summary>
         /// Elapsed time: 2.5min
         /// </summary>
         /// <exception cref="TimeoutException"></exception>
@@ -316,15 +297,6 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
                 addr+= Memory.EXT_FLASH_BLOCK_SIZE;
             }    
         }
-
-        [Test, Ignore("Nem futtatom mert legalább 53 percig tart...")]
-        public void ExtFlashFullWrite()
-        {
-            byte[] toWrite = new byte[Memory.EXT_FLASH_SIZE];
-            new Random().NextBytes(toWrite);
-            _mem.ExtFlashWrite(Memory.EXT_FLASH_BASE_ADDR, toWrite);
-        }
-
         #endregion
     }
 }

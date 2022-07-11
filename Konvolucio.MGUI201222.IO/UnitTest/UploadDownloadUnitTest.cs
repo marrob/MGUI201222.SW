@@ -62,17 +62,14 @@ using NUnit.Framework;
         public void IntFlashUpload()
         {
             var wait = new AutoResetEvent(false);
-            int addr = (int)Memory.APP_FLASH_START_ADDR;
 
+            int addr = 0;
             int size = 8;
             byte[] toWrite = new byte[size];
             new Random().NextBytes(toWrite);
             byte[] toRead = null;
             object result = null;
-            _mem.IntFlashUnlock();
-            _mem.IntFlashErase(6);
 
-            _mem.IntFlashUnlock();
             var ifu = new IntFlashUpload(_mem);
             ifu.Begin(addr, toWrite);
             ifu.ProgressChange += (s, e) => Console.WriteLine(e.UserState);
@@ -85,11 +82,55 @@ using NUnit.Framework;
             if (!wait.WaitOne(TimeSpan.FromSeconds(1000)))
                 Assert.Fail("Timeout");
 
-            Assert.IsFalse(result is Exception);
-
+            if (result is Exception)
+                Assert.Fail((result as Exception).Message);
 
             var ifd = new IntFlashDownload(_mem);
             ifd.Begin(addr, size);
+            ifd.ProgressChange += (s, e) => Console.WriteLine(e.UserState);
+            ifd.Completed += (s, e) =>
+            {
+                toRead = (byte[])e.Result;
+                wait.Set();
+            };
+
+            if (!wait.WaitOne(TimeSpan.FromSeconds(1000)))
+                Assert.Fail("Timeout");
+            Assert.AreEqual(toWrite, toRead);
+
+        }
+
+ //       [TestCase(0x00000000, 1)]
+ //      [TestCase(0x00000000, 1024)]//1k
+ //       [TestCase(0x00000000, 65536)]//64k
+ //       [TestCase(0x00000000, 262144)] //256k
+        [TestCase(0x00000000, 786432)] //768k
+        public void IntFlashUploadDonwload(int address, int size)
+        {
+            var wait = new AutoResetEvent(false);
+
+            byte[] toWrite = new byte[size];
+            new Random().NextBytes(toWrite);
+            byte[] toRead = null;
+            object result = null;
+
+            var ifu = new IntFlashUpload(_mem);
+            ifu.Begin(address, toWrite);
+            ifu.ProgressChange += (s, e) => Console.WriteLine(e.UserState);
+            ifu.Completed += (s, e) =>
+            {
+                result = e.Result;
+                wait.Set();
+            };
+
+            if (!wait.WaitOne(TimeSpan.FromSeconds(1000)))
+                Assert.Fail("Timeout");
+
+            if (result is Exception)
+                Assert.Fail((result as Exception).Message);
+
+            var ifd = new IntFlashDownload(_mem);
+            ifd.Begin(address, size);
             ifd.ProgressChange += (s, e) => Console.WriteLine(e.UserState);
             ifd.Completed += (s, e) =>
             {

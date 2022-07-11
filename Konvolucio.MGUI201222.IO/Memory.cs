@@ -17,13 +17,9 @@ namespace Konvolucio.MGUI201222.IO
         public const UInt16 FRAME_SIZE = 0x100;
 
         //STM32F207
-        public const UInt32 APP_FLASH_START_ADDR = 0x00040000;
         public const UInt32 APP_FLASH_SIZE = 0x100000 - 0x40000; //-> 768KB
-
-
         public const int BTLDR_FLASH_LAST_SECTOR = 5;
-        public const UInt32 BTLDR_BASE_ADDR = 0x00000000;
-        public const UInt32 BTLDR_SIZE = 0x40000;               //0x40000-> 256KB
+
 
         public const UInt32 EXT_FLASH_BASE_ADDR = 0x00000000;
         public const UInt32 EXT_FLASH_SIZE = 0x02000000;        //0x02000000 -> 32MB
@@ -34,6 +30,8 @@ namespace Konvolucio.MGUI201222.IO
 
 
         public int FrameSize { get { return FRAME_SIZE; } }
+        public int AppFirstSector { get { return 6; } }
+        public int AppLastSector { get { return 11; } }
 
         #region Internal
 
@@ -124,7 +122,7 @@ namespace Konvolucio.MGUI201222.IO
         /// <exception cref="ApplicationException"></exception>
         public void IntFlashWrite(UInt32 address, Byte[] data)
         {
-            string response = WriteRead($"FP I {address:X8} {data.Length:X3} {Tools.ByteArrayToString(data)} {Tools.CalcCrc16Ansi(0, data):X4}");
+            string response = WriteRead($"FW I {address:X8} {data.Length:X3} {Tools.ByteArrayToString(data)} {Tools.CalcCrc16Ansi(0, data):X4}");
             if (response != "OK")
             {
                 string msg = $"{response}";
@@ -175,7 +173,7 @@ namespace Konvolucio.MGUI201222.IO
         /// <exception cref="ApplicationException"></exception>
         public void ExtFlashWrite(UInt32 address, Byte[] data)
         {
-            string response = WriteRead($"FP E {address:X8} {data.Length:X3} {Tools.ByteArrayToString(data)} {Tools.CalcCrc16Ansi(0, data):X4}");
+            string response = WriteRead($"FW E {address:X8} {data.Length:X3} {Tools.ByteArrayToString(data)} {Tools.CalcCrc16Ansi(0, data):X4}");
             if (response != "OK")
             {
                 string msg = $"{response}";

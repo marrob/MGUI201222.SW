@@ -37,11 +37,11 @@
             }
         }
 
-        readonly Memory _memory;
+        readonly Memory _mem;
 
         public IntFlashUpload(Memory memory)
         {
-            _memory = memory;
+            _mem = memory;
             _bw = new BackgroundWorker();
             _bw.DoWork += new DoWorkEventHandler(BackgroundWorker_DoWork);
             _waitForDoneEvent = new AutoResetEvent(false);
@@ -59,20 +59,29 @@
             BackgroundWorker bw = (e.Argument as BackroundWorkerArg).Worker;
             byte[] data = (e.Argument as BackroundWorkerArg).Data;
             int address = (e.Argument as BackroundWorkerArg).Address;
-            int frameSize = _memory.FrameSize;
+            int frameSize = _mem.FrameSize;
 
             Stopwatch watch = new Stopwatch();
             watch.Start();
             int offset = 0;
+            int frames = 0;
             try
             {
+               
+                _mem.IntFlashUnlock();
+
+                for (int i = _mem.AppFirstSector; i <= _mem.AppLastSector; i++)
+                { 
+                    bw.ReportProgress(1, $"INTERNAL FLASH SECTORS: {i} ERASING... ");
+                    _mem.IntFlashErase(i);
+                }
                 do
                 {
                     if (data.Length - offset >= frameSize)
                     {
                         byte[] temp = new byte[frameSize];
                         Buffer.BlockCopy(data, offset, temp, 0, frameSize);
-                        _memory.IntFlashWrite((UInt32)address, temp);
+                        _mem.IntFlashWrite((UInt32)address, temp);
                         address += frameSize;
                         offset += frameSize;
                     }
@@ -80,7 +89,7 @@
                     {
                         byte[] temp = new byte[data.Length - offset];
                         Buffer.BlockCopy(data, offset, temp, 0, data.Length - offset);
-                        _memory.IntFlashWrite((UInt32)address, temp);
+                        _mem.IntFlashWrite((UInt32)address, temp);
                         address += (data.Length - offset);
                         offset += (data.Length - offset);
                     }
@@ -89,7 +98,7 @@
                         e.Cancel = true;
                         break;
                     }
-                    bw.ReportProgress((int)(((double)offset / data.Length) * 100.0), "STATUS: " + data.Length.ToString() + "/" + offset.ToString() + ".");
+                    bw.ReportProgress((int)(((double)offset / data.Length) * 100.0), $"UPLOAD STATUS: { data.Length } / { offset } ({frames++}).");
                 } while (offset != data.Length);
 
                 watch.Stop();
@@ -97,12 +106,12 @@
                 if (!bw.CancellationPending)
                 {
 
-                    bw.ReportProgress(0, "COMPLETE Elapsed:" + (watch.ElapsedMilliseconds / 1000.0).ToString() + "s");
+                    bw.ReportProgress(0, $"UPLOAD COMPLETED {watch.ElapsedMilliseconds / 1000.0} sec");
                     e.Result = data;
                 }
                 else
                 {
-                    bw.ReportProgress(0, "ABORTED Elapsed:" + (watch.ElapsedMilliseconds / 1000.0).ToString() + "s");
+                    bw.ReportProgress(0, $"UPLOAD ABORTED {watch.ElapsedMilliseconds / 1000.0} sec");
                 }
             }
             catch (Exception ex)
@@ -111,6 +120,7 @@
             }
             finally
             {
+                _mem.IntFlashLock();
                 _waitForDoneEvent.Set();
             }
         }
@@ -137,16 +147,12 @@
 
             if (disposing)
             {
-                // Free any other managed objects here. 
                 if (_bw.IsBusy)
                 {
                     _bw.CancelAsync();
                     _waitForDoneEvent.WaitOne();
                 }
             }
-
-            // Free any unmanaged objects here. 
-            //
             _disposed = true;
         }
 

@@ -65,7 +65,7 @@ namespace Konvolucio.MGUI201222.IO
             Stopwatch watch = new Stopwatch();
             watch.Start();
             int offset = 0;
-
+            int frames = 0;
             byte[] data = new byte[size];
             try
             {
@@ -91,7 +91,7 @@ namespace Konvolucio.MGUI201222.IO
                         e.Cancel = true;
                         break;
                     }
-                    bw.ReportProgress((int)(((double)offset / size) * 100.0), "STATUS: " + size.ToString() + "/" + offset.ToString() + ".");
+                    bw.ReportProgress((int)(((double)offset / data.Length) * 100.0), $"DOWNLOAD STATUS: {data.Length} / {offset} ({frames++}).");
                 } while (offset != size);
 
                 watch.Stop();
@@ -99,12 +99,12 @@ namespace Konvolucio.MGUI201222.IO
                 if (!bw.CancellationPending)
                 {
 
-                    bw.ReportProgress(0, "COMPLETE Elapsed:" + (watch.ElapsedMilliseconds / 1000.0).ToString() + "s");
+                    bw.ReportProgress(0, $"DOWNLOAD COMPLETED {watch.ElapsedMilliseconds / 1000.0} sec");
                     e.Result = data;
                 }
                 else
                 {
-                    bw.ReportProgress(0, "ABORTED Elapsed:" + (watch.ElapsedMilliseconds / 1000.0).ToString() + "s");
+                    bw.ReportProgress(0, $"DOWNLOAD ABORTED {watch.ElapsedMilliseconds / 1000.0} sec");
                 }
             }
             catch (Exception ex)
