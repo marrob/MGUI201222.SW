@@ -70,5 +70,17 @@ namespace Konvolucio.MGUI201222.DFU.Properties {
                 this["IntFirmwareFilePath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool WriteReadVerify {
+            get {
+                return ((bool)(this["WriteReadVerify"]));
+            }
+            set {
+                this["WriteReadVerify"] = value;
+            }
+        }
     }
 }

@@ -51,7 +51,7 @@ namespace Konvolucio.MGUI201222.IO
             {
                 _sp = new SerialPort(port)
                 {
-                    ReadTimeout = 5000,
+                    ReadTimeout = 2000,
                     BaudRate = 921600, //460800,
                     NewLine = "\n"
                 };
@@ -136,6 +136,53 @@ namespace Konvolucio.MGUI201222.IO
             Close();
             throw exception;
         }
+
+        internal string WriteReadWoTracing(string request)
+        {
+            string response = string.Empty;
+            Exception exception = null;
+            int rxErrors = 0;
+            int txErrors = 0;
+
+            do
+            {
+                if (_sp == null || !_sp.IsOpen)
+                {
+                    var msg = $"The {_sp.PortName} Serial Port is closed. Please open it.";
+                    Trace(msg);
+                    OnConnectionChanged();
+                    throw new ApplicationException(msg);
+                }
+                try
+                {
+                    _sp.WriteLine(request);
+                    try
+                    {
+                        response = _sp.ReadLine().Trim(new char[] { '\0', '\r', '\n' }); ;
+                        return response;
+                    }
+                    catch (Exception ex)
+                    {
+                        exception = ex;
+                        rxErrors++;
+                        OnErrorHappened();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Trace("Tx ERROR Serial Port is:" + ex.Message);
+                    exception = ex;
+                    txErrors++;
+                    OnErrorHappened();
+                }
+
+            } while (rxErrors < 3 && txErrors < 3);
+
+            Trace("There were three consecutive io error. I close the connection.");
+            Close();
+            throw exception;
+        }
+
         public void Close()
         {
             TraceQueue.Enqueue(DateTime.Now.ToString(GenericTimestampFormat) + " " + "Serial Port is: " + "Close");

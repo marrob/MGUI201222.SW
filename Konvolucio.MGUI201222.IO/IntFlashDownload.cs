@@ -8,11 +8,7 @@ namespace Konvolucio.MGUI201222.IO
 
     public sealed class IntFlashDownload : IDisposable
     {
-        public event RunWorkerCompletedEventHandler Completed
-        {
-            remove { _bw.RunWorkerCompleted -= value; }
-            add { _bw.RunWorkerCompleted += value; }
-        }
+        public event RunWorkerCompletedEventHandler Completed;
         public event ProgressChangedEventHandler ProgressChange
         {
             add { _bw.ProgressChanged += value; }
@@ -43,8 +39,15 @@ namespace Konvolucio.MGUI201222.IO
         {
             _memory = memory;
             _bw = new BackgroundWorker();
+            _bw.RunWorkerCompleted += RunWorkerCompleted;
             _bw.DoWork += new DoWorkEventHandler(BackgroundWorker_DoWork);
             _waitForDoneEvent = new AutoResetEvent(false);
+        }
+
+        private void RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (Completed != null)
+                Completed(this, e);
         }
 
         public void Begin(int address, int size)
@@ -91,7 +94,7 @@ namespace Konvolucio.MGUI201222.IO
                         e.Cancel = true;
                         break;
                     }
-                    bw.ReportProgress((int)(((double)offset / data.Length) * 100.0), $"INTERNAL FLASH DOWNLOAD STATUS: {data.Length} / {offset} ({frames++}).");
+                    bw.ReportProgress((int)(((double)offset / data.Length) * 100.0), $"INTERNAL FLASH DOWNLOAD STATUS: {data.Length} / {offset}bytes ({frames++}).");
                 } while (offset != size);
 
                 watch.Stop();
@@ -109,7 +112,7 @@ namespace Konvolucio.MGUI201222.IO
             }
             catch (Exception ex)
             {
-                e.Result = ex;
+                throw ex;
             }
             finally
             {

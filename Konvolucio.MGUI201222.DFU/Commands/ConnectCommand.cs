@@ -9,11 +9,11 @@ namespace Konvolucio.MGUI201222.DFU.Commands
     using IO;
 
 
-    class StartStopCommand : ToolStripMenuItem
+    class ConnectCommand : ToolStripMenuItem
     {
-        public StartStopCommand()
+        public ConnectCommand()
         {
-            Text = "A kapcsolódáshoz nyomd meg!";
+            Text = "Connect";
            // Image = Resources.Play_48x48;
             ShortcutKeys = Keys.F5;
             DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;

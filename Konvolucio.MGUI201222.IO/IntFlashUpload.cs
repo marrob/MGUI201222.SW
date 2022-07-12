@@ -7,12 +7,7 @@
 
     public sealed class IntFlashUpload : IDisposable
     {
-
-        public event RunWorkerCompletedEventHandler Completed
-        {
-            remove { _bw.RunWorkerCompleted -= value; }
-            add { _bw.RunWorkerCompleted += value; }
-        }
+        public event RunWorkerCompletedEventHandler Completed;
         public event ProgressChangedEventHandler ProgressChange
         {
             add { _bw.ProgressChanged += value; }
@@ -43,8 +38,15 @@
         {
             _mem = memory;
             _bw = new BackgroundWorker();
+            _bw.RunWorkerCompleted += RunWorkerCompleted;
             _bw.DoWork += new DoWorkEventHandler(BackgroundWorker_DoWork);
             _waitForDoneEvent = new AutoResetEvent(false);
+        }
+
+        private void RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (Completed != null)
+                Completed(this, e);
         }
 
         public void Begin(int address, byte[] data)
@@ -98,14 +100,13 @@
                         e.Cancel = true;
                         break;
                     }
-                    bw.ReportProgress((int)(((double)offset / data.Length) * 100.0), $"INTERNAL FLASH UPLOAD STATUS: { data.Length } / { offset } ({frames++}).");
+                    bw.ReportProgress((int)(((double)offset / data.Length) * 100.0), $"INTERNAL FLASH UPLOAD STATUS: { data.Length } / { offset }bytes ({frames++}).");
                 } while (offset != data.Length);
 
                 watch.Stop();
 
                 if (!bw.CancellationPending)
                 {
-
                     bw.ReportProgress(0, $"INTERNAL FLASH UPLOAD COMPLETED {watch.ElapsedMilliseconds / 1000.0} sec");
                     e.Result = data;
                 }
@@ -116,7 +117,7 @@
             }
             catch (Exception ex)
             {
-                e.Result = ex;
+                throw ex;
             }
             finally
             {

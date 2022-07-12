@@ -16,55 +16,39 @@ namespace Konvolucio.MGUI201222.DFU
 
     public interface IMainForm
     {
-
         event EventHandler Shown;
         event FormClosedEventHandler FormClosed;
         event FormClosingEventHandler FormClosing;
-        event EventHandler BtnConnectClick;
-        event EventHandler<int> DeviceRestart;
-        event EventHandler Disposed;
 
-        event EventHandler WriteEventHandler;
-        event EventHandler FileBrowseEventHandler;
-        event EventHandler ShowConfiguration;
-
+        string Text { get; set; }
         ToolStripItem[] MenuBar { set; }
+
+        string ExtFlashFilePath { get; set; }
+        string IntFlashFilePath { get; set; }
 
         KnvRichTextBox RichTextBoxTrace { get; }
 
-        string Text { get; set; }
-        string FileName { get; set; }
+        int ProgressValue { get; set; }
+        string ProgressStatus { get; set; }
 
-
-
-
-
-
-
-
-        string Version { get; set; }
+        ToolStripItem[] StatusBar { set; }
     }
 
     public partial class MainForm : Form, IMainForm
     {
-        public event EventHandler BtnConnectClick;
-
-        public event EventHandler<int> DeviceRestart;
-        public event EventHandler ShowConfiguration;
-
-        public string Version 
+        public ToolStripItem[] MenuBar
         {
-            get { return toolStripStatusLabelVersion.Text; }
-            set { toolStripStatusLabelVersion.Text = value; }
+            set { menuStrip1.Items.AddRange(value); }
         }
 
-        public ConnectionStatusTypes ConnectionStatus;
+        public string ExtFlashFilePath {
+            get { return textExtFilePath.Text; }
+            set { textExtFilePath.Text = value; }
+        }
 
-        public event EventHandler WriteEventHandler;
-        public event EventHandler FileBrowseEventHandler
-        {
-            add { buttonBrowse.Click += value; }
-            remove { buttonBrowse.Click -= value; }
+        public string IntFlashFilePath {
+            get { return textIntFilePath.Text; }
+            set { textIntFilePath.Text = value; }
         }
 
         public KnvRichTextBox RichTextBoxTrace
@@ -72,48 +56,27 @@ namespace Konvolucio.MGUI201222.DFU
             get { return knvRichTextBox1; }
         }
 
-        public ToolStripItem[] MenuBar
+        public int ProgressValue
         {
-            set { menuStrip1.Items.AddRange(value); }
+            get { return progressBar.Value; }
+            set { progressBar.Value = value; }
         }
-        public int PoregressValue;
 
-
-        public string FileName
+        public string ProgressStatus 
         {
-            get { return textFileName.Text; }
-            set { textFileName.Text = value; }
+            get { return labelProgressStatus.Text; }
+            set { labelProgressStatus.Text = value; }
         }
-        
-        bool wrtieEnabled;
-        public bool WriteEnabled;
-
 
         public MainForm() 
         {
            InitializeComponent();   
         }
 
-        private void TextFileName_TextChanged(object sender, EventArgs e)
+        public ToolStripItem[] StatusBar
         {
-
+            set { statusStrip1.Items.AddRange(value); }
         }
-
-        private void ButtonConfig_Click(object sender, EventArgs e)
-        {
-            ShowConfiguration?.Invoke(sender, EventArgs.Empty);
-        }
-
-        private void ButtonLogs_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void buttonRestart_Click(object sender, EventArgs e)
-        {
-
-        }
-
 
         private void ButtonExtBrowse_Click(object sender, EventArgs e)
         {
@@ -128,6 +91,7 @@ namespace Konvolucio.MGUI201222.DFU
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 Settings.Default.ExtFirmwareFilePath = ofd.FileName;
+                textExtFilePath.Text = ofd.FileName;
             }
         }
 
@@ -144,8 +108,8 @@ namespace Konvolucio.MGUI201222.DFU
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 Settings.Default.IntFirmwareFilePath = ofd.FileName;
+                textIntFilePath.Text = ofd.FileName;
             }
         }
-
     }
 }

@@ -46,7 +46,7 @@
 
         public void IntFlashLock()
         { 
-            string response = WriteRead("FL I");
+            string response = WriteReadWoTracing("FL I");
             if (response != "OK")
             {
                 string msg = $"{response} ";
@@ -57,7 +57,7 @@
 
         public void IntFlashUnlock()
         {
-            string response = WriteRead("FU I");
+            string response = WriteReadWoTracing("FU I");
             if (response != "OK")
             {
                 string msg = $"{response}"; 
@@ -74,7 +74,7 @@
         /// <returns></returns>
         public void IntFlashErase(int sector)
         {
-            var response = WriteRead($"FE I {sector:X8}");
+            var response = WriteReadWoTracing($"FE I {sector:X8}");
             if (response != "OK")
             {
                 var msg = $"{response}";
@@ -85,7 +85,7 @@
 
         public Byte[] IntFlashRead(int address, int size)
         {
-            string result = WriteRead($"FR I {address:X8} {size:X3}");
+            string result = WriteReadWoTracing($"FR I {address:X8} {size:X3}");
 
             if (result.Contains("ERROR"))
                 new ApplicationException(result);
@@ -119,7 +119,7 @@
         /// <exception cref="ApplicationException"></exception>
         public void IntFlashWrite(int address, Byte[] data)
         {
-            string response = WriteRead($"FW I {address:X8} {data.Length:X3} {Tools.ByteArrayToString(data)} {Tools.CalcCrc16Ansi(0, data):X4}");
+            string response = WriteReadWoTracing($"FW I {address:X8} {data.Length:X3} {Tools.ByteArrayToString(data)} {Tools.CalcCrc16Ansi(0, data):X4}");
             if (response != "OK")
             {
                 string msg = $"{response}";
@@ -134,7 +134,7 @@
             /*
              * FR E 00000000 00 //cmd addr size
              */
-            string result = WriteRead($"FR E {address:X8} {size:X3}");
+            string result = WriteReadWoTracing($"FR E {address:X8} {size:X3}");
 
             if (result.Contains('!'))
                 new ApplicationException(result);
@@ -168,7 +168,7 @@
         /// <exception cref="ApplicationException"></exception>
         public void ExtFlashWrite(int address, Byte[] data)
         {
-            string response = WriteRead($"FW E {address:X8} {data.Length:X3} {Tools.ByteArrayToString(data)} {Tools.CalcCrc16Ansi(0, data):X4}");
+            string response = WriteReadWoTracing($"FW E {address:X8} {data.Length:X3} {Tools.ByteArrayToString(data)} {Tools.CalcCrc16Ansi(0, data):X4}");
             if (response != "OK")
             {
                 string msg = $"{response}";
@@ -184,7 +184,7 @@
         /// <exception cref="ApplicationException"></exception>
         public void ExtFlashBlockErase(int address)
         {
-            var response = WriteRead($"FE E {address:X8}");
+            var response = WriteReadWoTracing($"FE E {address:X8}");
             if (response != "OK")
             {
                 var msg = $"{response}";
@@ -195,7 +195,7 @@
 
         public bool ExtrnalFlashIsBusy()
         {
-            var response = WriteRead($"FB E");
+            var response = WriteReadWoTracing($"FB E");
             if (response == "FREE")
                 return false;
             else if (response == "BUSY")

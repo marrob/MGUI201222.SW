@@ -81,25 +81,32 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppConstants.cs" />
+    <Compile Include="Commands\WriteReadVerifyCommand .cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Commands\ConnectAfterStartCommand.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Commands\ComPortSelectCommand.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Commands\StartStopCommand .cs">
+    <Compile Include="Commands\UpdateCommand.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Commands\ConnectCommand.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\KnvRichTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\RichTextBoxExtensions.cs" />
-    <Compile Include="Events\ConfigsChangedAppEvent .cs" />
     <Compile Include="Events\ConnectionChangedAppEvent.cs" />
-    <Compile Include="Events\DeviceNameChanged.cs" />
+    <Compile Include="Events\UpdatingStateChangedAppEvent.cs" />
     <Compile Include="Events\EventAggregator.cs" />
     <Compile Include="Events\RefreshAppEvent.cs" />
     <Compile Include="Events\ResetAppEvent .cs" />
     <Compile Include="Events\ShowAppEvent.cs" />
     <Compile Include="Events\TracingChanged.cs" />
-    <Compile Include="Events\TreeNodeChangedAppEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Common\AppLog.cs" />
     <Compile Include="Common\Tools.cs" />
@@ -110,6 +117,21 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
+    <Compile Include="StatusBar\EmptyStatusBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="StatusBar\FwVersion.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="StatusBar\LogoStatusBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="StatusBar\VersionStatus.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="StatusBar\WhoIsStatusBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="TimerService.cs" />
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
