@@ -38,14 +38,15 @@ namespace Konvolucio.MGUI201222.DFU
     {
         public static SynchronizationContext SyncContext = null;
 
-        public Queue<string> _traceQueue = new Queue<string>();
-
-        public IMainForm _mainForm { get; set; }
-
+        internal IMainForm _mainForm { get; set; }
         readonly ExtFlashDownload _efd;
         readonly ExtFlashUpload _efu;
         readonly IntFlashDownload _ifd;
         readonly IntFlashUpload _ifu;
+        readonly Stopwatch _sw;
+        Queue<string> _traceQueue = new Queue<string>();
+        byte[] _intFw;
+        byte[] _extFw;
 
         public App()
         {
@@ -80,7 +81,7 @@ namespace Konvolucio.MGUI201222.DFU
             _ifu = new IntFlashUpload(MemoryInterface.Instance);
             _ifu.ProgressChange += ProgressChanged;
             _ifu.Completed += Completed;
-
+            _sw = new Stopwatch();
 
             _mainForm = new MainForm();
             _mainForm.Text = "MGUI201222 - DFU";
@@ -145,7 +146,6 @@ namespace Konvolucio.MGUI201222.DFU
                     else
                         _mainForm.RichTextBoxTrace.AppendText(str + "\r\n", System.Drawing.Color.Black);
                 }
-
                 if (_traceQueue.Count != 0)
                 {
                     string str = _traceQueue.Dequeue();
@@ -172,7 +172,6 @@ namespace Konvolucio.MGUI201222.DFU
             EventAggregator.Instance.Publish(new ShowAppEvent());
             _mainForm.ExtFlashFilePath = Settings.Default.ExtFirmwareFilePath;
             _mainForm.IntFlashFilePath = Settings.Default.IntFirmwareFilePath;
-
         }
 
         void MainForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -195,11 +194,16 @@ namespace Konvolucio.MGUI201222.DFU
             _efu.Abort();
         }
 
-        byte[] _intFw;
-        byte[] _extFw;
         public void FwUpdate(string intFile, string extFile)
         {
-            if(System.IO.File.Exists(intFile))
+            /*** Results Clear ***/
+            _traceQueue.Clear();
+            MemoryInterface.Instance.TraceQueue.Clear();
+            _mainForm.RichTextBoxTrace.Clear();
+            _mainForm.ResultReset();
+            _sw.Start();
+
+            if (System.IO.File.Exists(intFile))
                 _intFw = Tools.OpenFile(intFile);
             else
                 _intFw = new byte[0];
@@ -258,7 +262,6 @@ namespace Konvolucio.MGUI201222.DFU
                     ResultIsFailed();
                     return;
                 }
-
 
                 if (sender is IntFlashUpload)
                 {
@@ -340,27 +343,26 @@ namespace Konvolucio.MGUI201222.DFU
             };
 
             if (App.SyncContext != null)
-                App.SyncContext.Post((e1) => 
-                { 
-                
-                    syncCompleted(); 
-                
-                }, null);
-
-
+                App.SyncContext.Post((e1) => { syncCompleted(); }, null);
         }
 
 
         void ResultIsPassed()
         {
-            Trace("App: UPDATE: PASSED");
+            _sw.Stop();
+            Trace($"App: UPDATE: PASSED");
+            _mainForm.ProgressStatus = $"UPDATE SUCCESSFULY I:{_intFw.Length/1024}kB E:{_extFw.Length / 1024}kB t:{_sw.ElapsedMilliseconds/1000}s";
             EventAggregator.Instance.Publish(new UpdatingStateChangedAppEvent(false));
+            _mainForm.ResultPassed();
         }
 
         void ResultIsFailed()
         {
+            _sw.Stop();
             Trace("ERROR: UPDATE: FAILED");
+            _mainForm.ProgressStatus = "UPDATE FAILED";
             EventAggregator.Instance.Publish(new UpdatingStateChangedAppEvent(false));
+            _mainForm.ResultFailed();
         }
 
         private void ProgressChanged(object sender, ProgressChangedEventArgs e)

@@ -32,6 +32,10 @@ namespace Konvolucio.MGUI201222.DFU
         string ProgressStatus { get; set; }
 
         ToolStripItem[] StatusBar { set; }
+
+        void ResultReset();
+        void ResultFailed();
+        void ResultPassed();
     }
 
     public partial class MainForm : Form, IMainForm
@@ -62,20 +66,33 @@ namespace Konvolucio.MGUI201222.DFU
             set { progressBar.Value = value; }
         }
 
-        public string ProgressStatus 
+        public string ProgressStatus
         {
             get { return labelProgressStatus.Text; }
             set { labelProgressStatus.Text = value; }
         }
 
-        public MainForm() 
+        public MainForm()
         {
-           InitializeComponent();   
+            InitializeComponent();
         }
 
         public ToolStripItem[] StatusBar
         {
             set { statusStrip1.Items.AddRange(value); }
+        }
+
+        public void ResultReset()
+        {
+            labelProgressStatus.BackColor = System.Drawing.SystemColors.Control;
+        }
+        public void ResultFailed()
+        {
+            labelProgressStatus.BackColor = Color.Red;
+        }
+        public void ResultPassed()
+        {
+            labelProgressStatus.BackColor = Color.LimeGreen;
         }
 
         private void ButtonExtBrowse_Click(object sender, EventArgs e)

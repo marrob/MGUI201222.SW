@@ -37,8 +37,8 @@
             this.textExtFilePath = new System.Windows.Forms.TextBox();
             this.button3 = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.knvRichTextBox1 = new Konvolucio.MGUI201222.DFU.Controls.KnvRichTextBox();
             this.labelProgressStatus = new System.Windows.Forms.Label();
+            this.knvRichTextBox1 = new Konvolucio.MGUI201222.DFU.Controls.KnvRichTextBox();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -46,9 +46,9 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripSplitButton1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 263);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 267);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(746, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(748, 22);
             this.statusStrip1.SizingGrip = false;
             this.statusStrip1.TabIndex = 5;
             this.statusStrip1.Text = "statusStrip1";
@@ -88,9 +88,9 @@
             // 
             // progressBar
             // 
-            this.progressBar.Location = new System.Drawing.Point(3, 232);
+            this.progressBar.Location = new System.Drawing.Point(3, 224);
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(738, 23);
+            this.progressBar.Size = new System.Drawing.Size(741, 40);
             this.progressBar.TabIndex = 18;
             // 
             // textExtFilePath
@@ -122,14 +122,24 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.menuStrip1.Size = new System.Drawing.Size(746, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(748, 24);
             this.menuStrip1.TabIndex = 20;
             this.menuStrip1.Text = "menuStrip1";
+            // 
+            // labelProgressStatus
+            // 
+            this.labelProgressStatus.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelProgressStatus.Location = new System.Drawing.Point(10, 236);
+            this.labelProgressStatus.Name = "labelProgressStatus";
+            this.labelProgressStatus.Size = new System.Drawing.Size(728, 20);
+            this.labelProgressStatus.TabIndex = 21;
+            this.labelProgressStatus.Text = "---";
+            this.labelProgressStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // knvRichTextBox1
             // 
             this.knvRichTextBox1.BackColor = System.Drawing.SystemColors.Control;
-            this.knvRichTextBox1.BackgroundText = "TRACEING";
+            this.knvRichTextBox1.BackgroundText = "DEVICE FIRMWARE UPGRADE";
             this.knvRichTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.knvRichTextBox1.Location = new System.Drawing.Point(3, 80);
             this.knvRichTextBox1.Name = "knvRichTextBox1";
@@ -137,21 +147,11 @@
             this.knvRichTextBox1.TabIndex = 0;
             this.knvRichTextBox1.Text = "";
             // 
-            // labelProgressStatus
-            // 
-            this.labelProgressStatus.AutoSize = true;
-            this.labelProgressStatus.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelProgressStatus.Location = new System.Drawing.Point(6, 235);
-            this.labelProgressStatus.Name = "labelProgressStatus";
-            this.labelProgressStatus.Size = new System.Drawing.Size(23, 17);
-            this.labelProgressStatus.TabIndex = 21;
-            this.labelProgressStatus.Text = "---";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(746, 285);
+            this.ClientSize = new System.Drawing.Size(748, 289);
             this.Controls.Add(this.labelProgressStatus);
             this.Controls.Add(this.buttonBrowse);
             this.Controls.Add(this.button3);
