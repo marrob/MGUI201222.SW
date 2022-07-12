@@ -17,12 +17,12 @@ using NUnit.Framework;
         const string DEVICE_NAME = "BOOTLOADER";
         const string DEVICE_VERSION = "220629_1834";
 
-        Memory _mem;    
+        MemoryInterface _mem;    
 
         [SetUp]
         public void TestSetup()
         {
-            _mem = new Memory(COMX);
+            _mem = new MemoryInterface(COMX);
             Assert.AreEqual(DEVICE_NAME, _mem.WhoIs());
             Assert.AreEqual(DEVICE_VERSION, _mem.GetVersion());
         }

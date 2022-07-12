@@ -9,16 +9,14 @@ namespace Konvolucio.MGUI201222.IO
     using System.IO.Ports;
     using System.Globalization;
     using System.ComponentModel;
-    public class Io
+    public class SerialIo
     {
         const string GenericTimestampFormat = "yyyy.MM.dd HH:mm:ss";
 
         public event EventHandler ConnectionChanged;
         public event EventHandler ErrorHappened;
         public bool TracingEnable { get; set; } = false;
-        public static GuiIo Instance { get { return _instance; } }
 
-        private static readonly GuiIo _instance = new GuiIo();
 
         public Queue<string> TraceQueue = new Queue<string>();
         public int TraceLines { get; private set; }

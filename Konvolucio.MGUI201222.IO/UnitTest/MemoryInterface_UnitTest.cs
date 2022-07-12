@@ -10,19 +10,19 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
     using NUnit.Framework;
 
     [TestFixture]
-    public class Memory_UnitTest
+    public class MemoryInterface_UnitTest
     {
         const string FileNameTimestampFormat = "yyMMdd_HHmmss";
         const string COMX = "COM9";
         const string DEVICE_NAME = "BOOTLOADER";
         const string DEVICE_VERSION = "220629_1834";
 
-        Memory _mem;
+        MemoryInterface _mem;
 
         [SetUp]
         public void TestSetup()
         {
-            _mem = new Memory();
+            _mem = new MemoryInterface();
             _mem.Open(COMX);
 
             Assert.AreEqual(DEVICE_NAME, _mem.WhoIs());
@@ -85,7 +85,7 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
         {
             Exception ex = Assert.Throws<ApplicationException>(delegate
             {
-                _mem.IntFlashErase(Memory.BTLDR_FLASH_LAST_SECTOR);
+                _mem.IntFlashErase(MemoryInterface.BTLDR_FLASH_LAST_SECTOR);
             });
             Assert.That(ex.Message, Is.EqualTo("ERROR: YOU TRY TO ERASE A BOOTLOADER SECTOR!"));
         }
@@ -94,7 +94,7 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
         [Test]
         public void YouTryToWriteOutOfAppFlashArea()
         {
-            int address = Memory.APP_FLASH_SIZE ;
+            int address = MemoryInterface.APP_FLASH_SIZE ;
             Exception ex = Assert.Throws<ApplicationException>(delegate
             {
                 _mem.IntFlashWrite(address, new byte[] { 0, 1 });
@@ -147,7 +147,7 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
             new Random().NextBytes(toWrite);
 
             long timestamp = DateTime.Now.Ticks;
-            _mem.ExtFlashBlockErase(Memory.EXT_FLASH_BASE_ADDR);
+            _mem.ExtFlashBlockErase(MemoryInterface.EXT_FLASH_BASE_ADDR);
             do
             {
                 if ((DateTime.Now.Ticks - timestamp) > 1000 * 10000)
@@ -156,7 +156,7 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
 
             Exception ex = Assert.Throws<ApplicationException>(delegate
             {
-                _mem.ExtFlashWrite(Memory.EXT_FLASH_BASE_ADDR + address, toWrite);
+                _mem.ExtFlashWrite(MemoryInterface.EXT_FLASH_BASE_ADDR + address, toWrite);
             });
             Assert.That(ex.Message, Is.EqualTo("ERROR: NOT ALIGNED!"));
         }
@@ -166,7 +166,7 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
         {
             Exception ex = Assert.Throws<ApplicationException>(delegate
             {
-                _mem.ExtFlashBlockErase(Memory.EXT_FLASH_BASE_ADDR + Memory.EXT_FLASH_SIZE);
+                _mem.ExtFlashBlockErase(MemoryInterface.EXT_FLASH_BASE_ADDR + MemoryInterface.EXT_FLASH_SIZE);
             });
             Assert.That(ex.Message, Is.EqualTo("ERROR: YOU TRY TO ERASE OUT OF EXT FLASH AREA!"));
         }
@@ -176,7 +176,7 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
         {
             Exception ex = Assert.Throws<ApplicationException>(delegate
             {
-                _mem.ExtFlashWrite(Memory.EXT_FLASH_BASE_ADDR + Memory.EXT_FLASH_SIZE, new byte[] { 0 });
+                _mem.ExtFlashWrite(MemoryInterface.EXT_FLASH_BASE_ADDR + MemoryInterface.EXT_FLASH_SIZE, new byte[] { 0 });
             });
             Assert.That(ex.Message, Is.EqualTo("ERROR: YOU TRY TO WRITE OUT OF EXT FLASH AREA!"));
         }
@@ -192,7 +192,7 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
         [Test]
         public void ExtFlashBusy()
         {
-            _mem.ExtFlashBlockErase(Memory.EXT_FLASH_BASE_ADDR);
+            _mem.ExtFlashBlockErase(MemoryInterface.EXT_FLASH_BASE_ADDR);
             Assert.AreEqual(true, _mem.ExtrnalFlashIsBusy());
 
             long timestamp = DateTime.Now.Ticks;
@@ -206,7 +206,7 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
         [Test]
         public void ExtWriteReadBytes()
         {
-            _mem.ExtFlashBlockErase(Memory.EXT_FLASH_BASE_ADDR);
+            _mem.ExtFlashBlockErase(MemoryInterface.EXT_FLASH_BASE_ADDR);
             Stopwatch sw = new Stopwatch();
             sw.Start();
 
@@ -221,9 +221,9 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
             Console.WriteLine($"Sector Erase Elapsed Time: {sw.ElapsedMilliseconds/1000}sec");
 
             var toWrite = new byte[] { 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x57, 0x6F, 0x72, 0x6C, 0x64 };
-            _mem.ExtFlashWrite(Memory.EXT_FLASH_BASE_ADDR, toWrite);
+            _mem.ExtFlashWrite(MemoryInterface.EXT_FLASH_BASE_ADDR, toWrite);
 
-            byte[] toRead = _mem.ExtFlashRead(Memory.EXT_FLASH_BASE_ADDR, 11);
+            byte[] toRead = _mem.ExtFlashRead(MemoryInterface.EXT_FLASH_BASE_ADDR, 11);
             Console.WriteLine(ASCIIEncoding.ASCII.GetString(toRead));
 
             Assert.AreEqual(toWrite, toRead);
@@ -232,14 +232,14 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
        [Test]
         public void ExtFlashWriteReadLastByte()
         {
-            int address = Memory.EXT_FLASH_BASE_ADDR + (Memory.EXT_FLASH_SIZE - 1) - 1;
+            int address = MemoryInterface.EXT_FLASH_BASE_ADDR + (MemoryInterface.EXT_FLASH_SIZE - 1) - 1;
             int size = 1;
 
             byte[] toWrite = new byte[size];
             new Random().NextBytes(toWrite);
 
-            int last64kBlockAddress = Memory.EXT_FLASH_SIZE - _mem.ExtFlashBlockSize;
-            _mem.ExtFlashBlockErase(Memory.EXT_FLASH_BASE_ADDR + last64kBlockAddress);
+            int last64kBlockAddress = MemoryInterface.EXT_FLASH_SIZE - _mem.ExtFlashBlockSize;
+            _mem.ExtFlashBlockErase(MemoryInterface.EXT_FLASH_BASE_ADDR + last64kBlockAddress);
             long timestamp = DateTime.Now.Ticks;
             do
             {
@@ -262,15 +262,15 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
             new Random().NextBytes(toWrite);
 
             long timestamp = DateTime.Now.Ticks;
-            _mem.ExtFlashBlockErase(Memory.EXT_FLASH_BASE_ADDR);
+            _mem.ExtFlashBlockErase(MemoryInterface.EXT_FLASH_BASE_ADDR);
             do
             {
                 if ((DateTime.Now.Ticks - timestamp) > 1000 * 10000)
                     throw new TimeoutException();
             } while (_mem.ExtrnalFlashIsBusy());
 
-            _mem.ExtFlashWrite(Memory.EXT_FLASH_BASE_ADDR + address, toWrite);
-            byte[] toRead = _mem.ExtFlashRead(Memory.EXT_FLASH_BASE_ADDR + address, size);
+            _mem.ExtFlashWrite(MemoryInterface.EXT_FLASH_BASE_ADDR + address, toWrite);
+            byte[] toRead = _mem.ExtFlashRead(MemoryInterface.EXT_FLASH_BASE_ADDR + address, size);
             Assert.AreEqual(toWrite, toRead);
         }
 
@@ -281,8 +281,8 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
         [Test]
         public void ExtFlashErase()
         {
-            int blocks = Memory.EXT_FLASH_SIZE / _mem.ExtFlashBlockSize;
-            int addr = Memory.EXT_FLASH_BASE_ADDR;
+            int blocks = MemoryInterface.EXT_FLASH_SIZE / _mem.ExtFlashBlockSize;
+            int addr = MemoryInterface.EXT_FLASH_BASE_ADDR;
 
             for (int b = 0; b < blocks; b++)
             { 

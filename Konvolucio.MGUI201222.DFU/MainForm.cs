@@ -11,6 +11,7 @@ namespace Konvolucio.MGUI201222.DFU
     using System.Text;
     using System.Windows.Forms;
     using Properties;
+    using Controls;
 
 
     public interface IMainForm
@@ -27,7 +28,9 @@ namespace Konvolucio.MGUI201222.DFU
         event EventHandler FileBrowseEventHandler;
         event EventHandler ShowConfiguration;
 
+        ToolStripItem[] MenuBar { set; }
 
+        KnvRichTextBox RichTextBoxTrace { get; }
 
         string Text { get; set; }
         string FileName { get; set; }
@@ -64,6 +67,15 @@ namespace Konvolucio.MGUI201222.DFU
             remove { buttonBrowse.Click -= value; }
         }
 
+        public KnvRichTextBox RichTextBoxTrace
+        {
+            get { return knvRichTextBox1; }
+        }
+
+        public ToolStripItem[] MenuBar
+        {
+            set { menuStrip1.Items.AddRange(value); }
+        }
         public int PoregressValue;
 
 
@@ -101,5 +113,39 @@ namespace Konvolucio.MGUI201222.DFU
         {
 
         }
+
+
+        private void ButtonExtBrowse_Click(object sender, EventArgs e)
+        {
+            var ofd = new OpenFileDialog();
+            if (string.IsNullOrEmpty(Settings.Default.ExtFirmwareFilePath))
+                ofd.InitialDirectory = Settings.Default.ExtFirmwareFilePath;
+            else
+                ofd.InitialDirectory = "";
+            ofd.Filter = AppConstants.FileFilter;
+            ofd.FilterIndex = 1;
+            ofd.RestoreDirectory = true;
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                Settings.Default.ExtFirmwareFilePath = ofd.FileName;
+            }
+        }
+
+        private void ButtonIntBrowse_Click(object sender, EventArgs e)
+        {
+            var ofd = new OpenFileDialog();
+            if (string.IsNullOrEmpty(Settings.Default.IntFirmwareFilePath))
+                ofd.InitialDirectory = Settings.Default.IntFirmwareFilePath;
+            else
+                ofd.InitialDirectory = "";
+            ofd.Filter = AppConstants.FileFilter;
+            ofd.FilterIndex = 1;
+            ofd.RestoreDirectory = true;
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                Settings.Default.IntFirmwareFilePath = ofd.FileName;
+            }
+        }
+
     }
 }

@@ -9,7 +9,9 @@ namespace Konvolucio.MGUI201222.DFU
     using Properties;
     using System.Diagnostics;
     using Common;
-
+    using IO;
+    using Controls;
+    using Events;
 
     static class Program
     {
@@ -21,7 +23,7 @@ namespace Konvolucio.MGUI201222.DFU
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run((MainForm)new App().MainForm);
+            Application.Run((MainForm)new App()._mainForm);
         }
     }
 
@@ -35,9 +37,14 @@ namespace Konvolucio.MGUI201222.DFU
     {
         public static SynchronizationContext SyncContext = null;
 
-        public IMainForm MainForm { get; set; }
-        string _firmwareFilePath { get; set; }
+        public IMainForm _mainForm { get; set; }
+        string _extFirmwareFilePath { get; set; }
+        string _intFirmwareFilePath { get; set; }
 
+        readonly ExtFlashDownload _efd;
+        readonly ExtFlashUpload _efu;
+        readonly IntFlashDownload _ifd;
+        readonly IntFlashUpload _ifu;
 
         public App()
         {
@@ -49,54 +56,67 @@ namespace Konvolucio.MGUI201222.DFU
             //AppLog.Instance.Enabled = AppConfiguration.Instance.DfuApp.LogEnable;
             AppLog.Instance.WriteLine("MALT200817.DFU.App() Constructor started.");
 
-            if (string.IsNullOrEmpty(Settings.Default.WorkingDirectory))
+           // if (string.IsNullOrEmpty(Settings.Default.WorkingDirectory))
             { //First Start 
               //C:\\Users\\Margit Robert\\Documents\\Konvolucio\\MARC170608
-                Settings.Default.WorkingDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + Application.CompanyName + "\\" + Application.ProductName;
+             //  Settings.Default.WorkingDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + Application.CompanyName + "\\" + Application.ProductName;
                 //C:\\Users\\Margit Robert\\Documents\\Konvolucio\\MARC170608\\Firmware Update
-                Settings.Default.FirmwareUpdateDirectory = Settings.Default.WorkingDirectory + "\\" + "Firmware Update";
+              //  Settings.Default.FirmwareUpdateDirectory = Settings.Default.WorkingDirectory + "\\" + "Firmware Update";
             }
 
             SyncContext = SynchronizationContext.Current;
 
-            MainForm = new MainForm();
-            MainForm.Text = "MGUI201222 - DFU";
-            MainForm.Version = Application.ProductVersion;
+            MemoryInterface.Instance.TracingEnable = true;
 
-            MainForm.FileBrowseEventHandler += ButtonBrowse_Click;
-            MainForm.FormClosed += MainForm_FormClosed;
-            MainForm.WriteEventHandler += ButtonWrite_Click;
-            MainForm.Shown += MainForm_Shown;
-            MainForm.DeviceRestart += MainForm_DeviceRestart;
-            MainForm.BtnConnectClick += MainForm_BtnConnectClick;
-            MainForm.ShowConfiguration += MainForm_ShowConfiguration;
+            _efd = new ExtFlashDownload(MemoryInterface.Instance);
+            _efu = new ExtFlashUpload(MemoryInterface.Instance);
+            _ifd = new IntFlashDownload(MemoryInterface.Instance);
+            _ifu = new IntFlashUpload(MemoryInterface.Instance);
+
+            _mainForm = new MainForm();
+            _mainForm.Text = "MGUI201222 - DFU";
+            _mainForm.Version = Application.ProductVersion;
+
+            _mainForm.FormClosed += MainForm_FormClosed;
+            _mainForm.WriteEventHandler += ButtonWrite_Click;
+            _mainForm.Shown += MainForm_Shown;
+            _mainForm.DeviceRestart += MainForm_DeviceRestart;
+            _mainForm.ShowConfiguration += MainForm_ShowConfiguration;
+
+
+            /*** Main Menu ***/
+            _mainForm.MenuBar = new ToolStripItem[]
+            {
+                new Commands.ComPortSelectCommand(this),
+                new Commands.StartStopCommand(),
+            };
+
+            /*** TimerService ***/
+            TimerService.Instance.Interval = 500;
+
+            /*** Trace ***/
+            TimerService.Instance.Tick += (o, e) =>
+            {
+                for (int i = 0; MemoryInterface.Instance.TraceQueue.Count != 0; i++)
+                {
+                    string str = MemoryInterface.Instance.TraceQueue.Dequeue();
+                    if (str.Contains("Rx:"))
+                        _mainForm.RichTextBoxTrace.AppendText(str + "\r\n", System.Drawing.Color.DarkGreen, false);
+                    else if (str.Contains("Tx:"))
+                        _mainForm.RichTextBoxTrace.AppendText(str + "\r\n", System.Drawing.Color.Blue);
+                    else if (str.Contains("ERROR"))
+                        _mainForm.RichTextBoxTrace.AppendText(str + "\r\n", System.Drawing.Color.Red);
+                    else
+                        _mainForm.RichTextBoxTrace.AppendText(str + "\r\n", System.Drawing.Color.Black);
+                }
+            };
         }
 
-        private void MainForm_BtnConnectClick(object sender, EventArgs e)
-        {
-            try
-            {
-              //  if (MainForm.ConnectionStatus == ConnectionStatusTypes.PressToConnect)
-                {
-
-
-                }
-               // else
-                {
-
-                }
-            }
-            catch (Exception ex)
-            {
-           //     MainForm.ConnectionStatus = ConnectionStatusTypes.PressToConnect;
-                throw ex;
-            }
-        }
 
         private void MainForm_ShowConfiguration(object sender, EventArgs e)
         {
           //  Tools.RunNotepadOrNpp();
-        }   
+        }
 
         private void MainForm_DeviceRestart(object sender, int e)
         {
@@ -115,6 +135,17 @@ namespace Konvolucio.MGUI201222.DFU
         private void MainForm_Shown(object sender, EventArgs e)
         {
             SyncContext = SynchronizationContext.Current;
+            TimerService.Instance.Start();
+
+            if (Settings.Default.OpenAfterStartUp)
+            {
+                if (!string.IsNullOrWhiteSpace(Settings.Default.SeriaPortName))
+                {
+                    MemoryInterface.Instance.Open(Settings.Default.SeriaPortName);
+                }
+            }
+            EventAggregator.Instance.Publish(new ShowAppEvent());
+
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -137,7 +168,7 @@ namespace Konvolucio.MGUI201222.DFU
                 MainForm.LabelStatus = ev.UserState.ToString();
             };
             */
-            byte[] firmware = Tools.OpenFile(_firmwareFilePath);
+            byte[] firmware = Tools.OpenFile(_extFirmwareFilePath);
            // dfu.Begin(firmware);
 
             Action syncCompleted = () =>
@@ -158,22 +189,6 @@ namespace Konvolucio.MGUI201222.DFU
             */
         }
 
-        private void ButtonBrowse_Click(object sender, EventArgs e)
-        {
-            var ofd =  new OpenFileDialog();
-            if (string.IsNullOrEmpty(_firmwareFilePath))
-                ofd.InitialDirectory = Settings.Default.FirmwareDirecotry;
-            else
-                ofd.InitialDirectory = _firmwareFilePath;
-            ofd.Filter = AppConstants.FileFilter;
-            ofd.FilterIndex = 1;
-            ofd.RestoreDirectory = true;
-            if (ofd.ShowDialog() == DialogResult.OK)
-            {
-                _firmwareFilePath = ofd.FileName;
-                MainForm.FileName = System.IO.Path.GetFileName(_firmwareFilePath);
-            }
-        }
 
     }
         

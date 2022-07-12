@@ -8,8 +8,11 @@
     using System.Globalization;
     using System.ComponentModel;
 
-    public class GuiIo:Io
+    public class GuiIo:SerialIo
     {
+        public static GuiIo Instance { get { return _instance; } }
+        private static readonly GuiIo _instance = new GuiIo();
+
         public event RunWorkerCompletedEventHandler Completed;
         public event ProgressChangedEventHandler ProgressChanged;
 

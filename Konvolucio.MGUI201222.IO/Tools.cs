@@ -9,7 +9,7 @@ namespace Konvolucio.MGUI201222.IO
     using System.Threading.Tasks;
     using System.IO;
 
-    public static class Tools
+    internal static class Tools
     {
         /// <summary>
         /// Az bájt tömb érték konvertálása string.

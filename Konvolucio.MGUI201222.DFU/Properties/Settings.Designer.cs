@@ -26,84 +26,48 @@ namespace Konvolucio.MGUI201222.DFU.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string LastUsedAddress {
+        public string ExtFirmwareFilePath {
             get {
-                return ((string)(this["LastUsedAddress"]));
+                return ((string)(this["ExtFirmwareFilePath"]));
             }
             set {
-                this["LastUsedAddress"] = value;
+                this["ExtFirmwareFilePath"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string LastUsedPath {
+        public string SeriaPortName {
             get {
-                return ((string)(this["LastUsedPath"]));
+                return ((string)(this["SeriaPortName"]));
             }
             set {
-                this["LastUsedPath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string FirmwareDirecotry {
-            get {
-                return ((string)(this["FirmwareDirecotry"]));
-            }
-            set {
-                this["FirmwareDirecotry"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string LastUsedComPort {
-            get {
-                return ((string)(this["LastUsedComPort"]));
-            }
-            set {
-                this["LastUsedComPort"] = value;
+                this["SeriaPortName"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool AutoConnect {
+        public bool OpenAfterStartUp {
             get {
-                return ((bool)(this["AutoConnect"]));
+                return ((bool)(this["OpenAfterStartUp"]));
             }
             set {
-                this["AutoConnect"] = value;
+                this["OpenAfterStartUp"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string WorkingDirectory {
+        public string IntFirmwareFilePath {
             get {
-                return ((string)(this["WorkingDirectory"]));
+                return ((string)(this["IntFirmwareFilePath"]));
             }
             set {
-                this["WorkingDirectory"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string FirmwareUpdateDirectory {
-            get {
-                return ((string)(this["FirmwareUpdateDirectory"]));
-            }
-            set {
-                this["FirmwareUpdateDirectory"] = value;
+                this["IntFirmwareFilePath"] = value;
             }
         }
     }

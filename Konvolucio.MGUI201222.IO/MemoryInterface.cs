@@ -1,6 +1,4 @@
-﻿
-
-namespace Konvolucio.MGUI201222.IO
+﻿namespace Konvolucio.MGUI201222.IO
 {
     using System;
     using System.Collections.Generic;
@@ -11,8 +9,10 @@ namespace Konvolucio.MGUI201222.IO
     using System.ComponentModel;
     using System.Threading;
 
-    public class Memory : Io, IDisposable
+    public class MemoryInterface : SerialIo, IDisposable
     {
+        public static MemoryInterface Instance { get { return _instance; } }
+        private static readonly MemoryInterface _instance = new MemoryInterface();
 
         public const int FRAME_SIZE = 0x100;
 
@@ -20,13 +20,10 @@ namespace Konvolucio.MGUI201222.IO
         public const int APP_FLASH_SIZE = 0x100000 - 0x40000; //-> 768KB
         public const int BTLDR_FLASH_LAST_SECTOR = 5;
 
-
         public const int EXT_FLASH_BASE_ADDR = 0x00000000;
         public const int EXT_FLASH_SIZE = 0x02000000;        //0x02000000 -> 32MB
 
-
         bool _disposed = false;
-
 
         public int FrameSize { get { return FRAME_SIZE; } }
         public int AppFirstSector { get { return 6; } }
@@ -37,12 +34,12 @@ namespace Konvolucio.MGUI201222.IO
 
 
 
-        public Memory()
+        public MemoryInterface()
         {
 
         }
 
-        public Memory( string COMx)
+        public MemoryInterface( string COMx)
         {
             Open(COMx);
         }
@@ -131,8 +128,6 @@ namespace Konvolucio.MGUI201222.IO
             }
         }
         #endregion
-
-
         #region External
         public Byte[] ExtFlashRead(int address, int size)
         {
@@ -213,10 +208,7 @@ namespace Konvolucio.MGUI201222.IO
             }
         }
         #endregion
-
-        
-
-
+        #region Dispose
         public void Dispose()
         {
             Dispose(true);
@@ -227,11 +219,9 @@ namespace Konvolucio.MGUI201222.IO
         {
             if (_disposed)
                 return;
-
-            // Free any unmanaged objects here. 
-            //
             _disposed = true;
         }
+        #endregion
 
     }
 }

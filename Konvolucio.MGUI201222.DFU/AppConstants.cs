@@ -1,6 +1,6 @@
 ﻿namespace Konvolucio.MGUI201222.DFU
 {
-    public class AppConstants
+    internal class AppConstants
     {
         public const string ValueNotAvailable2 = "n/a";
         public const string InvalidFlieNameChar = "A file name can't contain any of flowing characters:";

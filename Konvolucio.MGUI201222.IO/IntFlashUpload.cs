@@ -37,9 +37,9 @@
             }
         }
 
-        readonly Memory _mem;
+        readonly MemoryInterface _mem;
 
-        public IntFlashUpload(Memory memory)
+        public IntFlashUpload(MemoryInterface memory)
         {
             _mem = memory;
             _bw = new BackgroundWorker();

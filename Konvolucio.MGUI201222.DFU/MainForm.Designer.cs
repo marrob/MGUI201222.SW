@@ -36,20 +36,12 @@
             this.toolStripStatusLabelLogo = new System.Windows.Forms.ToolStripStatusLabel();
             this.buttonBrowse = new System.Windows.Forms.Button();
             this.textFileName = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
-            this.button1 = new System.Windows.Forms.Button();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.button2 = new System.Windows.Forms.Button();
             this.progressBar2 = new System.Windows.Forms.ProgressBar();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.button3 = new System.Windows.Forms.Button();
-            this.buttonLogs = new System.Windows.Forms.Button();
+            this.knvRichTextBox1 = new Konvolucio.MGUI201222.DFU.Controls.KnvRichTextBox();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.statusStrip1.SuspendLayout();
-            this.panel1.SuspendLayout();
-            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -59,9 +51,9 @@
             this.toolStripStatusLabel1,
             this.toolStripStatusLabelVersion,
             this.toolStripStatusLabelLogo});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 238);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 261);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(727, 24);
+            this.statusStrip1.Size = new System.Drawing.Size(746, 24);
             this.statusStrip1.SizingGrip = false;
             this.statusStrip1.TabIndex = 5;
             this.statusStrip1.Text = "statusStrip1";
@@ -78,7 +70,7 @@
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(592, 19);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(611, 19);
             this.toolStripStatusLabel1.Spring = true;
             // 
             // toolStripStatusLabelVersion
@@ -100,138 +92,93 @@
             // 
             // buttonBrowse
             // 
+            this.buttonBrowse.FlatAppearance.BorderSize = 0;
+            this.buttonBrowse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonBrowse.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonBrowse.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.buttonBrowse.Location = new System.Drawing.Point(612, 23);
+            this.buttonBrowse.Location = new System.Drawing.Point(656, 27);
             this.buttonBrowse.Name = "buttonBrowse";
-            this.buttonBrowse.Size = new System.Drawing.Size(75, 23);
+            this.buttonBrowse.Size = new System.Drawing.Size(82, 23);
             this.buttonBrowse.TabIndex = 8;
-            this.buttonBrowse.Text = "Browse";
+            this.buttonBrowse.Text = "Int Browse";
             this.buttonBrowse.UseVisualStyleBackColor = true;
+            this.buttonBrowse.Click += new System.EventHandler(this.ButtonIntBrowse_Click);
             // 
             // textFileName
             // 
-            this.textFileName.Location = new System.Drawing.Point(3, 25);
+            this.textFileName.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textFileName.Location = new System.Drawing.Point(12, 37);
             this.textFileName.Name = "textFileName";
             this.textFileName.ReadOnly = true;
-            this.textFileName.Size = new System.Drawing.Size(603, 20);
+            this.textFileName.Size = new System.Drawing.Size(638, 13);
             this.textFileName.TabIndex = 16;
             this.textFileName.TextChanged += new System.EventHandler(this.TextFileName_TextChanged);
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(3, 9);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(70, 13);
-            this.label3.TabIndex = 17;
-            this.label3.Text = "Internal Flash";
-            // 
-            // panel1
-            // 
-            this.panel1.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.panel1.Controls.Add(this.button1);
-            this.panel1.Controls.Add(this.progressBar1);
-            this.panel1.Controls.Add(this.textFileName);
-            this.panel1.Controls.Add(this.label3);
-            this.panel1.Controls.Add(this.buttonBrowse);
-            this.panel1.Location = new System.Drawing.Point(8, 34);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(704, 88);
-            this.panel1.TabIndex = 22;
-            // 
-            // progressBar1
-            // 
-            this.progressBar1.Location = new System.Drawing.Point(4, 51);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(602, 23);
-            this.progressBar1.TabIndex = 18;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(612, 51);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 19;
-            this.button1.Text = "Update";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // panel2
-            // 
-            this.panel2.BackColor = System.Drawing.Color.IndianRed;
-            this.panel2.Controls.Add(this.button2);
-            this.panel2.Controls.Add(this.progressBar2);
-            this.panel2.Controls.Add(this.textBox1);
-            this.panel2.Controls.Add(this.label1);
-            this.panel2.Controls.Add(this.button3);
-            this.panel2.Location = new System.Drawing.Point(8, 128);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(704, 88);
-            this.panel2.TabIndex = 23;
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(612, 51);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 19;
-            this.button2.Text = "Update";
-            this.button2.UseVisualStyleBackColor = true;
-            // 
             // progressBar2
             // 
-            this.progressBar2.Location = new System.Drawing.Point(4, 51);
+            this.progressBar2.Location = new System.Drawing.Point(3, 232);
             this.progressBar2.Name = "progressBar2";
-            this.progressBar2.Size = new System.Drawing.Size(602, 23);
+            this.progressBar2.Size = new System.Drawing.Size(738, 23);
             this.progressBar2.TabIndex = 18;
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(3, 25);
+            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox1.Location = new System.Drawing.Point(12, 61);
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(603, 20);
+            this.textBox1.Size = new System.Drawing.Size(638, 13);
             this.textBox1.TabIndex = 16;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(70, 13);
-            this.label1.TabIndex = 17;
-            this.label1.Text = "Internal Flash";
             // 
             // button3
             // 
+            this.button3.FlatAppearance.BorderSize = 0;
+            this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button3.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.button3.Location = new System.Drawing.Point(612, 23);
+            this.button3.Location = new System.Drawing.Point(656, 56);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.Size = new System.Drawing.Size(82, 23);
             this.button3.TabIndex = 8;
-            this.button3.Text = "Browse";
+            this.button3.Text = "Ext Browse";
             this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.ButtonExtBrowse_Click);
             // 
-            // buttonLogs
+            // knvRichTextBox1
             // 
-            this.buttonLogs.Location = new System.Drawing.Point(14, 222);
-            this.buttonLogs.Name = "buttonLogs";
-            this.buttonLogs.Size = new System.Drawing.Size(95, 23);
-            this.buttonLogs.TabIndex = 21;
-            this.buttonLogs.Text = "Logs";
-            this.buttonLogs.UseVisualStyleBackColor = true;
-            this.buttonLogs.Click += new System.EventHandler(this.ButtonLogs_Click);
+            this.knvRichTextBox1.BackColor = System.Drawing.SystemColors.Control;
+            this.knvRichTextBox1.BackgroundText = "TRACEING";
+            this.knvRichTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.knvRichTextBox1.Location = new System.Drawing.Point(3, 80);
+            this.knvRichTextBox1.Name = "knvRichTextBox1";
+            this.knvRichTextBox1.Size = new System.Drawing.Size(741, 146);
+            this.knvRichTextBox1.TabIndex = 0;
+            this.knvRichTextBox1.Text = "";
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(746, 24);
+            this.menuStrip1.TabIndex = 20;
+            this.menuStrip1.Text = "menuStrip1";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(727, 262);
-            this.Controls.Add(this.panel2);
-            this.Controls.Add(this.panel1);
-            this.Controls.Add(this.buttonLogs);
+            this.ClientSize = new System.Drawing.Size(746, 285);
+            this.Controls.Add(this.buttonBrowse);
+            this.Controls.Add(this.button3);
+            this.Controls.Add(this.knvRichTextBox1);
+            this.Controls.Add(this.textFileName);
+            this.Controls.Add(this.progressBar2);
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "MainForm";
@@ -240,10 +187,6 @@
             this.Text = "Form1";
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -257,18 +200,12 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelVersion;
         private System.Windows.Forms.Button buttonBrowse;
         private System.Windows.Forms.TextBox textFileName;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelLogo;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.ProgressBar progressBar1;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.ProgressBar progressBar2;
         private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button buttonLogs;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private Controls.KnvRichTextBox knvRichTextBox1;
     }
 }
 

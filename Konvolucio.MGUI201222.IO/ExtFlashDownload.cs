@@ -37,9 +37,9 @@ namespace Konvolucio.MGUI201222.IO
             }
         }
 
-        readonly Memory  _memory;
+        readonly MemoryInterface  _memory;
 
-        public ExtFlashDownload(Memory memory)
+        public ExtFlashDownload(MemoryInterface memory)
         {
             _memory = memory;
             _bw = new BackgroundWorker();

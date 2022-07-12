@@ -37,9 +37,9 @@
             }
         }
 
-        readonly Memory _mem;
+        readonly MemoryInterface _mem;
 
-        public ExtFlashUpload(Memory memory)
+        public ExtFlashUpload(MemoryInterface memory)
         {
             _mem = memory;
             _bw = new BackgroundWorker();
