@@ -69,10 +69,10 @@
         public bool IntFlashEraseCompleted(out string status)
         {
             int temp = ReadTimeout;
-            ReadTimeout = 1000;
+            ReadTimeout = 1500;
             try
             {
-                status = WriteReadWoTracing($"FE I?");
+                status = WriteReadWoTracing($"FE I");
             }
             catch (Exception ex)
             {
