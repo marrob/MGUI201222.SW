@@ -128,5 +128,15 @@ namespace Konvolucio.MGUI201222.DFU
                 textIntFilePath.Text = ofd.FileName;
             }
         }
+
+        private void textExtFilePath_TextChanged(object sender, EventArgs e)
+        {
+            Settings.Default.ExtFirmwareFilePath = textExtFilePath.Text;
+        }
+
+        private void textIntFilePath_TextChanged(object sender, EventArgs e)
+        {
+            Settings.Default.IntFirmwareFilePath = textIntFilePath.Text;
+        }
     }
 }

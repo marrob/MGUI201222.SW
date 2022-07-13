@@ -11,8 +11,10 @@ namespace Konvolucio.MGUI201222.DFU.Commands
 
     class ConnectCommand : ToolStripMenuItem
     {
-        public ConnectCommand()
+        readonly App _app;
+        public ConnectCommand(App app)
         {
+            _app = app;
             Text = "Connect";
            // Image = Resources.Play_48x48;
             ShortcutKeys = Keys.F5;
@@ -38,7 +40,7 @@ namespace Konvolucio.MGUI201222.DFU.Commands
             base.OnClick(e);
 
             if (!MemoryInterface.Instance.IsOpen)
-                MemoryInterface.Instance.Open(Settings.Default.SeriaPortName);
+                _app.OpenPort();
             else
                 MemoryInterface.Instance.Close();
         }

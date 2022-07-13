@@ -69,14 +69,16 @@
             int frames = 0;
             try
             {
-               
                 _mem.IntFlashUnlock();
+                long timestamp = DateTime.Now.Ticks;
+                string status = "";
+                do
+                {
+                    if ((DateTime.Now.Ticks - timestamp) > 7000 * 10000)
+                        throw new TimeoutException("Error: Internal Flash Erasing Timeout");
+                    bw.ReportProgress(1, $"INTERNAL FLASH ERASING: {status} SECTOR ");
+                } while (!_mem.IntFlashEraseCompleted(out status));
 
-                for (int i = _mem.AppFirstSector; i <= _mem.AppLastSector; i++)
-                { 
-                    bw.ReportProgress(1, $"INTERNAL FLASH SECTORS: {i} ERASING... ");
-                    _mem.IntFlashErase(i);
-                }
                 do
                 {
                     if (data.Length - offset >= frameSize)

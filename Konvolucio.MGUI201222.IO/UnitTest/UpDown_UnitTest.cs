@@ -15,7 +15,7 @@ using NUnit.Framework;
         const string FileNameTimestampFormat = "yyMMdd_HHmmss";
         const string COMX = "COM9";
         const string DEVICE_NAME = "BOOTLOADER";
-        const string DEVICE_VERSION = "220629_1834";
+        const string DEVICE_VERSION = "220713_0828";
 
         MemoryInterface _mem;    
 

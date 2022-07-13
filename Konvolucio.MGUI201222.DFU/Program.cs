@@ -108,8 +108,10 @@ namespace Konvolucio.MGUI201222.DFU
             _mainForm.MenuBar = new ToolStripItem[]
             {
                 new Commands.ComPortSelectCommand(this),
-                new Commands.ConnectCommand(),
+                new Commands.ConnectCommand(this),
+                new Commands.EnterDfutCommand(),
                 new Commands.UpdateCommand(this),
+                new Commands.ExitDfutCommand(),
                 settingsMenu
             };
 
@@ -163,16 +165,21 @@ namespace Konvolucio.MGUI201222.DFU
             TimerService.Instance.Start();
 
             if (Settings.Default.OpenAfterStartUp)
-            {
                 if (!string.IsNullOrWhiteSpace(Settings.Default.SeriaPortName))
-                {
-                    MemoryInterface.Instance.Open(Settings.Default.SeriaPortName);
-                }
-            }
+                    OpenPort();
+
             EventAggregator.Instance.Publish(new ShowAppEvent());
             _mainForm.ExtFlashFilePath = Settings.Default.ExtFirmwareFilePath;
             _mainForm.IntFlashFilePath = Settings.Default.IntFirmwareFilePath;
         }
+
+
+        public void OpenPort()
+        {
+            ResultClear();
+            MemoryInterface.Instance.Open(Settings.Default.SeriaPortName);
+        }
+
 
         void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
@@ -194,14 +201,19 @@ namespace Konvolucio.MGUI201222.DFU
             _efu.Abort();
         }
 
-        public void FwUpdate(string intFile, string extFile)
-        {
+        private void ResultClear()
+        { 
             /*** Results Clear ***/
             _traceQueue.Clear();
             MemoryInterface.Instance.TraceQueue.Clear();
             _mainForm.RichTextBoxTrace.Clear();
             _mainForm.ResultReset();
             _sw.Start();
+        }
+
+        public void FwUpdate(string intFile, string extFile)
+        {
+            ResultClear();
 
             if (System.IO.File.Exists(intFile))
                 _intFw = Tools.OpenFile(intFile);

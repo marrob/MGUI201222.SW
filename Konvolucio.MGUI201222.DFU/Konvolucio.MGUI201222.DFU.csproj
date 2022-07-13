@@ -81,6 +81,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppConstants.cs" />
+    <Compile Include="Commands\ExitDfuMode.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Commands\EnterDfuCommand .cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Commands\WriteReadVerifyCommand .cs">
       <SubType>Component</SubType>
     </Compile>

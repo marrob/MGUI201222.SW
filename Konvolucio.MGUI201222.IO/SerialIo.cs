@@ -17,11 +17,8 @@ namespace Konvolucio.MGUI201222.IO
         public event EventHandler ErrorHappened;
         public bool TracingEnable { get; set; } = false;
 
-
         public Queue<string> TraceQueue = new Queue<string>();
         public int TraceLines { get; private set; }
-        
-
         
         SerialPort _sp;
         public bool IsOpen
@@ -33,6 +30,12 @@ namespace Konvolucio.MGUI201222.IO
                 else
                     return _sp.IsOpen;
             }
+        }
+
+        public int ReadTimeout 
+        {
+            get { return _sp.ReadTimeout; }
+            set { _sp.ReadTimeout = value; }
         }
 
         public static string[] GetPortNames()
@@ -51,17 +54,19 @@ namespace Konvolucio.MGUI201222.IO
             {
                 _sp = new SerialPort(port)
                 {
-                    ReadTimeout = 2000,
+                    ReadTimeout = 1000,
                     BaudRate = 921600, //460800,
                     NewLine = "\n"
                 };
                 _sp.Open();
+                _sp.DiscardInBuffer();
                 Trace("Serial Port: " + port + " is Open.");
                 Test();
                 OnConnectionChanged();
             }
             catch (Exception ex)
             {
+                _sp.Close();
                 Trace("IO ERROR Serial Port is: " + port + " Open fail... beacuse:" + ex.Message);
                 OnConnectionChanged();
             }
@@ -84,6 +89,41 @@ namespace Konvolucio.MGUI201222.IO
             {
                 Trace("IO-ERROR:" + ex.Message);
             }
+        }
+
+        public void ExitDfuMode()
+        {
+            WriteRead("RST");
+        }
+
+        public void EnterDfuMode()
+        {
+
+            WriteRead("RST");
+            System.Threading.Thread.Sleep(1000);
+
+
+            int temp = _sp.ReadTimeout;
+            _sp.ReadTimeout = 20;
+            string response = string.Empty;
+
+            for (int i = 0; i < 5; i++)
+            {
+                try
+                {
+                    response = WriteRead("DFU");
+                    if (response == "OK")
+                        break;
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+            _sp.ReadTimeout = temp;
+
+            if (response != "OK")
+                throw new ApplicationException("");
         }
 
 
@@ -117,7 +157,7 @@ namespace Konvolucio.MGUI201222.IO
                     catch (Exception ex) //TODO: Nem jol van kezelve a TIMOUT
                     {
                         Trace("Rx ERROR Serial Port is:" + ex.Message);
-                        exception = ex;
+                        exception = new TimeoutException( $"Last Request: { request}",ex );
                         rxErrors++;
                         OnErrorHappened();
                     }
@@ -163,7 +203,7 @@ namespace Konvolucio.MGUI201222.IO
                     }
                     catch (Exception ex)
                     {
-                        exception = ex;
+                        exception = new TimeoutException($"Last Request: {request}", ex);
                         rxErrors++;
                         OnErrorHappened();
                     }

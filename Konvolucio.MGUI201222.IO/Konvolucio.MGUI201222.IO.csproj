@@ -48,11 +48,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExtFlashDownload.cs" />
-    <Compile Include="IntFlashDownload.cs" />
-    <Compile Include="ExtFlashUpload.cs" />
-    <Compile Include="IntFlashUpload.cs" />
-    <Compile Include="MemoryInterface.cs" />
+    <Compile Include="Flash\ExtFlashDownload.cs" />
+    <Compile Include="Flash\IntFlashDownload.cs" />
+    <Compile Include="Flash\ExtFlashUpload.cs" />
+    <Compile Include="Flash\IntFlashUpload.cs" />
+    <Compile Include="Flash\MemoryInterface.cs" />
     <Compile Include="SerialIo.cs" />
     <Compile Include="UnitTest\MemoryInterface_UnitTest.cs" />
     <Compile Include="GuiIo.cs" />

@@ -69,7 +69,7 @@
             this.buttonBrowse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonBrowse.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonBrowse.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.buttonBrowse.Location = new System.Drawing.Point(656, 27);
+            this.buttonBrowse.Location = new System.Drawing.Point(656, 33);
             this.buttonBrowse.Name = "buttonBrowse";
             this.buttonBrowse.Size = new System.Drawing.Size(82, 23);
             this.buttonBrowse.TabIndex = 8;
@@ -82,9 +82,9 @@
             this.textIntFilePath.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textIntFilePath.Location = new System.Drawing.Point(12, 37);
             this.textIntFilePath.Name = "textIntFilePath";
-            this.textIntFilePath.ReadOnly = true;
             this.textIntFilePath.Size = new System.Drawing.Size(638, 13);
             this.textIntFilePath.TabIndex = 16;
+            this.textIntFilePath.TextChanged += new System.EventHandler(this.textIntFilePath_TextChanged);
             // 
             // progressBar
             // 
@@ -96,11 +96,11 @@
             // textExtFilePath
             // 
             this.textExtFilePath.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textExtFilePath.Location = new System.Drawing.Point(12, 61);
+            this.textExtFilePath.Location = new System.Drawing.Point(12, 63);
             this.textExtFilePath.Name = "textExtFilePath";
-            this.textExtFilePath.ReadOnly = true;
             this.textExtFilePath.Size = new System.Drawing.Size(638, 13);
             this.textExtFilePath.TabIndex = 16;
+            this.textExtFilePath.TextChanged += new System.EventHandler(this.textExtFilePath_TextChanged);
             // 
             // button3
             // 
@@ -109,7 +109,7 @@
             this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button3.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.button3.Location = new System.Drawing.Point(656, 56);
+            this.button3.Location = new System.Drawing.Point(656, 58);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(82, 23);
             this.button3.TabIndex = 8;

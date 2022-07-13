@@ -66,22 +66,35 @@
             }  
         }
 
-        /// <summary>
-        /// Flash Sector Erase
-        /// Please check the current used chip
-        /// </summary>
-        /// <param name="num">STM32F207: FLASH_SECTOR_0..FLASH_SECTOR_11</param>
-        /// <returns></returns>
-        public void IntFlashErase(int sector)
+        public bool IntFlashEraseCompleted(out string status)
         {
-            var response = WriteReadWoTracing($"FE I {sector:X8}");
-            if (response != "OK")
+            int temp = ReadTimeout;
+            ReadTimeout = 1000;
+            try
             {
-                var msg = $"{response}";
+                status = WriteReadWoTracing($"FE I?");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                ReadTimeout = temp;
+            }
+            if (status.Contains("ERROR"))
+            {
+                var msg = $"{status}";
                 Trace(msg);
                 throw new ApplicationException(msg);
             }
+            else if (status.Contains("OK"))
+                return true;
+            else
+                return false;
         }
+
+
 
         public Byte[] IntFlashRead(int address, int size)
         {

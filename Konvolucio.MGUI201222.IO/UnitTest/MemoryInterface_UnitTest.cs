@@ -15,7 +15,7 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
         const string FileNameTimestampFormat = "yyMMdd_HHmmss";
         const string COMX = "COM9";
         const string DEVICE_NAME = "BOOTLOADER";
-        const string DEVICE_VERSION = "220629_1834";
+        const string DEVICE_VERSION = "220713_0828";
 
         MemoryInterface _mem;
 
@@ -37,11 +37,17 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
 
         #region Internal Flash Low Level Tests
         [Test]
-        public void IntSectorsErase()
+        public void IntFlashErase()
         {
             _mem.IntFlashUnlock();
-            for (int i = _mem.AppFirstSector; i <= _mem.AppLastSector; i++)
-                _mem.IntFlashErase(i);
+            long timestamp = DateTime.Now.Ticks;
+            string status = "";
+            do
+            {
+                if ((DateTime.Now.Ticks - timestamp) > 7000 * 10000)
+                    throw new TimeoutException();
+                Console.WriteLine(status);
+            } while (!_mem.IntFlashEraseCompleted(out status));
             _mem.IntFlashLock();
         }
 
@@ -70,25 +76,8 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
         #endregion
         #region Internal Flash Exceptions
 
-        [Test]
-        public void YouTryToEraseOutOfAppFlashSector()
-        {
-            Exception ex = Assert.Throws<ApplicationException>(delegate
-            {
-                _mem.IntFlashErase(_mem.AppLastSector + 1);
-            });
-            Assert.That(ex.Message, Is.EqualTo("ERROR: YOU TRY TO ERASE OUT OF APP FLASH SECTOR!"));
-        }
 
-        [Test]
-        public void YouTryToEraseBootloaderSector()
-        {
-            Exception ex = Assert.Throws<ApplicationException>(delegate
-            {
-                _mem.IntFlashErase(MemoryInterface.BTLDR_FLASH_LAST_SECTOR);
-            });
-            Assert.That(ex.Message, Is.EqualTo("ERROR: YOU TRY TO ERASE A BOOTLOADER SECTOR!"));
-        }
+
 
 
         [Test]
@@ -107,8 +96,16 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
         [Test, Order(1)]
         public void IntFlashWrtieRead()
         {
+            /*** Erase Internal Flash ***/
             _mem.IntFlashUnlock();
-            _mem.IntFlashErase(6);
+            long timestamp = DateTime.Now.Ticks;
+            string status = "";
+            do
+            {
+                if ((DateTime.Now.Ticks - timestamp) > 7000 * 10000)
+                    throw new TimeoutException();
+                Console.WriteLine(status);
+            } while (!_mem.IntFlashEraseCompleted(out status));
             _mem.IntFlashLock();
 
             _mem.IntFlashUnlock();
@@ -128,9 +125,18 @@ namespace Konvolucio.MGUI201222.IO.UnitTest
             byte[] toWrite = new byte[size];
             new Random().NextBytes(toWrite);
 
+            /*** Erase Internal Flash ***/
             _mem.IntFlashUnlock();
-            for(int i=0; i<sectors.Length; i++)
-                _mem.IntFlashErase(sectors[i]);
+            long timestamp = DateTime.Now.Ticks;
+            string status = "";
+            do
+            {
+                if ((DateTime.Now.Ticks - timestamp) > 7000 * 10000)
+                    throw new TimeoutException();
+                Console.WriteLine(status);
+            } while (!_mem.IntFlashEraseCompleted(out status));
+
+
             _mem.IntFlashWrite(address, toWrite);
             _mem.IntFlashLock();
             byte[] toRead = _mem.IntFlashRead(address, size);
