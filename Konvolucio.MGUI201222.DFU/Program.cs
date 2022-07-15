@@ -93,7 +93,12 @@ namespace Konvolucio.MGUI201222.DFU
 
             /*** Connection ***/
             MemoryInterface.Instance.ConnectionChanged += (o, e) =>
+            {
                 EventAggregator.Instance.Publish(new ConnectionChangedAppEvent(MemoryInterface.Instance.IsOpen));
+
+                if (MemoryInterface.Instance.IsOpen)
+                    MemoryInterface.Instance.EnterDfuMode();
+            };
 
             /*** Settings ***/
             var settingsMenu = new ToolStripMenuItem("Settings");
@@ -208,6 +213,7 @@ namespace Konvolucio.MGUI201222.DFU
             MemoryInterface.Instance.TraceQueue.Clear();
             _mainForm.RichTextBoxTrace.Clear();
             _mainForm.ResultReset();
+            _sw.Reset();
             _sw.Start();
         }
 
