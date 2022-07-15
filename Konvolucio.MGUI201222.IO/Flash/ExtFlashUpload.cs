@@ -79,11 +79,6 @@
                 {
                     long timestamp = DateTime.Now.Ticks;
                     _mem.ExtFlashBlockErase(er_addr);
-                    do
-                    {
-                        if ((DateTime.Now.Ticks - timestamp) > 1000 * 10000)
-                            throw new TimeoutException();
-                    } while (_mem.ExtrnalFlashIsBusy());
                     bw.ReportProgress(1, $"EXTERNAL FLASH BLOCKS: {i} ERASING... ");
                     er_addr += _mem.ExtFlashBlockSize;
                 }

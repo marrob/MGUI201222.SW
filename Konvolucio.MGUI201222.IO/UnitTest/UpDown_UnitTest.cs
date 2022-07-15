@@ -12,19 +12,13 @@ using NUnit.Framework;
     [TestFixture]
     public class UpDown_UnitTest
     {
-        const string FileNameTimestampFormat = "yyMMdd_HHmmss";
-        const string COMX = "COM9";
-        const string DEVICE_NAME = "BOOTLOADER";
-        const string DEVICE_VERSION = "220713_0828";
-
         MemoryInterface _mem;    
 
         [SetUp]
         public void TestSetup()
         {
-            _mem = new MemoryInterface(COMX);
-            Assert.AreEqual(DEVICE_NAME, _mem.WhoIs());
-            Assert.AreEqual(DEVICE_VERSION, _mem.GetVersion());
+            _mem = new MemoryInterface(DutConstatns.PORT);
+            Assert.AreEqual(DutConstatns.DEVICE_NAME, _mem.WhoIs());
         }
 
         [TearDown]
@@ -75,13 +69,13 @@ using NUnit.Framework;
             Assert.AreEqual(toWrite, toRead);
         }
 
-        [TestCase(0x00000000, 1, Description = "1B/6.8s")] 
-        [TestCase(0x00000001, 1, Description = "1B/6.7s")]
-        [TestCase(0x000000FF, 1, Description = "1B/6.7s")]
-        [TestCase(0x00000000, 1024, Description = "1kB/6.9s")]
-        [TestCase(0x00000000, 65536, Description = "64kB/12.9s")]
-        [TestCase(0x00000000, 262144, Description = "256kB/30.8s")]
-        [TestCase(0x00000000, 786432-1, Description = "768kB/1.3m")]
+        [TestCase(0x00000000, 1, Description =        "1B    |6.8s  |3.5s")] 
+        [TestCase(0x00000001, 1, Description =        "1B    |6.7s  |3.3s")]
+        [TestCase(0x000000FF, 1, Description =        "1B    |6.7s  |3.4s")]
+        [TestCase(0x00000000, 1024, Description =     "1kB   |6.9s  |3.5s")]
+        [TestCase(0x00000000, 65536, Description =    "64kB  |12.9s |14.7s")]
+        [TestCase(0x00000000, 262144, Description =   "256kB |30.8s |49.3")]
+        [TestCase(0x00000000, 786432-1, Description = "768kB |1.3m  |2.3m")]
         public void IntFlashUpDown(int address, int size)
         {
             var wait = new AutoResetEvent(false);
@@ -163,12 +157,12 @@ using NUnit.Framework;
                 Assert.Fail("Timeout");
             Assert.AreEqual(toWrite, toRead);
         }
-
-        [TestCase(0x00000000, 1, Description = "1B/464ms")]
-        [TestCase(0x00000000, 1024, Description = "1kB/435ms")]
-        [TestCase(0x00000000, 65536, Description = "64kB/5.5s" )]
-        [TestCase(0x00000000, 262144, Description = "256kB/21s")]
-        [TestCase(0x00000000, 524288, Description = "512kBs")]
+        //                                                  |F2      |220715-F7  
+        [TestCase(0x00000000, 1, Description =      "1B     |464ms   |635ms ")]
+        [TestCase(0x00000000, 1024, Description =   "1kB    |435ms   |694ms")]
+        [TestCase(0x00000000, 65536, Description =  "64kB   |5.5s    |11.s " )]
+        [TestCase(0x00000000, 262144, Description = "256kB  |21s     |47s")]
+        [TestCase(0x00000000, 524288, Description = "512kBs |43s     |1.6m")]
         public void ExtFlashUpDown(int address, int size)
         {
             var wait = new AutoResetEvent(false);

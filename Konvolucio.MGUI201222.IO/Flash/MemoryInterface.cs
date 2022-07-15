@@ -205,21 +205,6 @@
                 throw new ApplicationException(msg);
             }
         }
-
-        public bool ExtrnalFlashIsBusy()
-        {
-            var response = WriteReadWoTracing($"FB E");
-            if (response == "FREE")
-                return false;
-            else if (response == "BUSY")
-                return true;
-            else
-            {
-                var msg = $"Bootloader: Invalid Response: {response}";
-                Trace(msg);
-                throw new ApplicationException(msg);
-            }
-        }
         #endregion
         #region Dispose
         public void Dispose()
