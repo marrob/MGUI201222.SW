@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+	 xmlns:util="http://schemas.microsoft.com/wix/UtilExtension"
+	 xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+	<!-- This is how we include wxi files -->
+	<?include $(sys.CURRENTDIR)Config.wxi ?>
+
+
+	<Product  Id="$(var.ProductCode)"
+			  Name="$(var.ProductName)"
+			  Language="1033"
+			  Version="$(var.VersionNumber)"
+			  Manufacturer="$(var.LongCompany)"
+			  UpgradeCode="$(var.UpgradeCode)">
+
+		<Package   Id='*'
+         Keywords='Installer'
+         Description="MGUI201222 DFU"
+         Comments='"MGUI201222 DFU Calibrator Tool is a registered trademark of Konvolucio Bt.'
+         Manufacturer="$(var.LongCompany)"
+         InstallerVersion='200' Languages='1033' Compressed='yes' SummaryCodepage='1252' InstallScope="perMachine"  />
+
+		<!-- Define App Icon -->
+		<Icon Id="AppAddRemove.ico" SourceFile="$(var.AppAddRemoveIconFile)"/>
+		<!-- Set Your Installer's Icon in Add/Remove Programs -->
+		<Property Id="ARPPRODUCTICON" Value="AppAddRemove.ico"/>
+		<!-- Set CompoanyLink' in Add/Remove Programs -->
+		<Property Id="ARPHELPLINK" Value="$(var.URL)" />
+		<Property Id="ARPURLINFOABOUT" Value="$(var.URL)"/>
+		<Property Id="ARPURLUPDATEINFO" Value="$(var.URL)"/>
+		<Property Id="ARPHELPTELEPHONE" Value="$(var.URL)"/>
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<Media Id="1" Cabinet="media.cab" EmbedCab="yes" />
+
+		<Feature Id="Product_Feature" Title="Konvolucio.MGUI201222.DFU.Setup" Level="1">
+			<ComponentGroupRef Id="Product_Components" />
+			<Feature Id ="Driver_Feature" Title="USB Driver" Description="These are the drivers for the USB" Level="1">
+				<ComponentGroupRef Id="Driver_FTDI_Components"/>
+			</Feature>
+		</Feature>
+
+
+		<Condition Message="Legalább a .NET Framework 4.6.1! Kellene..." >
+			<![CDATA[ NOT(WIX_IS_NETFRAMEWORK_461_OR_LATER_INSTALLED) ]]>
+		</Condition >
+		
+		<!--Beavatkozás a telepités folyamatába Minta-->
+		<InstallExecuteSequence>
+			<!--Reboot After Install-->
+			<!--Csak akkor ha driver-t is telepitett-->
+			<!--
+			<ScheduleReboot After='InstallFinalize' >
+				<![CDATA[(&Driver_Feature = 3) AND NOT (!Driver_Feature = 3)]]>
+			</ScheduleReboot>
+			-->
+
+			
+			<!--Driver Install ***************************************************************************-->
+			<Custom  Action="Install_x86_Driver"                Before='InstallFinalize'>
+				<![CDATA[(&Driver_Feature = 3) AND NOT(!Driver_Feature = 3) AND NOT VersionNT64 AND NOT REINSTALL ]]>
+			</Custom>
+			<Custom  Action="Install_x64_Driver"                Before="InstallFinalize">
+				<![CDATA[(&Driver_Feature = 3) AND NOT(!Driver_Feature = 3) AND NOT REINSTALL]]>
+			</Custom>
+			<!--Bus Uninstall *************************************************************************-->
+			<Custom  Action="Uninstall_Bus_x86_Driver"          After="RemoveRegistryValues">
+				<![CDATA[(Installed AND NOT VersionNT64 AND NOT REINSTALL) ]]>
+			</Custom>
+			<Custom  Action="Uninstall_Bus_x64_Driver"          After="RemoveRegistryValues">
+				<![CDATA[(Installed AND VersionNT64 AND NOT REINSTALL)]]>
+			</Custom>
+			<!--Port Uninstall *************************************************************************-->
+			<Custom  Action="Uninstall_Port_x86_Driver"          After="RemoveRegistryValues">
+				<![CDATA[(Installed AND NOT VersionNT64 AND NOT REINSTALL) ]]>
+			</Custom>
+			<Custom  Action="Uninstall_Port_x64_Driver"          After="RemoveRegistryValues">
+				<![CDATA[(Installed AND VersionNT64 AND NOT REINSTALL)]]>
+			</Custom>
+		</InstallExecuteSequence>
+
+	</Product>
+
+
+
+	<Fragment>
+
+		<Property Id="MYDOCUMENTSPATH">
+			<RegistrySearch Id="MyDocumentsSearch" Root="HKCU" Type="directory" Name="Personal"
+				  Key="Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders"/>
+		</Property>
+
+		<!-- Directory Sturcture -->
+		<Directory Id="TARGETDIR" Name="SourceDir">
+
+			<!--C:\Program Files\-->
+			<Directory Id = "ProgramFilesFolder">
+				<!--C:\Program Files\Konvolucio\-->
+				<Directory Id = "AppMnfFolder" Name="$(var.ShortCompany)">
+					<!--C:\Program Files\Konvolucio\MARC170608\-->
+					<Directory Id = "AppFolder" Name="$(var.ProductName)">
+						<!--C:\Program Files\Konvolucio\MARC170608\Drivers\-->
+						<Directory Id = "AppDriverFolder" Name="Drivers"/>
+					</Directory>
+				</Directory>
+			</Directory>
+			<!-- ProgramMenuFolder = C:\ProgramData\Microsoft\Windows\Start Menu\Programs\-->
+			<Directory Id = "ProgramMenuFolder" Name="Programs">
+				<!-- ProgramMenuFolder = C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Konvolúció Bt.\-->
+				<Directory Id = "AppProgramsFolder" Name= "$(var.LongCompany)">
+					<!-- ProgramMenuFolder = C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Konvolúció Bt.\MARC170608-->
+					<!-- <Directory Id ="CurrentAppProgramsFolder" Name="$(var.ProductName)"/>-->
+				</Directory>
+			</Directory>
+			<!-- *Desktop* -->
+			<!--DesktopFolder = C:\Users\Public\Desktop\-->
+			<Directory Id="DesktopFolder" Name="Desktop" />
+			<!-- *Desktop* -->
+			<Directory Id ="MYDOCUMENTSPATH" SourceName="User's Personal Data Folder">
+				<!--C:\Users\Margit Róbert\Documents\Konvolucio\-->
+				<Directory Id = "MyDocMnfFolder" Name = "$(var.ShortCompany)">
+					<!--C:\Users\Margit Róbert\Documents\Konvolucio\MARC170608\-->
+					<Directory Id = "MyDocAppFolder" Name = "$(var.ProductName)">
+						<!--C:\Users\Margit Róbert\Documents\Konvolucio\MARC170608\Firmware Update-->
+						<Directory Id="MyDocFirmwareUpdateFolder" Name="Firmware Update"/>
+					</Directory>
+				</Directory>
+			</Directory>
+
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="Product_Components" Directory="AppFolder">
+			<!-- ProgramMenuFolder = C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Konvolucio\-->
+			<Component Guid="{BFEAA559-5CAB-4B9A-8E07-EDA7D8FD3F92}" >
+				<RemoveFolder Id="AppProgramsFolder" On='uninstall'  Directory='AppProgramsFolder'/>
+				<RegistryValue Root='HKCU' Key='Software\[Manufacturer]\[ProductName]' Type='string' Value='' KeyPath='yes' />
+			</Component>
+			<Component  Guid="{3BE1D5ED-BE0A-4E0B-AC8A-CF5704C510DA}">
+				<File Name="_Konvolucio.MGUI201222.DFU.exe" Source="$(var.AppDirectory)\Konvolucio.MGUI201222.DFU.exe" KeyPath="yes" Checksum="yes">
+					<Shortcut Id="_Konvolucio.MGUI201222.DFU.exe" Directory="AppProgramsFolder" WorkingDirectory="AppFolder" Icon="AppAddRemove.ico" Name="$(var.ProductName)" Advertise="yes" />
+					<Shortcut Id="DesktopShortcut"    Directory="DesktopFolder"  WorkingDirectory = "AppFolder"  Icon="AppAddRemove.ico"  Name="$(var.ProductName)" Advertise="yes" />
+				</File>
+				<File Id="_Konvolucio.MGUI201222.IO.dll" Source="$(var.AppDirectory)\Konvolucio.MGUI201222.IO.dll" KeyPath="no" Checksum="yes"/>
+			</Component>
+		</ComponentGroup>
+	</Fragment>
+</Wix>

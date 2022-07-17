@@ -33,7 +33,7 @@
 		
 
 		<!-- Define App Icon -->
-		<Icon Id="AppAddRemove.ico" SourceFile="..\Resources\Installer\AppAddRemove.ico"/>
+		<Icon Id="AppAddRemove.ico" SourceFile="$(var.AppAddRemoveIconFile)"/>
 		<!-- Set Your Installer's Icon in Add/Remove Programs -->
 		<Property Id="ARPPRODUCTICON" Value="AppAddRemove.ico"/>
 		<!-- Set CompoanyLink' in Add/Remove Programs -->

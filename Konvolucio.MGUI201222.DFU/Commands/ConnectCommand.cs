@@ -16,21 +16,21 @@ namespace Konvolucio.MGUI201222.DFU.Commands
         {
             _app = app;
             Text = "Connect";
-           // Image = Resources.Play_48x48;
-            ShortcutKeys = Keys.F5;
+            Image = Resources.Play_Hot48;
+            ShortcutKeys = Keys.F7;
             DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
             Enabled = true;
             EventAggregator.Instance.Subscribe((Action<ConnectionChangedAppEvent>)(e =>
             {
                 if (e.IsOpen)
                 {
-                   //Image = Resources.Stop_48x48;
                     Text = "Disconnect";
+                    Image = Resources.Stop_Normal_Red48;
                 }
                 else
                 {
-                    //Image = Resources.Play_48x48;
                     Text = "Connect";
+                    Image = Resources.Play_Hot48;
                 }
             }));
         }

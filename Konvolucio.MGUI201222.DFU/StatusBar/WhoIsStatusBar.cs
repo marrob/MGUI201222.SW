@@ -13,12 +13,12 @@
             BorderSides = ToolStripStatusLabelBorderSides.Left;
             BorderStyle = Border3DStyle.Etched;
             Size = new System.Drawing.Size(58, 19);
-            Text = "WhoIs: " + AppConstants.ValueNotAvailable2;
+            Text =  AppConstants.ValueNotAvailable2;
 
             EventAggregator.Instance.Subscribe((Action<ConnectionChangedAppEvent>)(e =>
             {
                 if (e.IsOpen)
-                    Text = "WhoIs:" + MemoryInterface.Instance.WhoIs();
+                    Text = MemoryInterface.Instance.WhoIs();
 
             }));
         }

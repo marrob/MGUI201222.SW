@@ -73,13 +73,49 @@ namespace Konvolucio.MGUI201222.DFU.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool WriteReadVerify {
             get {
                 return ((bool)(this["WriteReadVerify"]));
             }
             set {
                 this["WriteReadVerify"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool EnterDfuModeAfterConnect {
+            get {
+                return ((bool)(this["EnterDfuModeAfterConnect"]));
+            }
+            set {
+                this["EnterDfuModeAfterConnect"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ExitDfuModeAfterUpdate {
+            get {
+                return ((bool)(this["ExitDfuModeAfterUpdate"]));
+            }
+            set {
+                this["ExitDfuModeAfterUpdate"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool UpdateAfterEnterDfuMode {
+            get {
+                return ((bool)(this["UpdateAfterEnterDfuMode"]));
+            }
+            set {
+                this["UpdateAfterEnterDfuMode"] = value;
             }
         }
     }

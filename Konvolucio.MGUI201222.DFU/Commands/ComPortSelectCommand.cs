@@ -15,14 +15,9 @@ namespace Konvolucio.MGUI201222.DFU.Commands
         public ComPortSelectCommand(App obj)
         {
             _app = obj;
-           // Image = Resources.Settings_48x48;
             Text = "Válaszd ki a megfelelő COM portot a listából...";
-           // ShortcutKeys = Keys.None;
-            //DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
             Enabled = true;
-
             BackColor = System.Drawing.SystemColors.Control;
-
             DropDownStyle = ComboBoxStyle.DropDownList;
 
 

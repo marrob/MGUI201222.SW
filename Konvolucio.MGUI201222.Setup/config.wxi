@@ -34,7 +34,8 @@
   Global Paths.
   -->
   <?define AppDirectory               = "..\Konvolucio.MGUI201222.UI\bin\Release"?>
-  <?define AppResourceDirectory       = "..\Resources"?>
-  <?define DriverDirectory            = "..\Resources\Drivers\FTDI\"?>
+  <?define AppAddRemoveIconFile       = ".\Resources\Installer\AppAddRemove.ico"?>
+  <?define AppResourceDirectory       = ".\Resources"?>
+  <?define DriverDirectory            = ".\Resources\Drivers\FTDI\"?>
 </Include>
 

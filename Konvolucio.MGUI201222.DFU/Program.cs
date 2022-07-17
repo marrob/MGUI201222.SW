@@ -13,6 +13,8 @@ namespace Konvolucio.MGUI201222.DFU
     using Controls;
     using Events;
     using System.ComponentModel;
+    using System.Drawing;
+
 
     static class Program
     {
@@ -52,18 +54,12 @@ namespace Konvolucio.MGUI201222.DFU
         {
 
             /*** Application Configuration ***/
+            string AppDirectory = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}\\MGUI201222.DFU";
+            if (!System.IO.Directory.Exists(AppDirectory))
+                System.IO.Directory.CreateDirectory(AppDirectory);
 
-
-            //AppLog.Instance.FilePath = AppConfiguration.Instance.LogDirectory + @"//MALT200817.DFU_" + DateTime.Now.ToString("yyMMdd_HHmmss") + ".txt";
-            //AppLog.Instance.Enabled = AppConfiguration.Instance.DfuApp.LogEnable;
-
-            // if (string.IsNullOrEmpty(Settings.Default.WorkingDirectory))
-            { //First Start 
-              //C:\\Users\\Margit Robert\\Documents\\Konvolucio\\MARC170608
-              //  Settings.Default.WorkingDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + Application.CompanyName + "\\" + Application.ProductName;
-              //C:\\Users\\Margit Robert\\Documents\\Konvolucio\\MARC170608\\Firmware Update
-              //  Settings.Default.FirmwareUpdateDirectory = Settings.Default.WorkingDirectory + "\\" + "Firmware Update";
-            }
+            Log.Instance.FilePath = $"{AppDirectory}\\DFU_LOG_{DateTime.Now.ToString(AppConstants.FileNameTimestampFormat)}.txt ";
+            Log.Instance.WirteLine("*** Appliction Start ***");
 
             SyncContext = SynchronizationContext.Current;
 
@@ -97,7 +93,43 @@ namespace Konvolucio.MGUI201222.DFU
                 EventAggregator.Instance.Publish(new ConnectionChangedAppEvent(MemoryInterface.Instance.IsOpen));
 
                 if (MemoryInterface.Instance.IsOpen)
-                    MemoryInterface.Instance.EnterDfuMode();
+                {
+                    try
+                    { 
+                        for (int i = 0; i < 10; i++)
+                        {
+                            Application.DoEvents();
+                            Thread.Sleep(100);
+                        }
+
+                        string msg = "ENTERED DFU MODE";
+                        _mainForm.ProgressUpdate(msg, Color.LightBlue, 0);
+                        Trace($"App: {msg}");
+                        MemoryInterface.Instance.EnterDfuMode();
+                        //This will update the Whois on statusbar...
+                        EventAggregator.Instance.Publish(new ConnectionChangedAppEvent(MemoryInterface.Instance.IsOpen));
+
+                        for (int i = 0; i < 5; i++)
+                        {
+                            Application.DoEvents();
+                            Thread.Sleep(100);
+                        }
+
+                        if (Settings.Default.UpdateAfterEnterDfuMode)
+                        {
+                            FwUpdate(Settings.Default.IntFirmwareFilePath, Settings.Default.ExtFirmwareFilePath);     
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace($"ERROR: {ex.Message}");
+                    }
+                    finally
+                    { 
+                    
+                    }
+
+                }
             };
 
             /*** Settings ***/
@@ -105,8 +137,10 @@ namespace Konvolucio.MGUI201222.DFU
             settingsMenu.DropDown.Items.AddRange(
                  new ToolStripItem[]
                  {
-                    new Commands.ConnectAfterStartCommand(),
+                    new Commands.UpdateAfterEnterDfuModeCommand(),
+                    new Commands.ExitDfuModeAfterUpdateCommand(),
                     new Commands.WriteReadVerifyCommand(),
+                    new Commands.ConnectAfterStartCommand(),
                  });
 
             /*** Main Menu ***/
@@ -114,10 +148,11 @@ namespace Konvolucio.MGUI201222.DFU
             {
                 new Commands.ComPortSelectCommand(this),
                 new Commands.ConnectCommand(this),
-                new Commands.EnterDfutCommand(),
-                new Commands.UpdateCommand(this),
-                new Commands.ExitDfutCommand(),
-                settingsMenu
+                new Commands.HowIsWorkingCommand(),
+             // new Commands.EnterDfutCommand(),
+             // new Commands.UpdateCommand(this),
+             // new Commands.ExitDfutCommand(),
+            //  settingsMenu
             };
 
             /*** StatusBar ***/
@@ -143,23 +178,36 @@ namespace Konvolucio.MGUI201222.DFU
                 if(MemoryInterface.Instance.TraceQueue.Count != 0)
                 {
                     string str = MemoryInterface.Instance.TraceQueue.Dequeue();
-                    if (str.Contains("Rx:"))
-                        _mainForm.RichTextBoxTrace.AppendText(str + "\r\n", System.Drawing.Color.DarkGreen, false);
-                    else if (str.Contains("Tx:"))
-                        _mainForm.RichTextBoxTrace.AppendText(str + "\r\n", System.Drawing.Color.Blue);
-                    else if (str.Contains("ERROR"))
-                        _mainForm.RichTextBoxTrace.AppendText(str + "\r\n", System.Drawing.Color.Red);
 
+                    Log.Instance.WirteLine(str);
+
+                    if (str.Contains("Rx:"))
+                        _mainForm.RichTextBoxTrace.AppendText(str + "\r\n", Color.DarkGreen, false);
+                    else if (str.Contains("Tx:"))
+                        _mainForm.RichTextBoxTrace.AppendText(str + "\r\n", Color.Blue);
+                    else if (str.Contains("ERROR"))
+                        _mainForm.RichTextBoxTrace.AppendText(str + "\r\n", Color.Red);
                     else
-                        _mainForm.RichTextBoxTrace.AppendText(str + "\r\n", System.Drawing.Color.Black);
+                        _mainForm.RichTextBoxTrace.AppendText(str + "\r\n", Color.Black);
+
+                    /*** Auto Scroll ***/
+                    _mainForm.RichTextBoxTrace.SelectionStart = _mainForm.RichTextBoxTrace.Text.Length;
+                    _mainForm.RichTextBoxTrace.ScrollToCaret();
                 }
                 if (_traceQueue.Count != 0)
                 {
                     string str = _traceQueue.Dequeue();
+                    Log.Instance.WirteLine(str);
                     if (str.Contains("App"))
-                        _mainForm.RichTextBoxTrace.AppendText(str + "\r\n", System.Drawing.Color.HotPink);
+                        _mainForm.RichTextBoxTrace.AppendText(str + "\r\n", Color.HotPink);
                     else if (str.Contains("ERROR"))
-                        _mainForm.RichTextBoxTrace.AppendText(str + "\r\n", System.Drawing.Color.Red);
+                        _mainForm.RichTextBoxTrace.AppendText(str + "\r\n", Color.Red);
+                    else
+                        _mainForm.RichTextBoxTrace.AppendText(str + "\r\n", Color.Black);
+
+                    /*** Auto Scroll ***/
+                    _mainForm.RichTextBoxTrace.SelectionStart = _mainForm.RichTextBoxTrace.Text.Length;
+                    _mainForm.RichTextBoxTrace.ScrollToCaret();
                 }
             };
         }
@@ -176,13 +224,21 @@ namespace Konvolucio.MGUI201222.DFU
             EventAggregator.Instance.Publish(new ShowAppEvent());
             _mainForm.ExtFlashFilePath = Settings.Default.ExtFirmwareFilePath;
             _mainForm.IntFlashFilePath = Settings.Default.IntFirmwareFilePath;
+            ResultClear();
         }
 
 
         public void OpenPort()
         {
-            ResultClear();
-            MemoryInterface.Instance.Open(Settings.Default.SeriaPortName);
+            if (string.IsNullOrEmpty(Settings.Default.SeriaPortName))
+            {
+                Trace("ERROR: Please select a COM port first form the ComboBox.");
+            }
+            else
+            {
+                ResultClear();
+                MemoryInterface.Instance.Open(Settings.Default.SeriaPortName);
+            }
         }
 
 
@@ -212,15 +268,13 @@ namespace Konvolucio.MGUI201222.DFU
             _traceQueue.Clear();
             MemoryInterface.Instance.TraceQueue.Clear();
             _mainForm.RichTextBoxTrace.Clear();
-            _mainForm.ResultReset();
+            _mainForm.ProgressUpdate("", SystemColors.Control, 0);
             _sw.Reset();
             _sw.Start();
         }
 
         public void FwUpdate(string intFile, string extFile)
         {
-            ResultClear();
-
             if (System.IO.File.Exists(intFile))
                 _intFw = Tools.OpenFile(intFile);
             else
@@ -235,18 +289,18 @@ namespace Konvolucio.MGUI201222.DFU
             if (_intFw.Length != 0)
             {
                 _ifu.Begin(0, _intFw);
-                Trace("App: INT FALSH UPLOADING...");
+                Trace($"App: INT FALSH UPLOADING - {System.IO.Path.GetFileName(intFile) } - { new System.IO.FileInfo(intFile).Length}byte");
                 EventAggregator.Instance.Publish(new UpdatingStateChangedAppEvent(true));
             }
             else if (_extFw.Length != 0)
             {
                 _efu.Begin(0, _extFw);
-                Trace("App: EXT FALSH UPLOADING...");
+                Trace($"App: EXT FALSH UPLOADING - {System.IO.Path.GetFileName(extFile) } - { new System.IO.FileInfo(extFile).Length}byte");
                 EventAggregator.Instance.Publish(new UpdatingStateChangedAppEvent(true));
             }
             else
             {
-                Trace("App: There is nothing to do, please load binary file");
+                Trace("ERROR: There is nothing to do, please load binary file.");
                 ResultIsFailed();
             }
         }
@@ -283,7 +337,7 @@ namespace Konvolucio.MGUI201222.DFU
 
                 if (sender is IntFlashUpload)
                 {
-                    Trace("App: INT FALSH UPLOAD COMPLETED");
+                    Trace($"App: INT FALSH UPLOAD COMPLETED");
 
                     if (Settings.Default.WriteReadVerify)
                     {
@@ -295,7 +349,7 @@ namespace Konvolucio.MGUI201222.DFU
                         if (_extFw.Length != 0)
                         {
                             _efu.Begin(0, _extFw);
-                            Trace("App: EXT FALSH UPLOADING...");
+                            Trace($"App: EXT FALSH UPLOADING - {System.IO.Path.GetFileName(Settings.Default.ExtFirmwareFilePath)} - {new System.IO.FileInfo(Settings.Default.ExtFirmwareFilePath).Length}byte");
                         }
                         else
                         {
@@ -314,7 +368,7 @@ namespace Konvolucio.MGUI201222.DFU
                         if (_extFw.Length != 0)
                         {
                             _efu.Begin(0, _extFw);
-                            Trace("App: EXT FALSH UPLOADING...");
+                            Trace($"App: EXT FALSH UPLOADING - {System.IO.Path.GetFileName(Settings.Default.ExtFirmwareFilePath)} - {new System.IO.FileInfo(Settings.Default.ExtFirmwareFilePath).Length}byte");
                         }
                         else
                         {
@@ -368,27 +422,49 @@ namespace Konvolucio.MGUI201222.DFU
         void ResultIsPassed()
         {
             _sw.Stop();
-            Trace($"App: UPDATE: PASSED");
-            _mainForm.ProgressStatus = $"UPDATE SUCCESSFULY I:{_intFw.Length/1024}kB E:{_extFw.Length / 1024}kB t:{_sw.ElapsedMilliseconds/1000}s";
+            string msg = $"UPDATE SUCCESSFULY I:{_intFw.Length / 1024}kB E:{_extFw.Length / 1024}kB t:{_sw.ElapsedMilliseconds / 1000}s";
+            Trace($"App: {msg}");
             EventAggregator.Instance.Publish(new UpdatingStateChangedAppEvent(false));
-            _mainForm.ResultPassed();
+            _mainForm.ProgressUpdate(msg, Color.Lime, 100);
+
+            for (int i = 0; i < 5; i++)
+            {
+                Application.DoEvents();
+                Thread.Sleep(100);
+            }
+
+            if (Settings.Default.ExitDfuModeAfterUpdate)
+            {
+                MemoryInterface.Instance.ExitDfuMode();
+                msg = $"Leaving DFU Mode, the App will start soon...";
+                _mainForm.ProgressUpdate(msg, Color.Gold, 100);
+
+                for (int i = 0; i < 5; i++)
+                {
+                    Application.DoEvents();
+                    Thread.Sleep(100);
+                }
+
+                MemoryInterface.Instance.Close();
+
+            }
         }
 
         void ResultIsFailed()
         {
             _sw.Stop();
-            Trace("ERROR: UPDATE: FAILED");
-            _mainForm.ProgressStatus = "UPDATE FAILED";
+            string msg = $"UPDATE FAILED t:{_sw.ElapsedMilliseconds / 1000}s";
+            Trace($"App: {msg}");
             EventAggregator.Instance.Publish(new UpdatingStateChangedAppEvent(false));
-            _mainForm.ResultFailed();
+            _mainForm.ProgressUpdate(msg, Color.Red, 0);
+
         }
 
         private void ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             Action syncCompleted = () =>
             {
-                _mainForm.ProgressValue = e.ProgressPercentage;
-                _mainForm.ProgressStatus =e.UserState.ToString();
+                _mainForm.ProgressUpdate(e.UserState.ToString(), Color.Orange, e.ProgressPercentage);
             };
 
             if (App.SyncContext != null)

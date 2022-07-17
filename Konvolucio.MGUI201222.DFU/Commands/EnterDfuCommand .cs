@@ -21,7 +21,6 @@ namespace Konvolucio.MGUI201222.DFU.Commands
             {
                 Enabled = e.IsOpen;
             }));
-
         }
 
         protected override void OnClick(EventArgs e)

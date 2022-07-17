@@ -28,14 +28,10 @@ namespace Konvolucio.MGUI201222.DFU
 
         KnvRichTextBox RichTextBoxTrace { get; }
 
-        int ProgressValue { get; set; }
-        string ProgressStatus { get; set; }
+        void ProgressUpdate(string text, Color color, int progress);
 
         ToolStripItem[] StatusBar { set; }
 
-        void ResultReset();
-        void ResultFailed();
-        void ResultPassed();
     }
 
     public partial class MainForm : Form, IMainForm
@@ -44,6 +40,7 @@ namespace Konvolucio.MGUI201222.DFU
         {
             set { menuStrip1.Items.AddRange(value); }
         }
+
 
         public string ExtFlashFilePath {
             get { return textExtFilePath.Text; }
@@ -60,16 +57,11 @@ namespace Konvolucio.MGUI201222.DFU
             get { return knvRichTextBox1; }
         }
 
-        public int ProgressValue
+        public void ProgressUpdate(string text, Color color, int progress)
         {
-            get { return progressBar.Value; }
-            set { progressBar.Value = value; }
-        }
-
-        public string ProgressStatus
-        {
-            get { return labelProgressStatus.Text; }
-            set { labelProgressStatus.Text = value; }
+            labelProgressStatus.BackColor = color;
+            labelProgressStatus.Text = text;
+            progressBar.Value = progress;
         }
 
         public MainForm()
@@ -82,18 +74,6 @@ namespace Konvolucio.MGUI201222.DFU
             set { statusStrip1.Items.AddRange(value); }
         }
 
-        public void ResultReset()
-        {
-            labelProgressStatus.BackColor = System.Drawing.SystemColors.Control;
-        }
-        public void ResultFailed()
-        {
-            labelProgressStatus.BackColor = Color.Red;
-        }
-        public void ResultPassed()
-        {
-            labelProgressStatus.BackColor = Color.LimeGreen;
-        }
 
         private void ButtonExtBrowse_Click(object sender, EventArgs e)
         {
