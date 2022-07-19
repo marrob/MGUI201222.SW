@@ -48,19 +48,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Flash\ExtFlashDownload.cs" />
-    <Compile Include="Flash\IntFlashDownload.cs" />
-    <Compile Include="Flash\ExtFlashUpload.cs" />
-    <Compile Include="Flash\IntFlashUpload.cs" />
-    <Compile Include="Flash\MemoryInterface.cs" />
     <Compile Include="SerialIo.cs" />
-    <Compile Include="UnitTest\DutConstatns.cs" />
-    <Compile Include="UnitTest\ExtFlash_UnitTest.cs" />
-    <Compile Include="UnitTest\IntFlash_UnitTest.cs" />
     <Compile Include="GuiIo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools.cs" />
-    <Compile Include="UnitTest\UpDown_UnitTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

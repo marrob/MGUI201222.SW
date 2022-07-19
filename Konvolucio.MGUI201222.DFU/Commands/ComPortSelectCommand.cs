@@ -24,7 +24,7 @@ namespace Konvolucio.MGUI201222.DFU.Commands
             DropDown += (o, e) =>
             {
                 Items.Clear();
-                Items.AddRange(GuiIo.GetPortNames());
+                Items.AddRange(MemoryInterface.GetPortNames());
             };
 
             DropDownClosed += (o, e) =>{
@@ -39,7 +39,7 @@ namespace Konvolucio.MGUI201222.DFU.Commands
             EventAggregator.Instance.Subscribe((Action<ShowAppEvent>)(e =>
             {               
                 Items.Clear();
-                Items.AddRange(GuiIo.GetPortNames());
+                Items.AddRange(MemoryInterface.GetPortNames());
 
                 if (!string.IsNullOrWhiteSpace(Settings.Default.SeriaPortName))
                 {

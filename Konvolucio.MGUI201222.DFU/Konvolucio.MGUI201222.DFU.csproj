@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\NUnit.3.13.3\build\NUnit.props" Condition="Exists('..\packages\NUnit.3.13.3\build\NUnit.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -27,6 +28,8 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -86,6 +89,9 @@
     <ApplicationIcon>AppAddRemove.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="nunit.framework, Version=3.13.3.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.3.13.3\lib\net45\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -99,31 +105,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppConstants.cs" />
-    <Compile Include="Commands\ExitDfuMode.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Commands\EnterDfuCommand .cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Commands\ExitDfuModeAfterUpdateCommand.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Commands\HowIsWorkingCommand.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Commands\UpdateAfterEnterDfuModeCommand .cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Commands\WriteReadVerifyCommand .cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Commands\ConnectAfterStartCommand.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Commands\ComPortSelectCommand.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Commands\UpdateCommand.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Commands\ConnectCommand.cs">
@@ -143,6 +128,17 @@
     <Compile Include="HowIsWorkingForm.Designer.cs">
       <DependentUpon>HowIsWorkingForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="IO\Flash\ExtFlashDownload.cs" />
+    <Compile Include="IO\Flash\ExtFlashUpload.cs" />
+    <Compile Include="IO\Flash\IntFlashDownload.cs" />
+    <Compile Include="IO\Flash\IntFlashUpload.cs" />
+    <Compile Include="IO\Flash\MemoryInterface.cs" />
+    <Compile Include="IO\SerialIo.cs" />
+    <Compile Include="IO\Tools.cs" />
+    <Compile Include="IO\UnitTest\DutConstatns.cs" />
+    <Compile Include="IO\UnitTest\ExtFlash_UnitTest.cs" />
+    <Compile Include="IO\UnitTest\IntFlash_UnitTest.cs" />
+    <Compile Include="IO\UnitTest\UpDown_UnitTest.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Common\AppLog.cs" />
@@ -187,6 +183,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.config" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -196,12 +193,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Konvolucio.MGUI201222.IO\Konvolucio.MGUI201222.IO.csproj">
-      <Project>{a945ba89-ae10-4d1d-929f-ede5f8b7cad2}</Project>
-      <Name>Konvolucio.MGUI201222.IO</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="AppAddRemove.ico" />
@@ -223,4 +214,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\NUnit.3.13.3\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit.3.13.3\build\NUnit.props'))" />
+  </Target>
 </Project>

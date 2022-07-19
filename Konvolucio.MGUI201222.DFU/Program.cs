@@ -115,10 +115,7 @@ namespace Konvolucio.MGUI201222.DFU
                             Thread.Sleep(100);
                         }
 
-                        if (Settings.Default.UpdateAfterEnterDfuMode)
-                        {
-                            FwUpdate(Settings.Default.IntFirmwareFilePath, Settings.Default.ExtFirmwareFilePath);     
-                        }
+                        FwUpdate(Settings.Default.IntFirmwareFilePath, Settings.Default.ExtFirmwareFilePath);     
                     }
                     catch (Exception ex)
                     {
@@ -132,27 +129,12 @@ namespace Konvolucio.MGUI201222.DFU
                 }
             };
 
-            /*** Settings ***/
-            var settingsMenu = new ToolStripMenuItem("Settings");
-            settingsMenu.DropDown.Items.AddRange(
-                 new ToolStripItem[]
-                 {
-                    new Commands.UpdateAfterEnterDfuModeCommand(),
-                    new Commands.ExitDfuModeAfterUpdateCommand(),
-                    new Commands.WriteReadVerifyCommand(),
-                    new Commands.ConnectAfterStartCommand(),
-                 });
-
             /*** Main Menu ***/
             _mainForm.MenuBar = new ToolStripItem[]
             {
                 new Commands.ComPortSelectCommand(this),
                 new Commands.ConnectCommand(this),
                 new Commands.HowIsWorkingCommand(),
-             // new Commands.EnterDfutCommand(),
-             // new Commands.UpdateCommand(this),
-             // new Commands.ExitDfutCommand(),
-            //  settingsMenu
             };
 
             /*** StatusBar ***/
@@ -217,10 +199,6 @@ namespace Konvolucio.MGUI201222.DFU
             SyncContext = SynchronizationContext.Current;
             TimerService.Instance.Start();
 
-            if (Settings.Default.OpenAfterStartUp)
-                if (!string.IsNullOrWhiteSpace(Settings.Default.SeriaPortName))
-                    OpenPort();
-
             EventAggregator.Instance.Publish(new ShowAppEvent());
             _mainForm.ExtFlashFilePath = Settings.Default.ExtFirmwareFilePath;
             _mainForm.IntFlashFilePath = Settings.Default.IntFirmwareFilePath;
@@ -276,13 +254,13 @@ namespace Konvolucio.MGUI201222.DFU
         public void FwUpdate(string intFile, string extFile)
         {
             if (System.IO.File.Exists(intFile))
-                _intFw = Tools.OpenFile(intFile);
+                _intFw = Common.Tools.OpenFile(intFile);
             else
                 _intFw = new byte[0];
 
 
             if (System.IO.File.Exists(extFile))
-                _extFw = Tools.OpenFile(extFile);
+                _extFw = Common.Tools.OpenFile(extFile);
             else
                 _extFw = new byte[0];
 
@@ -305,19 +283,8 @@ namespace Konvolucio.MGUI201222.DFU
             }
         }
 
-
-        /*
-         * 1. Int-Ok   | Ext-Ok   | Verify-None |  
-         * 2. Int-Ok   | Ext-None | Verify-None |
-         * 3. Int-None | Ext-Ok   | Verify-None |
-         * 4. Int-None | Ext-None | Verify-None |
-         * 5. Int-Ok   | Ext-Ok   | Verify-On   | Int-Verify-Ok | Ext-Verify-Ok
-         * 6. Int-Ok   | Ext-None | Verify-On   | Int-Verify-Ok | Ext-Verify-None
-         * 
-         */
         private void Completed(object sender, RunWorkerCompletedEventArgs e)
         {
-
             Action syncCompleted = () =>
             {
 
@@ -339,23 +306,9 @@ namespace Konvolucio.MGUI201222.DFU
                 {
                     Trace($"App: INT FALSH UPLOAD COMPLETED");
 
-                    if (Settings.Default.WriteReadVerify)
-                    {
-                        _ifd.Begin(0, _intFw.Length);
-                        Trace("App: INT FALSH DOWNLOADING...");
-                    }
-                    else
-                    {
-                        if (_extFw.Length != 0)
-                        {
-                            _efu.Begin(0, _extFw);
-                            Trace($"App: EXT FALSH UPLOADING - {System.IO.Path.GetFileName(Settings.Default.ExtFirmwareFilePath)} - {new System.IO.FileInfo(Settings.Default.ExtFirmwareFilePath).Length}byte");
-                        }
-                        else
-                        {
-                            ResultIsPassed();
-                        }
-                    }
+                    _ifd.Begin(0, _intFw.Length);
+                    Trace("App: INT FALSH DOWNLOADING...");
+
                 }
 
                 if (sender is IntFlashDownload)
@@ -386,15 +339,9 @@ namespace Konvolucio.MGUI201222.DFU
                 {
                     Trace("App: EXT FALSH UPLOAD COMPLETED");
 
-                    if (Settings.Default.WriteReadVerify)
-                    {
-                        _efd.Begin(0, _extFw.Length);
-                        Trace("App: EXT FALSH DOWNLOADING...");
-                    }
-                    else 
-                    {
-                        ResultIsPassed();
-                    }
+                    _efd.Begin(0, _extFw.Length);
+                    Trace("App: EXT FALSH DOWNLOADING...");
+
                 }
 
                 if (sender is ExtFlashDownload)
@@ -433,21 +380,18 @@ namespace Konvolucio.MGUI201222.DFU
                 Thread.Sleep(100);
             }
 
-            if (Settings.Default.ExitDfuModeAfterUpdate)
+            MemoryInterface.Instance.ExitDfuMode();
+            msg = $"Leaving DFU Mode, the App will start soon...";
+            _mainForm.ProgressUpdate(msg, Color.Gold, 100);
+
+            for (int i = 0; i < 5; i++)
             {
-                MemoryInterface.Instance.ExitDfuMode();
-                msg = $"Leaving DFU Mode, the App will start soon...";
-                _mainForm.ProgressUpdate(msg, Color.Gold, 100);
-
-                for (int i = 0; i < 5; i++)
-                {
-                    Application.DoEvents();
-                    Thread.Sleep(100);
-                }
-
-                MemoryInterface.Instance.Close();
-
+                Application.DoEvents();
+                Thread.Sleep(100);
             }
+
+            MemoryInterface.Instance.Close();
+
         }
 
         void ResultIsFailed()

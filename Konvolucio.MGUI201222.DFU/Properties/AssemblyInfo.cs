@@ -13,5 +13,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("Copyright © Konvolucio 2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: AssemblyVersion("0.0.1.0")]
-[assembly: AssemblyFileVersion("0.0.1.0")]
+[assembly: AssemblyVersion("0.0.2.0")]
+[assembly: AssemblyFileVersion("0.0.2.0")]
+[assembly: Guid("8623F50F-0734-412D-8CDF-5C6EEAA575FB")]

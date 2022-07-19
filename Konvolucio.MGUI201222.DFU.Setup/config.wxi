@@ -8,9 +8,10 @@
   <!-- Revision is NOT used by WiX in the upgrade procedure -->
   <!--The default revision number is the number of seconds since midnight local time, divided by 2.-->
   <?define Revision = "1"?>
-  
+
   <!-- Full version number to display -->
-  <?define VersionNumber  = "$(var.MajorVersion).$(var.MinorVersion).$(var.BuildNumber).$(var.Revision)"?>
+  <?define VersionNumber = !(bind.FileVersion._Konvolucio.MGUI201222.DFU.exe) ?>
+  <!--<?define VersionNumber  = "$(var.MajorVersion).$(var.MinorVersion).$(var.BuildNumber).$(var.Revision)"?> -->
   <?define ProductName = "MGUI201222 - DFU"?>
   <?define ProductCode = "{D3EE2327-4861-4948-A560-205DB69DD139}"?>
   

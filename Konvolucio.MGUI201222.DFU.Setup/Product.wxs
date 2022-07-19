@@ -142,7 +142,7 @@
 					<Shortcut Id="_Konvolucio.MGUI201222.DFU.exe" Directory="AppProgramsFolder" WorkingDirectory="AppFolder" Icon="AppAddRemove.ico" Name="$(var.ProductName)" Advertise="yes" />
 					<Shortcut Id="DesktopShortcut"    Directory="DesktopFolder"  WorkingDirectory = "AppFolder"  Icon="AppAddRemove.ico"  Name="$(var.ProductName)" Advertise="yes" />
 				</File>
-				<File Id="_Konvolucio.MGUI201222.IO.dll" Source="$(var.AppDirectory)\Konvolucio.MGUI201222.IO.dll" KeyPath="no" Checksum="yes"/>
+				<!-- 	<File Id="_Konvolucio.MGUI201222.IO.dll" Source="$(var.AppDirectory)\Konvolucio.MGUI201222.IO.dll" KeyPath="no" Checksum="yes"/> -->
 			</Component>
 		</ComponentGroup>
 	</Fragment>
